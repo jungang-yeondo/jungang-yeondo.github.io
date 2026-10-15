@@ -1,4 +1,6 @@
 (function(){
+  // 설립연도 기준 년수 자동 계산 ({년수})
+  document.querySelectorAll('.years-since').forEach(function(e){var y=new Date().getFullYear()-parseInt(e.dataset.from,10);if(y>0)e.textContent=y;});
   var body=document.body;
   function setOver(){body.classList.toggle('over',window.scrollY<60)}
   window.addEventListener('scroll',setOver,{passive:true}); setOver();

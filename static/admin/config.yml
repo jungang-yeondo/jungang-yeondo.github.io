@@ -62,7 +62,7 @@ collections:
             label: "25mm 영역 사양 줄"
             widget: list
             fields: [{ name: label, label: 항목, widget: string }, { name: value, label: 값, widget: string }]
-          - { name: projects_title, label: "시공실적 영역 제목", widget: text }
+          - { name: projects_title, label: "납품실적 영역 제목", widget: text }
           - name: project_photos
             label: "메인 시공 사진 (3장)"
             widget: list
@@ -182,13 +182,13 @@ collections:
 
       # ── 시공실적 ──────────────────────────────
       - name: projects
-        label: "⑤ 시공실적·현장 사진·인증"
+        label: "⑤ 납품실적·현장 사진·인증"
         file: content/projects.json
         fields:
           - { name: banner, label: "상단 배경 사진", widget: image }
           - { name: note, label: "실적 안내 문구", widget: string }
           - name: items
-            label: "대표 시공 현장"
+            label: "대표 납품 현장"
             label_singular: "현장"
             summary: "{{fields.name}} · {{fields.category}}"
             widget: list

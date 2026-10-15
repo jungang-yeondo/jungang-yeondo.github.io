@@ -1,0 +1,42 @@
+{
+  "slide_seconds": 6,
+  "slides": [
+    { "image": "/uploads/jamsil2.jpg", "caption": "잠실 실내체육관 · 2024" },
+    { "image": "/uploads/sac.jpg", "caption": "예술의전당 보일러공사 · 2024" },
+    { "image": "/uploads/wonju1.jpg", "caption": "원주 빨래공장 · 2025" }
+  ],
+  "hero_eyebrow": "Stainless Steel Chimney · Since 2013",
+  "hero_title": "보이지 않는 곳에서\n건물을 숨 쉬게 합니다",
+  "hero_text": "보일러·발전기·냉온수기의 배기가스가 지나가는 길. 중앙연도는 그 길을 포천 공장에서 직접 설계하고 만듭니다.",
+  "about_image": "/uploads/logoplate.jpg",
+  "about_title": "연도 한 분야에만\n13년을 쏟았습니다",
+  "about_text": "원자재 선택부터 재단·용접·조립, 현장 설치와 연막 테스트까지. 모든 공정을 직접 책임지는 스테인리스 연도 전문 제조사입니다.",
+  "numbers": [
+    { "value": "2013", "suffix": "", "label": "법인 설립" },
+    { "value": "400", "suffix": "+", "label": "시공 현장" },
+    { "value": "9", "suffix": "", "label": "특허·디자인·상표" }
+  ],
+  "product1_image": "/uploads/yongin1.jpg",
+  "product1_title": "스테인리스 조립식 연도",
+  "product1_text": "STS304 내부관과 25mm 공기층. 단관부터 보온 삼중관까지.",
+  "product2_image": "/uploads/wonju2.jpg",
+  "product2_title": "LPF 기밀연도",
+  "product2_text": "플랜지 홈 패킹과 V밴드 체결로 이음부 누설을 막는 이중연도.",
+  "eng_title": "별도 보온 없이 단열하는 공기층",
+  "eng_text": "내부관과 외부 커버 사이를 스페이서로 25mm 띄워 공기 단열층을 만듭니다. 보온 작업이 따로 필요 없고, 외관이 깔끔하며 유지보수가 쉽습니다.",
+  "eng_specs": [
+    { "label": "내부관", "value": "STS304 · 0.8–1.5t" },
+    { "label": "외부 커버", "value": "STS304 / AL-Coated" },
+    { "label": "표준 길이", "value": "977 · 477 mm" }
+  ],
+  "projects_title": "400여 곳의 건물이\n중앙연도로 숨 쉽니다",
+  "project_photos": [
+    { "image": "/uploads/sac.jpg", "caption": "예술의전당 보일러공사", "year": "2024" },
+    { "image": "/uploads/yonsei.jpg", "caption": "연세대 국제캠 제약바이오", "year": "2024" },
+    { "image": "/uploads/jamsil1.jpg", "caption": "잠실 실내체육관", "year": "2024" }
+  ],
+  "tech_title": "현장의 문제를 풀어\n특허로 남겼습니다",
+  "cta_image": "/uploads/truck2.jpg",
+  "cta_title": "연도 견적이 필요하신가요?",
+  "cta_text": "도면과 장비 사양을 보내 주시면 관경과 경로를 검토해 회신드립니다."
+}

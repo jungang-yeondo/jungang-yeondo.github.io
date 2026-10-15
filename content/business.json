@@ -1,0 +1,15 @@
+{
+  "banner": "/uploads/yongin2.jpg",
+  "fields": [
+    { "label": "Boiler", "title": "보일러 연도", "text": "기계실 보일러 출구부터 옥상 최상단까지 수직 연도와 수평 브리칭을 구성합니다. 학교·병원·공동주택·업무시설.", "image": "/uploads/sac.jpg" },
+    { "label": "Generator", "title": "발전기 연도", "text": "고온 배기와 진동에 대응하는 벨로즈 조인트와 세라믹 패킹 LPF 연도를 적용합니다. 데이터센터·공장·공공시설.", "image": "/uploads/wonju1.jpg" },
+    { "label": "Chiller · Condensing", "title": "냉온수기 · 콘덴싱", "text": "응축수가 많은 장비에는 내열실리콘 패킹과 드레인 캡으로 누수를 막습니다.", "image": "/uploads/yonsei.jpg" }
+  ],
+  "process": [
+    { "title": "도면 검토", "text": "장비 사양과 현장 조건으로 관경·경로 산정" },
+    { "title": "시공상세도", "text": "지지 형식과 신축이음 위치를 반영해 승인" },
+    { "title": "공장 제작", "text": "CAD/CAM 설계, 플라즈마 절단, TIG 용접" },
+    { "title": "출하 검사", "text": "치수·용접부·부품 규격 확인 후 납품" },
+    { "title": "설치 · 시험", "text": "조립 시공 후 연막 테스트로 누기·통풍력 확인" }
+  ]
+}

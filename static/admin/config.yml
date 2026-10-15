@@ -1,0 +1,265 @@
+# ─────────────────────────────────────────────────────────────
+# 중앙연도 홈페이지 관리자 화면 설정 (Decap CMS)
+# ※ 배포 전에 아래 repo 값을 실제 GitHub 저장소 이름으로 바꾸세요.
+# ─────────────────────────────────────────────────────────────
+backend:
+  name: github
+  repo: jungang-yeondo/jungang-website
+  branch: main
+  commit_messages:
+    update: "관리자 수정: {{collection}} / {{slug}}"
+    uploadMedia: "사진 업로드: {{path}}"
+
+locale: ko
+site_url: https://www.example.co.kr
+display_url: https://www.example.co.kr
+media_folder: static/uploads
+public_folder: /uploads
+
+collections:
+  - name: pages
+    label: 홈페이지 내용
+    editor: { preview: false }
+    files:
+
+      # ── 메인 화면 ──────────────────────────────
+      - name: home
+        label: "① 메인 화면"
+        file: content/home.json
+        fields:
+          - { name: slide_seconds, label: "슬라이드 넘김 간격(초)", widget: number, value_type: int, min: 3, max: 20, default: 6 }
+          - name: slides
+            label: "메인 슬라이드 사진"
+            label_singular: "슬라이드"
+            hint: "가로로 긴 사진(1920px 이상 권장). 위아래로 끌어서 순서를 바꿀 수 있습니다."
+            widget: list
+            min: 1
+            fields:
+              - { name: image, label: 사진, widget: image }
+              - { name: caption, label: "사진 설명 (예: 잠실 실내체육관 · 2024)", widget: string }
+          - { name: hero_eyebrow, label: "메인 상단 영문 문구", widget: string }
+          - { name: hero_title, label: "메인 큰 제목 (줄바꿈 = 엔터)", widget: text }
+          - { name: hero_text, label: "메인 설명 문구", widget: text }
+          - { name: about_image, label: "회사 소개 사진", widget: image }
+          - { name: about_title, label: "회사 소개 제목", widget: text }
+          - { name: about_text, label: "회사 소개 문구", widget: text }
+          - name: numbers
+            label: "숫자 3개 (설립연도 등)"
+            widget: list
+            fields:
+              - { name: value, label: 숫자, widget: string }
+              - { name: suffix, label: "뒤 기호 (예: +)", widget: string, required: false }
+              - { name: label, label: 설명, widget: string }
+          - { name: product1_image, label: "제품 1 사진 (스테인리스 연도)", widget: image }
+          - { name: product1_title, label: "제품 1 제목", widget: string }
+          - { name: product1_text, label: "제품 1 설명", widget: string }
+          - { name: product2_image, label: "제품 2 사진 (LPF)", widget: image }
+          - { name: product2_title, label: "제품 2 제목", widget: string }
+          - { name: product2_text, label: "제품 2 설명", widget: string }
+          - { name: eng_title, label: "25mm 영역 제목", widget: string }
+          - { name: eng_text, label: "25mm 영역 설명", widget: text }
+          - name: eng_specs
+            label: "25mm 영역 사양 줄"
+            widget: list
+            fields: [{ name: label, label: 항목, widget: string }, { name: value, label: 값, widget: string }]
+          - { name: projects_title, label: "시공실적 영역 제목", widget: text }
+          - name: project_photos
+            label: "메인 시공 사진 (3장)"
+            widget: list
+            max: 3
+            fields:
+              - { name: image, label: 사진, widget: image }
+              - { name: caption, label: 현장명, widget: string }
+              - { name: year, label: 연도, widget: string }
+          - { name: tech_title, label: "특허 영역 제목", widget: text }
+          - { name: cta_image, label: "하단 문의 배경 사진", widget: image }
+          - { name: cta_title, label: "하단 문의 제목", widget: string }
+          - { name: cta_text, label: "하단 문의 설명", widget: string }
+
+      # ── 회사소개 ──────────────────────────────
+      - name: company
+        label: "② 회사소개 (인사말·개요·연혁)"
+        file: content/company.json
+        fields:
+          - { name: banner, label: "상단 배경 사진", widget: image }
+          - { name: greeting_quote, label: "인사말 큰 문구", widget: text }
+          - { name: greeting_body, label: "인사말 본문 (문단 사이 빈 줄)", widget: text }
+          - { name: greeting_sign_title, label: "서명 앞 문구", widget: string }
+          - { name: greeting_image, label: "인사말 하단 사진", widget: image, required: false }
+          - name: overview_rows
+            label: "회사개요 표"
+            widget: list
+            fields: [{ name: label, label: 항목, widget: string }, { name: value, label: 내용, widget: text }]
+          - name: history
+            label: "연혁"
+            label_singular: "연혁 항목"
+            hint: "최신 항목을 맨 위에 두세요."
+            widget: list
+            fields:
+              - { name: date, label: "날짜 (예: 2026.01)", widget: string }
+              - { name: title, label: 내용, widget: string }
+              - { name: note, label: "보조 설명 (등록번호 등)", widget: string, required: false }
+              - { name: highlight, label: "빨간색 강조", widget: boolean, default: false }
+          - { name: visit_note, label: "오시는 길 방문 안내", widget: text }
+
+      # ── 사업분야 ──────────────────────────────
+      - name: business
+        label: "③ 사업분야"
+        file: content/business.json
+        fields:
+          - { name: banner, label: "상단 배경 사진", widget: image }
+          - name: fields
+            label: "적용 분야"
+            widget: list
+            fields:
+              - { name: image, label: 사진, widget: image }
+              - { name: label, label: "영문 라벨", widget: string }
+              - { name: title, label: 제목, widget: string }
+              - { name: text, label: 설명, widget: text }
+          - name: process
+            label: "진행 절차"
+            widget: list
+            fields: [{ name: title, label: 단계명, widget: string }, { name: text, label: 설명, widget: string }]
+
+      # ── 제품 ──────────────────────────────
+      - name: products
+        label: "④ 제품소개 (스테인리스 연도·LPF)"
+        file: content/products.json
+        fields:
+          - { name: banner, label: "상단 배경 사진", widget: image }
+          - { name: stack_title, label: "[스테인리스] 제목", widget: text }
+          - { name: stack_quote, label: "[스테인리스] 큰 문구", widget: text }
+          - { name: stack_intro, label: "[스테인리스] 설명", widget: text }
+          - { name: stack_image, label: "[스테인리스] 사진", widget: image }
+          - name: features
+            label: "[스테인리스] 특징"
+            widget: list
+            fields: [{ name: en, label: 영문, widget: string }, { name: title, label: 제목, widget: string }, { name: text, label: 설명, widget: text }]
+          - name: lineup
+            label: "[스테인리스] 구성 (단관·이중관·삼중관 순서)"
+            widget: list
+            max: 3
+            fields: [{ name: title, label: 이름, widget: string }, { name: text, label: 설명, widget: string }, { name: formula, label: 관경식, widget: string }]
+          - { name: lineup_note, label: "[스테인리스] 관경 예시 문구", widget: string }
+          - name: spec_rows
+            label: "[스테인리스] 재질·두께 표"
+            widget: list
+            fields:
+              - { name: name, label: 구분, widget: string }
+              - { name: a, label: "~Ø900", widget: string }
+              - { name: b, label: "Ø1000–1500", widget: string }
+              - { name: c, label: "Ø1600~", widget: string }
+              - { name: material, label: 재질, widget: string }
+          - { name: spec_note, label: "[스테인리스] 표 아래 안내", widget: text }
+          - name: support_rows
+            label: "[스테인리스] 지지 철물 표"
+            widget: list
+            fields: [{ name: name, label: 구분, widget: string }, { name: spec, label: 규격, widget: string }, { name: where, label: 설치 위치, widget: string }]
+          - name: parts
+            label: "[스테인리스] 주요 부품"
+            widget: list
+            fields: [{ name: code, label: 코드, widget: string }, { name: title, label: 이름, widget: string }, { name: text, label: 설명, widget: string }]
+          - { name: lpf_quote, label: "[LPF] 큰 문구", widget: text }
+          - { name: lpf_intro, label: "[LPF] 설명", widget: text }
+          - { name: lpf_note, label: "[LPF] 상표·특허 안내", widget: string }
+          - name: packing
+            label: "[LPF] 패킹 선택 표"
+            widget: list
+            fields: [{ name: name, label: 패킹, widget: string }, { name: cond, label: 적용 조건, widget: string }, { name: equip, label: 대표 장비, widget: string }]
+          - { name: packing_note, label: "[LPF] 패킹 안내", widget: text }
+          - name: steps
+            label: "[LPF] 조립 순서"
+            widget: list
+            fields: [{ name: text, label: 내용, widget: text }]
+          - name: lpf_thickness
+            label: "[LPF] 내부관 두께"
+            widget: object
+            fields: [{ name: a, label: "~Ø900", widget: string }, { name: b, label: "Ø1000–1500", widget: string }, { name: c, label: "Ø1600~", widget: string }]
+          - name: mfg
+            label: "[LPF] 제작 기준"
+            widget: list
+            fields: [{ name: text, label: 내용, widget: string }]
+
+      # ── 시공실적 ──────────────────────────────
+      - name: projects
+        label: "⑤ 시공실적·현장 사진·인증"
+        file: content/projects.json
+        fields:
+          - { name: banner, label: "상단 배경 사진", widget: image }
+          - { name: note, label: "실적 안내 문구", widget: string }
+          - name: items
+            label: "대표 시공 현장"
+            label_singular: "현장"
+            summary: "{{fields.name}} · {{fields.category}}"
+            widget: list
+            fields:
+              - { name: name, label: 현장명, widget: string }
+              - { name: category, label: 분야, widget: select, options: ["공공", "의료", "교육", "문화·체육", "산업", "상업·숙박", "교통", "주거", "기타"] }
+              - { name: contractor, label: 시공사, widget: string, required: false }
+          - name: gallery
+            label: "현장 사진"
+            label_singular: "사진"
+            summary: "{{fields.caption}} ({{fields.year}})"
+            widget: list
+            fields:
+              - { name: image, label: 사진, widget: image }
+              - { name: caption, label: 설명, widget: string }
+              - { name: year, label: 연도, widget: string }
+          - name: patents
+            label: "특허·디자인·상표"
+            summary: "{{fields.type}} · {{fields.title}}"
+            widget: list
+            fields:
+              - { name: type, label: 구분, widget: select, options: ["특허", "실용신안", "디자인", "상표", "인증"] }
+              - { name: title, label: 명칭, widget: string }
+              - { name: number, label: 등록번호, widget: string }
+              - { name: year, label: 등록연도, widget: string }
+              - { name: home, label: "메인 화면에 표시 (최대 4개)", widget: boolean, default: false }
+          - name: materials
+            label: "원자재 인증"
+            widget: list
+            fields: [{ name: kind, label: 구분, widget: string }, { name: issuer, label: 발행, widget: string }, { name: content, label: 내용, widget: string }]
+          - { name: materials_note, label: "원자재 인증 안내", widget: string }
+
+      # ── 고객지원 ──────────────────────────────
+      - name: support
+        label: "⑥ 자료실·온라인 문의"
+        file: content/support.json
+        fields:
+          - { name: banner, label: "상단 배경 사진", widget: image }
+          - name: downloads
+            label: "자료실"
+            label_singular: "자료"
+            widget: list
+            fields:
+              - { name: title, label: 자료명, widget: string }
+              - { name: desc, label: 설명, widget: string }
+              - { name: file, label: "파일 (PDF 등)", widget: file, required: false }
+              - { name: status, label: "파일이 없을 때 표시 (예: 준비 중)", widget: string, required: false }
+          - { name: contact_intro, label: "문의 안내 문구", widget: text }
+          - name: contact_types
+            label: "문의 구분 목록"
+            widget: list
+            fields: [{ name: name, label: 구분, widget: string }]
+          - { name: thanks_text, label: "문의 완료 메시지", widget: text }
+
+      # ── 기본 정보 ──────────────────────────────
+      - name: site
+        label: "⑦ 회사 기본정보·검색 설정"
+        file: content/site.json
+        fields:
+          - { name: name, label: 정식 상호, widget: string }
+          - { name: short_name, label: "짧은 상호 (상단 표시)", widget: string }
+          - { name: name_en, label: 영문 상호, widget: string }
+          - { name: ceo, label: 대표이사, widget: string }
+          - { name: founded, label: 설립일, widget: string }
+          - { name: bizno, label: 사업자등록번호, widget: string }
+          - { name: address, label: 주소, widget: string }
+          - { name: tel, label: 대표전화, widget: string }
+          - { name: fax, label: 팩스, widget: string }
+          - { name: email, label: 이메일, widget: string }
+          - { name: url, label: "홈페이지 주소 (https://www.…)", widget: string }
+          - { name: seo_title, label: "검색 결과 제목", widget: string, hint: "네이버·구글 검색 결과에 표시되는 제목 (60자 이내)" }
+          - { name: seo_description, label: "검색 결과 설명", widget: text, hint: "검색 결과 제목 아래 설명 (80~120자)" }
+          - { name: naver_verification, label: "네이버 서치어드바이저 인증 코드", widget: string, required: false }
+          - { name: google_verification, label: "구글 서치콘솔 인증 코드", widget: string, required: false }

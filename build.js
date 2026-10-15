@@ -23,7 +23,7 @@ const NAV = [
   { key: 'company', label: '회사소개', href: '/company/greeting/', sub: [['인사말', '/company/greeting/'], ['회사개요', '/company/overview/'], ['연혁', '/company/history/'], ['오시는 길', '/company/location/']] },
   { key: 'business', label: '사업분야', href: '/business/', sub: [['사업분야', '/business/']] },
   { key: 'product', label: '제품소개', href: '/product/stack/', sub: [['스테인리스 연도', '/product/stack/'], ['LPF 기밀연도', '/product/lpf/']] },
-  { key: 'projects', label: '시공실적', href: '/projects/', sub: [['시공실적', '/projects/'], ['현장 사진', '/projects/gallery/'], ['인증·특허', '/projects/certification/']] },
+  { key: 'projects', label: '납품실적', href: '/projects/', sub: [['납품실적', '/projects/'], ['현장 사진', '/projects/gallery/'], ['인증·특허', '/projects/certification/']] },
   { key: 'support', label: '고객지원', href: '/support/downloads/', sub: [['자료실', '/support/downloads/'], ['온라인 문의', '/support/contact/']] },
 ];
 
@@ -192,7 +192,7 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
 </div></section>
 
 <section class="sec"><div class="wrap">
-  <div class="headrow"><div><div class="label">Projects</div><h2 class="h2">${br(home.projects_title)}</h2></div><a class="arrow" href="/projects/" style="margin-top:0">시공실적 전체</a></div>
+  <div class="headrow"><div><div class="label">Projects</div><h2 class="h2">${br(home.projects_title)}</h2></div><a class="arrow" href="/projects/" style="margin-top:0">납품실적 전체</a></div>
 </div>
   <div class="marq" aria-hidden="true"><div class="row">${row(names.slice(0, half))}</div><div class="row rev">${row(names.slice(half))}</div></div>
 <div class="wrap"><div class="pgrid">${photos}</div></div></section>
@@ -237,7 +237,7 @@ add('/business/', {
   title: '사업분야', section: 'business', image: biz.banner,
   body: subPage({ en: 'Business', title: '사업분야', banner: biz.banner, section: 'business', current: '/business/', body:
     two('Field', '적용 분야', `<div class="biz3">${list(biz.fields).map((f) => `<article><div class="im">${img(f.image, f.title)}</div><span class="en">${esc(f.label)}</span><b>${esc(f.title)}</b><p>${esc(f.text)}</p></article>`).join('')}</div>`) +
-    two('Process', '수주부터 준공까지', `<ol class="steps" style="grid-template-columns:repeat(${Math.min(5, list(biz.process).length) || 1},1fr)">${list(biz.process).map((p) => `<li><b style="color:var(--ink);display:block;margin-bottom:6px">${esc(p.title)}</b>${esc(p.text)}</li>`).join('')}</ol>`) }),
+    two('Process', '수주부터 납품까지', `<ol class="steps" style="grid-template-columns:repeat(${Math.min(5, list(biz.process).length) || 1},1fr)">${list(biz.process).map((p) => `<li><b style="color:var(--ink);display:block;margin-bottom:6px">${esc(p.title)}</b>${esc(p.text)}</li>`).join('')}</ol>`) }),
 });
 
 // ---------- PRODUCTS ----------
@@ -250,7 +250,7 @@ add('/product/stack/', {
   title: '스테인리스 연도', section: 'product', image: prod.stack_image,
   desc: '스테인리스 조립식 이중연도 — STS304 내부관, 25mm 공기단열층, 단관·이중관·보온 삼중관, 재질·두께 규격과 주요 부품.',
   body: subPage({ en: 'Products', title: '스테인리스 연도', banner: prod.banner, section: 'product', current: '/product/stack/', body:
-    two('Double-wall Stack', br(prod.stack_title), `<p class="quote" style="margin-bottom:20px">${br(prod.stack_quote)}</p><p class="lead" style="margin-top:0">${esc(prod.stack_intro)}</p>${prod.stack_image ? `<div class="wideimg">${img(prod.stack_image, '스테인리스 이중연도 시공 현장')}</div>` : ''}`) +
+    two('Double-wall Stack', br(prod.stack_title), `<p class="quote" style="margin-bottom:20px">${br(prod.stack_quote)}</p><p class="lead" style="margin-top:0">${esc(prod.stack_intro)}</p>${prod.stack_image ? `<div class="wideimg">${img(prod.stack_image, '스테인리스 이중연도 납품 현장')}</div>` : ''}`) +
     two('Feature', '특징', `<div class="feat4">${list(prod.features).map((f) => `<div><span class="en">${esc(f.en)}</span><b>${esc(f.title)}</b><p>${esc(f.text)}</p></div>`).join('')}</div>`) +
     two('Line-up', '구성 · 관경 산정', `<div class="lineup">${list(prod.lineup).map((l, i) => `<div>${ICONS[Math.min(i, 2)]}<b>${esc(l.title)}</b><p>${esc(l.text)}</p><span class="f">${esc(l.formula)}</span></div>`).join('')}</div><p class="note">${esc(prod.lineup_note)}</p>`) +
     two('Specification', '재질 · 두께', `<div class="tw"><table class="tbl"><thead><tr><th>구분</th><th class="c">~ Ø900</th><th class="c">Ø1000 – 1500</th><th class="c">Ø1600 ~</th><th>재질</th></tr></thead><tbody>${list(prod.spec_rows).map((r) => `<tr><td>${esc(r.name)}</td><td class="c num">${esc(r.a)}</td><td class="c num">${esc(r.b)}</td><td class="c num">${esc(r.c)}</td><td>${esc(r.material)}</td></tr>`).join('')}</tbody></table></div><p class="note">${esc(prod.spec_note)}</p>
@@ -273,10 +273,10 @@ add('/product/lpf/', {
   const cats = ['전체', ...Array.from(new Set(items.map((i) => i.category).filter(Boolean)))];
   const rows = items.map((r) => `<tr data-cat="${esc(r.category)}"><td>${esc(r.name)}</td><td style="color:var(--muted)">${esc(r.category)}</td><td>${esc(r.contractor) || '<span style="color:var(--muted)">—</span>'}</td></tr>`).join('');
   add('/projects/', {
-    title: '시공실적', section: 'projects', image: proj.banner,
-    desc: `${site.short_name} 연도 시공실적 — ${items.slice(0, 8).map((i) => i.name).join(', ')} 등 13,000곳 이상.`,
-    body: subPage({ en: 'Projects', title: '시공실적', banner: proj.banner, section: 'projects', current: '/projects/', body:
-      two('Reference', '대표 시공 현장', `<div class="filters" id="filters" role="group" aria-label="분야 필터">${cats.map((c, i) => `<button type="button" aria-pressed="${i === 0}">${esc(c)}</button>`).join('')}</div>
+    title: '납품실적', section: 'projects', image: proj.banner,
+    desc: `${site.short_name} 연도 납품실적 — ${items.slice(0, 8).map((i) => i.name).join(', ')} 등 13,000곳 이상.`,
+    body: subPage({ en: 'Projects', title: '납품실적', banner: proj.banner, section: 'projects', current: '/projects/', body:
+      two('Reference', '대표 납품 현장', `<div class="filters" id="filters" role="group" aria-label="분야 필터">${cats.map((c, i) => `<button type="button" aria-pressed="${i === 0}">${esc(c)}</button>`).join('')}</div>
 <div class="searchrow"><span class="rcnt" id="countLine"><b>${items.length}</b> 개 현장</span><input id="q" type="search" placeholder="현장명 · 시공사 검색" aria-label="현장 검색"></div>
 <div class="tw"><table class="tbl" id="rtable"><thead><tr><th>현장명</th><th>분야</th><th>시공사</th></tr></thead><tbody>${rows}</tbody></table></div>
 <p class="note" id="noResult" hidden>검색 결과가 없습니다. 다른 이름으로 찾아보세요.</p>`, `<p class="note" style="margin-top:14px">${esc(proj.note)}</p>`) }),

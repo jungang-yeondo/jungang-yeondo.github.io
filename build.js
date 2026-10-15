@@ -345,13 +345,17 @@ function render() {
   for (const p of pages) {
     const file = p.url.endsWith('.html') ? path.join(OUT, p.url) : path.join(OUT, p.url, 'index.html');
     fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, p.html);
+    fs.writeFileSync(file, p.html.replace(/(src|href)="(\/uploads\/[^"?]+)"/g, (m, a, s) => a + '="' + s + '?v=' + ver(s) + '"'));
   }
   const today = new Date().toISOString().slice(0, 10);
   const urls = pages.filter((p) => !p.url.endsWith('.html') && !p.url.includes('thanks')).map((p) => `<url><loc>${baseUrl}${p.url}</loc><lastmod>${today}</lastmod></url>`).join('');
   fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`);
   fs.writeFileSync(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: ${baseUrl}/sitemap.xml\n`);
   console.log(`built ${pages.length} pages → _site/`);
+}
+function ver(s) {
+  try { return require('crypto').createHash('md5').update(fs.readFileSync(path.join(ROOT, 'static', s))).digest('hex').slice(0, 8); }
+  catch (e) { return Date.now().toString(36); }
 }
 function copyDir(src, dst) {
   fs.mkdirSync(dst, { recursive: true });

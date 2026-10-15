@@ -5,12 +5,16 @@
       "caption": "중앙연도 로고"
     },
     {
-      "image": "/uploads/kakaotalk_20261015_152812390.jpg",
-      "caption": "중앙연도 전경"
+      "image": "/uploads/factory-front-01.jpg",
+      "caption": "공장 전경"
     },
     {
-      "image": "/uploads/factory-yard-01.jpg",
-      "caption": "중앙연도 전경"
+      "image": "/uploads/stock-yard-01.jpg",
+      "caption": "출하 대기 중인 연도 제품"
+    },
+    {
+      "image": "/uploads/delivery-truck-01.jpg",
+      "caption": "현장 납품"
     }
   ],
   "hero_eyebrow": "Stainless Steel Chimney · Since 2013",

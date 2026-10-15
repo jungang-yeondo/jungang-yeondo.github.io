@@ -274,7 +274,7 @@ add('/product/lpf/', {
   const rows = items.map((r) => `<tr data-cat="${esc(r.category)}"><td>${esc(r.name)}</td><td style="color:var(--muted)">${esc(r.category)}</td><td>${esc(r.contractor) || '<span style="color:var(--muted)">—</span>'}</td></tr>`).join('');
   add('/projects/', {
     title: '시공실적', section: 'projects', image: proj.banner,
-    desc: `${site.short_name} 연도 시공실적 — ${items.slice(0, 8).map((i) => i.name).join(', ')} 등 400여 건.`,
+    desc: `${site.short_name} 연도 시공실적 — ${items.slice(0, 8).map((i) => i.name).join(', ')} 등 13,000곳 이상.`,
     body: subPage({ en: 'Projects', title: '시공실적', banner: proj.banner, section: 'projects', current: '/projects/', body:
       two('Reference', '대표 시공 현장', `<div class="filters" id="filters" role="group" aria-label="분야 필터">${cats.map((c, i) => `<button type="button" aria-pressed="${i === 0}">${esc(c)}</button>`).join('')}</div>
 <div class="searchrow"><span class="rcnt" id="countLine"><b>${items.length}</b> 개 현장</span><input id="q" type="search" placeholder="현장명 · 시공사 검색" aria-label="현장 검색"></div>

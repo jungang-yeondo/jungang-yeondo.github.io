@@ -1,82 +1,376 @@
 {
   "banner": "/uploads/jamsil1.jpg",
-  "note": "전체 400여 건 목록은 회사 지명원에 수록되어 있습니다.",
+  "note": "전국 13,000곳이 넘는 납품 현장 가운데 대표 현장을 소개합니다.",
   "items": [
-    { "name": "국회의사당", "category": "공공", "contractor": "(주)보성프랜트" },
-    { "name": "한국은행", "category": "공공", "contractor": "코리아플랜트(주)" },
-    { "name": "대한민국 국가정보원", "category": "공공", "contractor": "청운기공" },
-    { "name": "서울 시의회", "category": "공공", "contractor": "(주)영익엔지니어링" },
-    { "name": "감사원", "category": "공공", "contractor": "연안산업(주)" },
-    { "name": "프랑스 대사관", "category": "공공", "contractor": "동호엔지니어링(주)" },
-    { "name": "대전 문화재 연구센터", "category": "공공", "contractor": "(주)상건설비" },
-    { "name": "강북 정수사업소", "category": "공공", "contractor": "영익엔지니어링(주)" },
-    { "name": "김해 장유소각장", "category": "공공", "contractor": "(주)국민이엔씨" },
-    { "name": "서울아산병원", "category": "의료", "contractor": "(주)중앙이엔지" },
-    { "name": "고려대학교 안산병원", "category": "의료", "contractor": "(주)중앙이엔지" },
-    { "name": "부천 성모병원", "category": "의료", "contractor": "(주)중앙이엔지" },
-    { "name": "강원대 병원", "category": "의료", "contractor": "화남이엔씨(주)" },
-    { "name": "서울외과병원", "category": "의료", "contractor": "(주)세영종합건설" },
-    { "name": "숙명여자대학교", "category": "교육", "contractor": "한신테크" },
-    { "name": "서울예술고등학교", "category": "교육", "contractor": "(주)중앙이엔지" },
-    { "name": "인하대학교", "category": "교육", "contractor": "부림기공(주)" },
-    { "name": "서울과학고등학교", "category": "교육", "contractor": "화남이엔씨(주)" },
-    { "name": "서울 시립대학교", "category": "교육", "contractor": "영익엔지니어링(주)" },
-    { "name": "충주대학교", "category": "교육", "contractor": "다원건영(주)" },
-    { "name": "예술의전당 보일러공사", "category": "문화·체육", "contractor": "" },
-    { "name": "잠실 실내체육관", "category": "문화·체육", "contractor": "" },
-    { "name": "국립어린이박물관", "category": "문화·체육", "contractor": "화성산업" },
-    { "name": "동탄 예술의전당", "category": "문화·체육", "contractor": "용문엔지니어링" },
-    { "name": "고양시 미술관", "category": "문화·체육", "contractor": "(주)필에이드엔지니어링" },
-    { "name": "남산타워 개보수", "category": "문화·체육", "contractor": "윤성기업(주)" },
-    { "name": "엑스포 예술관", "category": "문화·체육", "contractor": "진화엔지니어링(주)" },
-    { "name": "SK하이닉스", "category": "산업", "contractor": "코스탈파워" },
-    { "name": "삼성전자 NanoCity 온양캠퍼스", "category": "산업", "contractor": "상우플랜" },
-    { "name": "현대자동차 전주공장", "category": "산업", "contractor": "상우플랜" },
-    { "name": "LG에너지솔루션 오창", "category": "산업", "contractor": "(주)중앙이엔지" },
-    { "name": "SK ON", "category": "산업", "contractor": "화성산업" },
-    { "name": "네이버 데이터센터 각 세종", "category": "산업", "contractor": "청운기공" },
-    { "name": "해태제과식품 광주공장", "category": "산업", "contractor": "화성산업" },
-    { "name": "롯데칠성음료 양산공장", "category": "산업", "contractor": "상우플랜" },
-    { "name": "연세대 국제캠 제약바이오", "category": "산업", "contractor": "" },
-    { "name": "LG 정밀공장", "category": "산업", "contractor": "환스이엔지(주)" },
-    { "name": "평택 LCD FILM 공장", "category": "산업", "contractor": "대우이엔지(주)" },
-    { "name": "부산 롯데월드", "category": "상업·숙박", "contractor": "(주)중앙이엔지" },
-    { "name": "서울 신라호텔 면세점", "category": "상업·숙박", "contractor": "상우플랜" },
-    { "name": "대전 롯데백화점", "category": "상업·숙박", "contractor": "상우플랜" },
-    { "name": "KTX스테이 속초", "category": "상업·숙박", "contractor": "용문엔지니어링(주)" },
-    { "name": "강남 CGV", "category": "상업·숙박", "contractor": "한성연도" },
-    { "name": "콘티넨탈 호텔", "category": "상업·숙박", "contractor": "성영건설(주)" },
-    { "name": "고양 KTX 차량기지", "category": "교통", "contractor": "화남이엔씨(주)" },
-    { "name": "구로·상계 차량기지", "category": "교통", "contractor": "태성기건(주)" },
-    { "name": "천안 고속터미널", "category": "교통", "contractor": "(주)삼전기업" }
+    {
+      "name": "국회의사당",
+      "category": "공공",
+      "contractor": "(주)보성프랜트"
+    },
+    {
+      "name": "한국은행",
+      "category": "공공",
+      "contractor": "코리아플랜트(주)"
+    },
+    {
+      "name": "대한민국 국가정보원",
+      "category": "공공",
+      "contractor": "청운기공"
+    },
+    {
+      "name": "서울 시의회",
+      "category": "공공",
+      "contractor": "(주)영익엔지니어링"
+    },
+    {
+      "name": "감사원",
+      "category": "공공",
+      "contractor": "연안산업(주)"
+    },
+    {
+      "name": "프랑스 대사관",
+      "category": "공공",
+      "contractor": "동호엔지니어링(주)"
+    },
+    {
+      "name": "대전 문화재 연구센터",
+      "category": "공공",
+      "contractor": "(주)상건설비"
+    },
+    {
+      "name": "강북 정수사업소",
+      "category": "공공",
+      "contractor": "영익엔지니어링(주)"
+    },
+    {
+      "name": "김해 장유소각장",
+      "category": "공공",
+      "contractor": "(주)국민이엔씨"
+    },
+    {
+      "name": "서울아산병원",
+      "category": "의료",
+      "contractor": "(주)중앙이엔지"
+    },
+    {
+      "name": "고려대학교 안산병원",
+      "category": "의료",
+      "contractor": "(주)중앙이엔지"
+    },
+    {
+      "name": "부천 성모병원",
+      "category": "의료",
+      "contractor": "(주)중앙이엔지"
+    },
+    {
+      "name": "강원대 병원",
+      "category": "의료",
+      "contractor": "화남이엔씨(주)"
+    },
+    {
+      "name": "서울외과병원",
+      "category": "의료",
+      "contractor": "(주)세영종합건설"
+    },
+    {
+      "name": "숙명여자대학교",
+      "category": "교육",
+      "contractor": "한신테크"
+    },
+    {
+      "name": "서울예술고등학교",
+      "category": "교육",
+      "contractor": "(주)중앙이엔지"
+    },
+    {
+      "name": "인하대학교",
+      "category": "교육",
+      "contractor": "부림기공(주)"
+    },
+    {
+      "name": "서울과학고등학교",
+      "category": "교육",
+      "contractor": "화남이엔씨(주)"
+    },
+    {
+      "name": "서울 시립대학교",
+      "category": "교육",
+      "contractor": "영익엔지니어링(주)"
+    },
+    {
+      "name": "충주대학교",
+      "category": "교육",
+      "contractor": "다원건영(주)"
+    },
+    {
+      "name": "예술의전당 보일러공사",
+      "category": "문화·체육",
+      "contractor": ""
+    },
+    {
+      "name": "잠실 실내체육관",
+      "category": "문화·체육",
+      "contractor": ""
+    },
+    {
+      "name": "국립어린이박물관",
+      "category": "문화·체육",
+      "contractor": "화성산업"
+    },
+    {
+      "name": "동탄 예술의전당",
+      "category": "문화·체육",
+      "contractor": "용문엔지니어링"
+    },
+    {
+      "name": "고양시 미술관",
+      "category": "문화·체육",
+      "contractor": "(주)필에이드엔지니어링"
+    },
+    {
+      "name": "남산타워 개보수",
+      "category": "문화·체육",
+      "contractor": "윤성기업(주)"
+    },
+    {
+      "name": "엑스포 예술관",
+      "category": "문화·체육",
+      "contractor": "진화엔지니어링(주)"
+    },
+    {
+      "name": "SK하이닉스",
+      "category": "산업",
+      "contractor": "코스탈파워"
+    },
+    {
+      "name": "삼성전자 NanoCity 온양캠퍼스",
+      "category": "산업",
+      "contractor": "상우플랜"
+    },
+    {
+      "name": "현대자동차 전주공장",
+      "category": "산업",
+      "contractor": "상우플랜"
+    },
+    {
+      "name": "LG에너지솔루션 오창",
+      "category": "산업",
+      "contractor": "(주)중앙이엔지"
+    },
+    {
+      "name": "SK ON",
+      "category": "산업",
+      "contractor": "화성산업"
+    },
+    {
+      "name": "네이버 데이터센터 각 세종",
+      "category": "산업",
+      "contractor": "청운기공"
+    },
+    {
+      "name": "해태제과식품 광주공장",
+      "category": "산업",
+      "contractor": "화성산업"
+    },
+    {
+      "name": "롯데칠성음료 양산공장",
+      "category": "산업",
+      "contractor": "상우플랜"
+    },
+    {
+      "name": "연세대 국제캠 제약바이오",
+      "category": "산업",
+      "contractor": ""
+    },
+    {
+      "name": "LG 정밀공장",
+      "category": "산업",
+      "contractor": "환스이엔지(주)"
+    },
+    {
+      "name": "평택 LCD FILM 공장",
+      "category": "산업",
+      "contractor": "대우이엔지(주)"
+    },
+    {
+      "name": "부산 롯데월드",
+      "category": "상업·숙박",
+      "contractor": "(주)중앙이엔지"
+    },
+    {
+      "name": "서울 신라호텔 면세점",
+      "category": "상업·숙박",
+      "contractor": "상우플랜"
+    },
+    {
+      "name": "대전 롯데백화점",
+      "category": "상업·숙박",
+      "contractor": "상우플랜"
+    },
+    {
+      "name": "KTX스테이 속초",
+      "category": "상업·숙박",
+      "contractor": "용문엔지니어링(주)"
+    },
+    {
+      "name": "강남 CGV",
+      "category": "상업·숙박",
+      "contractor": "한성연도"
+    },
+    {
+      "name": "콘티넨탈 호텔",
+      "category": "상업·숙박",
+      "contractor": "성영건설(주)"
+    },
+    {
+      "name": "고양 KTX 차량기지",
+      "category": "교통",
+      "contractor": "화남이엔씨(주)"
+    },
+    {
+      "name": "구로·상계 차량기지",
+      "category": "교통",
+      "contractor": "태성기건(주)"
+    },
+    {
+      "name": "천안 고속터미널",
+      "category": "교통",
+      "contractor": "(주)삼전기업"
+    }
   ],
   "gallery": [
-    { "image": "/uploads/sac.jpg", "caption": "예술의전당 보일러공사", "year": "2024" },
-    { "image": "/uploads/jamsil2.jpg", "caption": "잠실 실내체육관", "year": "2024" },
-    { "image": "/uploads/yonsei.jpg", "caption": "연세대 국제캠 제약바이오", "year": "2024" },
-    { "image": "/uploads/yongin1.jpg", "caption": "용인 시청 연도공사", "year": "2023" },
-    { "image": "/uploads/jamsil1.jpg", "caption": "잠실 실내체육관 · 양중", "year": "2024" },
-    { "image": "/uploads/wonju1.jpg", "caption": "원주 빨래공장", "year": "2025" },
-    { "image": "/uploads/yongin2.jpg", "caption": "용인 시청 · 수평 브리칭", "year": "2023" },
-    { "image": "/uploads/wonju2.jpg", "caption": "원주 빨래공장 · V밴드 체결", "year": "2025" },
-    { "image": "/uploads/truck1.jpg", "caption": "제품 상차 · 자재 납품", "year": "포천 공장" }
+    {
+      "image": "/uploads/sac.jpg",
+      "caption": "예술의전당 보일러공사",
+      "year": "2024"
+    },
+    {
+      "image": "/uploads/jamsil2.jpg",
+      "caption": "잠실 실내체육관",
+      "year": "2024"
+    },
+    {
+      "image": "/uploads/yonsei.jpg",
+      "caption": "연세대 국제캠 제약바이오",
+      "year": "2024"
+    },
+    {
+      "image": "/uploads/yongin1.jpg",
+      "caption": "용인 시청 연도공사",
+      "year": "2023"
+    },
+    {
+      "image": "/uploads/jamsil1.jpg",
+      "caption": "잠실 실내체육관 · 양중",
+      "year": "2024"
+    },
+    {
+      "image": "/uploads/wonju1.jpg",
+      "caption": "원주 빨래공장",
+      "year": "2025"
+    },
+    {
+      "image": "/uploads/yongin2.jpg",
+      "caption": "용인 시청 · 수평 브리칭",
+      "year": "2023"
+    },
+    {
+      "image": "/uploads/wonju2.jpg",
+      "caption": "원주 빨래공장 · V밴드 체결",
+      "year": "2025"
+    },
+    {
+      "image": "/uploads/truck1.jpg",
+      "caption": "제품 상차 · 자재 납품",
+      "year": "포천 공장"
+    }
   ],
   "patents": [
-    { "type": "특허", "title": "냉각 채널을 구비하는 연도", "number": "10-2917514", "year": "2026", "home": true },
-    { "type": "특허", "title": "고열 배기가스용 배관 연결구", "number": "10-2789643", "year": "2025", "home": true },
-    { "type": "특허", "title": "배관 조립체", "number": "10-2774048", "year": "2025", "home": false },
-    { "type": "상표", "title": "LPF · Leakage Prevention Flange", "number": "40-2227790", "year": "2024", "home": true },
-    { "type": "특허", "title": "배관 반가공 자동화장치 및 배관 제조방법", "number": "10-2301203", "year": "2021", "home": false },
-    { "type": "디자인", "title": "배관 결합용 밴드", "number": "30-1121362", "year": "2021", "home": false },
-    { "type": "특허", "title": "연도용 에어덕트 조립체", "number": "10-1939190", "year": "2019", "home": false },
-    { "type": "특허", "title": "단열 연도 조립체", "number": "10-1648312", "year": "2016", "home": false },
-    { "type": "특허", "title": "연도 내부의 결로 방지 시스템", "number": "10-1457159", "year": "2014", "home": true }
+    {
+      "type": "특허",
+      "title": "냉각 채널을 구비하는 연도",
+      "number": "10-2917514",
+      "year": "2026",
+      "home": true
+    },
+    {
+      "type": "특허",
+      "title": "고열 배기가스용 배관 연결구",
+      "number": "10-2789643",
+      "year": "2025",
+      "home": true
+    },
+    {
+      "type": "특허",
+      "title": "배관 조립체",
+      "number": "10-2774048",
+      "year": "2025",
+      "home": false
+    },
+    {
+      "type": "상표",
+      "title": "LPF · Leakage Prevention Flange",
+      "number": "40-2227790",
+      "year": "2024",
+      "home": true
+    },
+    {
+      "type": "특허",
+      "title": "배관 반가공 자동화장치 및 배관 제조방법",
+      "number": "10-2301203",
+      "year": "2021",
+      "home": false
+    },
+    {
+      "type": "디자인",
+      "title": "배관 결합용 밴드",
+      "number": "30-1121362",
+      "year": "2021",
+      "home": false
+    },
+    {
+      "type": "특허",
+      "title": "연도용 에어덕트 조립체",
+      "number": "10-1939190",
+      "year": "2019",
+      "home": false
+    },
+    {
+      "type": "특허",
+      "title": "단열 연도 조립체",
+      "number": "10-1648312",
+      "year": "2016",
+      "home": false
+    },
+    {
+      "type": "특허",
+      "title": "연도 내부의 결로 방지 시스템",
+      "number": "10-1457159",
+      "year": "2014",
+      "home": true
+    }
   ],
   "materials": [
-    { "kind": "KS 제품인증", "issuer": "(주)포스코", "content": "냉간 압연 스테인리스 강판 및 강대 · KS D 3698" },
-    { "kind": "KS 제품인증", "issuer": "(주)포스코", "content": "열간 압연 스테인리스 강판 및 강대 · KS D 3705" },
-    { "kind": "제품인증 · 시험성적서", "issuer": "포스코스틸리온", "content": "도금강판 (외부 커버용)" },
-    { "kind": "시험성적서", "issuer": "대흥화학공업(주)", "content": "연도용 부자재" }
+    {
+      "kind": "KS 제품인증",
+      "issuer": "(주)포스코",
+      "content": "냉간 압연 스테인리스 강판 및 강대 · KS D 3698"
+    },
+    {
+      "kind": "KS 제품인증",
+      "issuer": "(주)포스코",
+      "content": "열간 압연 스테인리스 강판 및 강대 · KS D 3705"
+    },
+    {
+      "kind": "제품인증 · 시험성적서",
+      "issuer": "포스코스틸리온",
+      "content": "도금강판 (외부 커버용)"
+    },
+    {
+      "kind": "시험성적서",
+      "issuer": "대흥화학공업(주)",
+      "content": "연도용 부자재"
+    }
   ],
   "materials_note": "인증서 원본은 지명원 요청 시 함께 제공합니다."
 }

@@ -41,7 +41,7 @@ collections:
           - { name: hero_title, label: "메인 큰 제목 (줄바꿈 = 엔터)", widget: text }
           - { name: hero_text, label: "메인 설명 문구", widget: text }
           - { name: about_image, label: "회사 소개 사진", widget: image }
-          - { name: about_title, label: "회사 소개 제목", widget: text }
+          - { name: about_title, label: "회사 소개 제목", widget: text, hint: "{년수} 라고 쓰면 설립연도 기준으로 매년 자동 계산됩니다 (예: {년수}년을 쏟았습니다)" }
           - { name: about_text, label: "회사 소개 문구", widget: text }
           - name: numbers
             label: "숫자 3개 (설립연도 등)"

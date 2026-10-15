@@ -18,7 +18,7 @@
     }
   ],
   "hero_eyebrow": "Stainless Steel Chimney · Since 2013",
-  "about_title": "연도 한 분야에만\n13년을 쏟았습니다",
+  "about_title": "연도 한 분야에만\n{년수}년을 쏟았습니다",
   "project_photos": [
     {
       "image": "/uploads/sac.jpg",

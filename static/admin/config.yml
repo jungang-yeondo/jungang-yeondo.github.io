@@ -6,6 +6,7 @@ backend:
   name: github
   repo: jungang-yeondo/jungang-website
   branch: main
+  site_domain: jungang-yeondo.netlify.app
   commit_messages:
     update: "관리자 수정: {{collection}} / {{slug}}"
     uploadMedia: "사진 업로드: {{path}}"

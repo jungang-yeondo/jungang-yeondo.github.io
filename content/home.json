@@ -1,4 +1,5 @@
 {
+  "slide_seconds": 4,
   "slides": [
     {
       "image": "/uploads/logoplate.jpg",
@@ -18,28 +19,11 @@
     }
   ],
   "hero_eyebrow": "Stainless Steel Chimney · Since 2013",
-  "about_title": "연도 한 분야에만\n{년수}년을 쏟았습니다",
-  "project_photos": [
-    {
-      "image": "/uploads/sac.jpg",
-      "caption": "예술의전당 보일러공사",
-      "year": "2024"
-    },
-    {
-      "image": "/uploads/yonsei.jpg",
-      "caption": "연세대 국제캠 제약바이오",
-      "year": "2024"
-    },
-    {
-      "image": "/uploads/jamsil1.jpg",
-      "caption": "잠실 실내체육관",
-      "year": "2024"
-    }
-  ],
+  "hero_title": "보이지 않는 곳에서\n건물을 숨 쉬게 합니다",
+  "hero_text": "보일러·발전기·냉온수기의 배기가스가 지나가는 길. 중앙연도는 그 길을 포천 공장에서 직접 만듭니다.",
   "about_image": "/uploads/logoplate.jpg",
-  "product2_text": "플랜지 홈 패킹과 LPF용 V밴드 체결로 이음부 누설을 막는 이중연도.",
-  "cta_title": "연도 견적이 필요하신가요?",
-  "product1_text": "STS304 내부관과 25mm 공기층. 단관부터 보온 삼중관까지.",
+  "about_title": "연도 한 분야에만\n{년수}년을 쏟았습니다",
+  "about_text": "정밀한 가공 기술로 완성하는 스테인리스 연도, (주)중앙연도입니다. 레이저 커팅 설비와 전문적인 제작 기술을 바탕으로 정밀한 재단과 깔끔한 가공 품질을 구현하며, 다양한 규격의 스테인리스 이중연도를 고객의 요구와 현장 조건에 맞춰 제작합니다.",
   "numbers": [
     {
       "value": "2013",
@@ -57,13 +41,14 @@
       "label": "특허·디자인·상표"
     }
   ],
-  "cta_image": "/uploads/truck2.jpg",
+  "product1_image": "/uploads/stock-wrapped-01.jpg",
+  "product1_title": "스테인리스 조립식 연도",
+  "product1_text": "STS304 내부관과 25mm 공기층. 단관부터 보온 삼중관까지.",
+  "product2_image": "/uploads/inner-pipe-02.jpg",
+  "product2_title": "LPF 기밀연도",
+  "product2_text": "플랜지 홈 패킹과 LPF용 V밴드 체결로 이음부 누설을 막는 이중연도.",
+  "eng_title": "열 손실을 최소화하는 25mm 공기 단열층",
   "eng_text": "정밀 패킹 홈 가공과 LPF 전용 V밴드 밀착 체결로 이음부 누설을 원천 차단하는 고기밀 이중연도입니다.",
-  "tech_title": "현장의 문제를 풀어\n특허로 남겼습니다",
-  "slide_seconds": 6,
-  "hero_text": "보일러·발전기·냉온수기의 배기가스가 지나가는 길. 중앙연도는 그 길을 포천 공장에서 직접 만듭니다.",
-  "hero_title": "보이지 않는 곳에서\n건물을 숨 쉬게 합니다",
-  "projects_title": "13,000곳이 넘는 건물이\n중앙연도로 숨 쉽니다",
   "eng_specs": [
     {
       "label": "내부관",
@@ -78,11 +63,26 @@
       "value": "977 · 477 mm"
     }
   ],
-  "eng_title": "열 손실을 최소화하는 25mm 공기 단열층",
-  "product1_title": "스테인리스 조립식 연도",
-  "product2_title": "LPF 기밀연도",
-  "cta_text": "도면과 장비 사양을 보내 주시면 제작 사양과 견적을 검토해 회신드립니다.",
-  "product1_image": "/uploads/stock-wrapped-01.jpg",
-  "about_text": "정밀한 가공 기술로 완성하는 스테인리스 연도, (주)중앙연도입니다. 레이저 커팅 설비와 전문적인 제작 기술을 바탕으로 정밀한 재단과 깔끔한 가공 품질을 구현하며, 다양한 규격의 스테인리스 이중연도를 고객의 요구와 현장 조건에 맞춰 제작합니다.",
-  "product2_image": "/uploads/inner-pipe-02.jpg"
+  "projects_title": "13,000곳이 넘는 건물이\n중앙연도로 숨 쉽니다",
+  "project_photos": [
+    {
+      "image": "/uploads/sac.jpg",
+      "caption": "예술의전당 보일러공사",
+      "year": "2024"
+    },
+    {
+      "image": "/uploads/yonsei.jpg",
+      "caption": "연세대 국제캠 제약바이오",
+      "year": "2024"
+    },
+    {
+      "image": "/uploads/jamsil1.jpg",
+      "caption": "잠실 실내체육관",
+      "year": "2024"
+    }
+  ],
+  "tech_title": "현장의 문제를 풀어\n특허로 남겼습니다",
+  "cta_image": "/uploads/truck2.jpg",
+  "cta_title": "연도 견적이 필요하신가요?",
+  "cta_text": "도면과 장비 사양을 보내 주시면 제작 사양과 견적을 검토해 회신드립니다."
 }

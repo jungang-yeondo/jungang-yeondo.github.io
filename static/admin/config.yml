@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 backend:
   name: github
-  repo: jungang-yeondo/jungang-website
+  repo: jungang-yeondo/jungang-yeondo.github.io
   branch: main
   site_domain: jungang-yeondo.netlify.app
   commit_messages:
@@ -12,8 +12,8 @@ backend:
     uploadMedia: "사진 업로드: {{path}}"
 
 locale: ko
-site_url: https://www.example.co.kr
-display_url: https://www.example.co.kr
+site_url: https://jungang-yeondo.github.io
+display_url: https://jungang-yeondo.github.io
 media_folder: static/uploads
 public_folder: /uploads
 

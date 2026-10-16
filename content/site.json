@@ -1,17 +1,17 @@
 {
-  "google_verification": "",
-  "founded": "2013. 03. 13",
-  "naver_verification": "",
   "name": "주식회사 중앙연도",
-  "ceo": "이용표",
   "short_name": "(주)중앙연도",
-  "url": "https://jungang-yeondo.github.io",
+  "name_en": "JUNGANG YEONDO CO., LTD.",
+  "ceo": "이용표",
+  "founded": "2013. 03. 13",
   "bizno": "127-86-47852",
   "address": "경기도 포천시 가산면 정금로 238번길 65",
+  "tel": "031-535-8410",
+  "fax": "031-535-8411",
+  "email": "leeyp71@daum.net",
+  "url": "https://jungang-yeondo.github.io",
   "seo_title": "(주)중앙연도 | 스테인리스 연도·LPF 기밀연도 전문 제조",
   "seo_description": "경기도 포천 소재 스테인리스 연도(굴뚝) 전문 제조사. 조립식 이중연도, LPF 기밀연도 제작·납품, 전국 13,000곳 이상 납품.",
-  "tel": "031-535-8410",
-  "email": "leeyp71@daum.net",
-  "name_en": "JUNGANG YEONDO CO., LTD.",
-  "fax": "031-535-8411"
+  "naver_verification": "3af0e4c3658725b8c7ccc716d878db2bfa883a6b",
+  "google_verification": ""
 }

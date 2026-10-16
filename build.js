@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 // 공개 전에는 true (검색엔진 차단). 공개할 때 false 로 바꾸세요.
-const PRIVATE = true;
+const PRIVATE = false;
 
 const ROOT = __dirname;
 const OUT = path.join(ROOT, '_site');

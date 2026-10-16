@@ -309,16 +309,19 @@ add('/support/downloads/', {
 add('/support/contact/', {
   title: '온라인 문의', section: 'support', image: sup.banner,
   body: subPage({ en: 'Customer', title: '온라인 문의', banner: sup.banner, section: 'support', current: '/support/contact/', body:
-    two('Contact', '견적 · 기술 문의', `<form class="form" name="contact" method="POST" action="/support/contact/thanks/" data-netlify="true" netlify-honeypot="bot-field">
-<input type="hidden" name="form-name" value="contact">
-<p hidden><label>비워 두세요 <input name="bot-field"></label></p>
+    two('Contact', '견적 · 기술 문의', `<form class="form" name="contact" method="POST" action="https://api.web3forms.com/submit">
+<input type="hidden" name="access_key" value="f16da7f0-6f2c-494e-abbd-a1a7d74753d4">
+<input type="hidden" name="subject" value="[중앙연도 홈페이지] 새 온라인 문의">
+<input type="hidden" name="from_name" value="중앙연도 홈페이지">
+<input type="hidden" name="redirect" value="${baseUrl}/support/contact/thanks/">
+<input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off">
 <label>회사명 / 성함<input name="name" id="f-name" required></label>
 <label>연락처<input name="phone" id="f-tel" type="tel" required placeholder="010-0000-0000"></label>
 <label>이메일<input name="email" id="f-email" type="email" placeholder="선택"></label>
 <label>문의 구분<select name="type" id="f-type">${list(sup.contact_types).map((t) => `<option>${esc(t.name)}</option>`).join('')}</select></label>
 <label class="full">현장명<input name="site" id="f-site" placeholder="예) ○○병원 기계실"></label>
 <label class="full">내용<textarea name="message" id="f-msg" required placeholder="장비 종류, 관경, 수량, 납기 등을 적어 주세요."></textarea></label>
-<label class="full">도면·사양서 첨부 (선택, 8MB 이하)<input type="file" name="attachment" id="f-file" accept=".pdf,.jpg,.jpeg,.png,.dwg,.zip"></label>
+<p class="full note" style="margin:0">도면·사양서는 ${esc(site.email)} 로 메일 보내 주시면 함께 검토합니다.</p>
 <label class="agree full"><input type="checkbox" id="f-agree" name="agree" value="동의" required> 개인정보 수집·이용(문의 응대 목적)에 동의합니다. <a href="/privacy/" style="text-decoration:underline">자세히</a></label>
 <div class="full"><button class="btn" type="submit">문의 보내기 →</button></div>
 </form>`, `<p class="note" style="margin-top:14px">${esc(sup.contact_intro)}</p><p class="num" style="font-size:30px;margin-top:28px;line-height:1.2"><a href="${telHref(site.tel)}">${esc(site.tel)}</a><button class="copy" data-copy="${esc(site.tel)}">복사</button></p><p style="color:var(--muted);margin-top:6px">${esc(site.email)}<button class="copy" data-copy="${esc(site.email)}">복사</button></p>`) }),

@@ -66,14 +66,14 @@
   "projects_title": "13,000곳이 넘는 건물이\n중앙연도로 숨 쉽니다",
   "project_photos": [
     {
-      "image": "/uploads/음성 소방병원.jpg",
-      "caption": "음성 소방병원",
-      "year": "2025"
-    },
-    {
       "image": "/uploads/대구 차량기지 사업소4.jpg",
       "caption": "대구 차량기지 사업소",
       "year": "2026"
+    },
+    {
+      "image": "/uploads/음성 소방병원.jpg",
+      "caption": "음성 소방병원",
+      "year": "2025"
     },
     {
       "image": "/uploads/잠실 실내체육관 2.jpg",
@@ -82,7 +82,7 @@
     }
   ],
   "tech_title": "현장의 문제를 풀어\n특허로 남겼습니다",
-  "cta_image": "/uploads/factory-front-01.jpg",
+  "cta_image": "/uploads/stock-yard-01.jpg",
   "cta_title": "연도 견적이 필요하신가요?",
   "cta_text": "도면과 장비 사양을 보내 주시면 제작 사양과 견적을 검토해 회신드립니다."
 }

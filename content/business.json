@@ -2,22 +2,22 @@
   "banner": "/uploads/yongin2.jpg",
   "fields": [
     {
+      "image": "/uploads/sac.jpg",
       "label": "Boiler",
       "title": "보일러 연도",
-      "text": "기계실 보일러 출구부터 옥상 최상단까지 수직 연도와 수평 브리칭에 들어가는 직관·이형관·부속을 제작합니다. 학교·병원·공동주택·업무시설.",
-      "image": "/uploads/sac.jpg"
+      "text": "기계실 보일러 출구부터 옥상 최상단까지 수직 연도와 수평 브리칭에 들어가는 직관·이형관·부속을 제작합니다. 학교·병원·공동주택·업무시설."
     },
     {
+      "image": "/uploads/wonju1.jpg",
       "label": "Generator",
       "title": "발전기 연도",
-      "text": "고온 배기와 진동에 대응하는 벨로즈 조인트와 세라믹 패킹 LPF 연도를 제작합니다. 데이터센터·공장·공공시설.",
-      "image": "/uploads/wonju1.jpg"
+      "text": "고온 배기와 진동에 대응하는 벨로즈 조인트와 세라믹 패킹 LPF 연도를 제작합니다. 데이터센터·공장·공공시설."
     },
     {
+      "image": "/uploads/yonsei.jpg",
       "label": "Chiller · Condensing",
       "title": "냉온수기 · 콘덴싱",
-      "text": "응축수가 많은 장비용으로 내열실리콘 패킹과 드레인 캡을 적용한 연도를 제작합니다.",
-      "image": "/uploads/yonsei.jpg"
+      "text": "응축수가 많은 장비용으로 내열실리콘 패킹과 드레인 캡을 적용한 연도를 제작합니다."
     }
   ],
   "process": [
@@ -43,7 +43,7 @@
     },
     {
       "title": "정밀 용접",
-      "text": "TIG 용접을 통한 스테인리스 부품 접합 및 마감"
+      "text": "자동 용접기와 TIG 용접을 통한 스테인리스 부품 접합 및 마감"
     },
     {
       "title": "출하 검사",

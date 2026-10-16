@@ -2,6 +2,8 @@
 // content/*.json  →  _site/ 정적 HTML.  관리자 화면(/admin)에서 JSON을 수정하면 Netlify가 이 스크립트로 다시 빌드합니다.
 const fs = require('fs');
 const path = require('path');
+// 공개 전에는 true (검색엔진 차단). 공개할 때 false 로 바꾸세요.
+const PRIVATE = true;
 
 const ROOT = __dirname;
 const OUT = path.join(ROOT, '_site');
@@ -40,7 +42,7 @@ function layout({ title, desc, url, section, body, image }) {
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+${PRIVATE ? '<meta name="robots" content="noindex, nofollow">\n' : ''}<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(d)}">
 <link rel="canonical" href="${esc(canonical)}">
@@ -350,7 +352,7 @@ function render() {
   const today = new Date().toISOString().slice(0, 10);
   const urls = pages.filter((p) => !p.url.endsWith('.html') && !p.url.includes('thanks')).map((p) => `<url><loc>${baseUrl}${p.url}</loc><lastmod>${today}</lastmod></url>`).join('');
   fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`);
-  fs.writeFileSync(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: ${baseUrl}/sitemap.xml\n`);
+  fs.writeFileSync(path.join(OUT, 'robots.txt'), PRIVATE ? 'User-agent: *\nDisallow: /\n' : `User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: ${baseUrl}/sitemap.xml\n`);
   console.log(`built ${pages.length} pages → _site/`);
 }
 function yrs(html) {

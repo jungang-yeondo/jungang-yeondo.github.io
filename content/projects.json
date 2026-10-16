@@ -1,11 +1,11 @@
 {
-  "banner": "/uploads/jamsil1.jpg",
+  "banner": "/uploads/대구 차량기지 사업소4.jpg",
   "note": "전국 13,000곳이 넘는 납품 현장 가운데 대표 현장을 소개합니다.",
   "items": [
     {
-      "name": "국회의사당",
-      "category": "공공",
-      "contractor": "(주)보성프랜트"
+      "name": "잠실 실내체육관",
+      "category": "문화·체육",
+      "contractor": "미래스택"
     },
     {
       "name": "한국은행",
@@ -103,14 +103,14 @@
       "contractor": "다원건영(주)"
     },
     {
-      "name": "예술의전당 보일러공사",
-      "category": "문화·체육",
-      "contractor": ""
+      "name": "대구 차량기지 사업소",
+      "category": "교통",
+      "contractor": "미래스택"
     },
     {
-      "name": "잠실 실내체육관",
-      "category": "문화·체육",
-      "contractor": ""
+      "name": "김포 우리병원",
+      "category": "의료",
+      "contractor": "미래스택"
     },
     {
       "name": "국립어린이박물관",
@@ -178,9 +178,9 @@
       "contractor": "상우플랜"
     },
     {
-      "name": "연세대 국제캠 제약바이오",
+      "name": "사천 KAI",
       "category": "산업",
-      "contractor": ""
+      "contractor": "미래스택"
     },
     {
       "name": "LG 정밀공장",
@@ -240,34 +240,34 @@
   ],
   "gallery": [
     {
-      "image": "/uploads/sac.jpg",
-      "caption": "예술의전당 보일러공사",
-      "year": "2024"
+      "image": "/uploads/음성 소방병원.jpg",
+      "caption": "음성 소방병원",
+      "year": "2026"
     },
     {
-      "image": "/uploads/jamsil2.jpg",
+      "image": "/uploads/대전 KT&G공장 기숙사 1.jpg",
+      "caption": "대전 KT&G공장",
+      "year": "2026"
+    },
+    {
+      "image": "/uploads/김포 우리병원 1.jpg",
+      "caption": "김포 우리병원",
+      "year": "2026"
+    },
+    {
+      "image": "/uploads/충주 천보 신소재공장1.jpg",
+      "caption": "충주 천보 신소재공장",
+      "year": "2026"
+    },
+    {
+      "image": "/uploads/잠실 실내체육관 2.jpg",
       "caption": "잠실 실내체육관",
-      "year": "2024"
+      "year": "2026"
     },
     {
-      "image": "/uploads/yonsei.jpg",
-      "caption": "연세대 국제캠 제약바이오",
-      "year": "2024"
-    },
-    {
-      "image": "/uploads/yongin1.jpg",
-      "caption": "용인 시청",
-      "year": "2023"
-    },
-    {
-      "image": "/uploads/jamsil1.jpg",
-      "caption": "잠실 실내체육관 · 양중",
-      "year": "2024"
-    },
-    {
-      "image": "/uploads/wonju1.jpg",
-      "caption": "원주 빨래공장",
-      "year": "2025"
+      "image": "/uploads/포항 동국산업.jpg",
+      "caption": "포항 동국산업",
+      "year": "2026"
     },
     {
       "image": "/uploads/yongin2.jpg",

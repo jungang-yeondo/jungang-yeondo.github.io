@@ -31,6 +31,12 @@
       "label": "중앙스택 창업"
     },
     {
+      "value": "2013",
+      "suffix": "",
+      "label": "중앙연도 법인 개설",
+      "under": true
+    },
+    {
       "value": "13,000",
       "suffix": "+",
       "label": "납품 현장"

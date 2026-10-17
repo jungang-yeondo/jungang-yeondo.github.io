@@ -339,3 +339,14 @@ footer .c{grid-column:1/-1;font-size:13px;padding-top:22px;border-top:1px solid 
 .prose a,.info a{text-decoration:underline;text-underline-offset:3px}
 
 .tbl tr[hidden]{display:none}
+
+/* LPF 사진 설명 */
+.lpf-story{display:grid;grid-template-columns:1fr 1fr;gap:32px 24px;margin-top:48px}
+.lpf-story figure{margin:0;min-width:0}
+.lpf-story img{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--bg-2)}
+.lpf-story .wide{grid-column:1/-1}
+.lpf-story .wide img{aspect-ratio:16/9}
+.lpf-story figcaption{margin-top:14px;font-size:15px;line-height:1.7;color:var(--muted)}
+.lpf-story figcaption b{display:block;color:var(--ink);font-size:17px;margin-bottom:4px}
+.lpf-story figcaption a{display:inline-block;margin-top:6px;color:var(--red);font-weight:500}
+@media (max-width:640px){.lpf-story{grid-template-columns:1fr}}

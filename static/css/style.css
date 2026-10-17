@@ -51,7 +51,7 @@ nav.gnb{margin-left:auto;display:flex}
 .menu-btn{display:none;margin-left:auto;background:none;border:0;color:inherit;cursor:pointer;width:44px;height:44px;padding:10px}
 .menu-btn span{display:block;height:2px;background:currentColor;margin:6px 0}
 .mnav{display:none;background:var(--bg);color:var(--ink);border-top:1px solid var(--line);max-height:calc(100vh - 84px);overflow:auto}
-.mnav .wrap{padding-block:12px 24px}
+.top .mnav .wrap{display:block;height:auto;padding-block:12px 24px}
 .mnav b{display:block;font-size:13px;color:var(--red);margin:16px 0 4px;letter-spacing:.06em}
 .mnav a{display:block;padding:7px 0;font-size:16px}
 @media (max-width:1000px){nav.gnb{display:none}.menu-btn{display:block}.mnav.open{display:block}body.over.menu-open .top{background:var(--bg);color:var(--ink)}}

@@ -359,7 +359,7 @@ function render() {
   console.log(`built ${pages.length} pages → _site/`);
 }
 function yrs(html) {
-  const from = parseInt(String(site.founded).slice(0, 4), 10) || 2013;
+  const from = 2008; // 중앙스택 창업 연도 기준
   return html.replace(/\{년수\}/g, `<span class="years-since" data-from="${from}">${new Date().getFullYear() - from}</span>`);
 }
 function ver(s) {

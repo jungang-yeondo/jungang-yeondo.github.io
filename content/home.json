@@ -28,23 +28,26 @@
     {
       "value": "2008",
       "suffix": "",
-      "label": "중앙스택 창업"
+      "label": "중앙스택 창업",
+      "under": false
     },
     {
       "value": "2013",
       "suffix": "",
-      "label": "중앙연도 법인 개설",
+      "label": "(주)중앙연도 법인 전환 · 개설",
       "under": true
     },
     {
       "value": "13,000",
       "suffix": "+",
-      "label": "납품 현장"
+      "label": "납품 현장",
+      "under": false
     },
     {
       "value": "9",
       "suffix": "",
-      "label": "특허·디자인·상표"
+      "label": "특허·디자인·상표",
+      "under": false
     }
   ],
   "product1_image": "/uploads/stock-wrapped-01.jpg",

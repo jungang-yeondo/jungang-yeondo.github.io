@@ -350,3 +350,5 @@ footer .c{grid-column:1/-1;font-size:13px;padding-top:22px;border-top:1px solid 
 .lpf-story figcaption b{display:block;color:var(--ink);font-size:17px;margin-bottom:4px}
 .lpf-story figcaption a{display:inline-block;margin-top:6px;color:var(--red);font-weight:500}
 @media (max-width:640px){.lpf-story{grid-template-columns:1fr}}
+
+.nums .under{padding-top:0;margin-top:28px}

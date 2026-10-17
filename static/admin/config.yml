@@ -45,12 +45,13 @@ collections:
           - { name: about_title, label: "회사 소개 제목", widget: text, hint: "{년수} 라고 쓰면 설립연도 기준으로 매년 자동 계산됩니다 (예: {년수}년을 쏟았습니다)" }
           - { name: about_text, label: "회사 소개 문구", widget: text }
           - name: numbers
-            label: "숫자 3개 (설립연도 등)"
+            label: "숫자 칸"
             widget: list
             fields:
               - { name: value, label: 숫자, widget: string }
               - { name: suffix, label: "뒤 기호 (예: +)", widget: string, required: false }
               - { name: label, label: 설명, widget: string }
+              - { name: under, label: "바로 위 칸 아래에 붙이기", widget: boolean, required: false, default: false }
           - { name: product1_image, label: "제품 1 사진 (스테인리스 연도)", widget: image }
           - { name: product1_title, label: "제품 1 제목", widget: string }
           - { name: product1_text, label: "제품 1 설명", widget: string }

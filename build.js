@@ -141,7 +141,10 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
   const slides = list(home.slides);
   const sl = slides.map((s, i) => `<div class="slide${i === 0 ? ' on' : ''}" data-cap="${esc(s.caption)}">${i === 0 ? `<img src="${esc(s.image)}" alt="" fetchpriority="high">` : img(s.image)}</div>`).join('');
   const pad = (n) => String(n).padStart(2, '0');
-  const nums = list(home.numbers).map((n) => `<div><b>${esc(n.value)}${n.suffix ? `<sup>${esc(n.suffix)}</sup>` : ''}</b><span>${esc(n.label)}</span></div>`).join('');
+  const numItem = (n) => `<b>${esc(n.value)}${n.suffix ? `<sup>${esc(n.suffix)}</sup>` : ''}</b><span>${esc(n.label)}</span>`;
+  const numGroups = [];
+  list(home.numbers).forEach((n) => { if (n.under && numGroups.length) numGroups[numGroups.length - 1].push(n); else numGroups.push([n]); });
+  const nums = numGroups.map((g) => `<div>${g.map((n, i) => i ? `<div class="under">${numItem(n)}</div>` : numItem(n)).join('')}</div>`).join('');
   const specs = list(home.eng_specs).map((s) => `<li><span>${esc(s.label)}</span><span>${esc(s.value)}</span></li>`).join('');
   const names = list(proj.items).map((p) => `<span>${esc(p.name)}</span>`);
   const half = Math.ceil(names.length / 2);

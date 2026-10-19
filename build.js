@@ -17,7 +17,7 @@ const br = (s) => esc(s).replace(/\r?\n/g, '<br>');
 const paras = (s) => String(s ?? '').split(/\r?\n\s*\r?\n/).map((p) => p.trim()).filter(Boolean).map((p) => `<p>${br(p)}</p>`).join('\n');
 const lines = (s) => String(s ?? '').split(/\r?\n/).map((l) => `<span>${esc(l)}</span>`).join('');
 const list = (a) => (Array.isArray(a) ? a : []);
-const img = (src, alt = '', extra = '') => src ? `<img src="${esc(src)}" alt="${esc(alt)}" loading="lazy"${extra}>` : '';
+const img = (src, alt = '', extra = '') => src ? `<img src="${esc(src)}" alt="${esc(alt || site.short_name || '(주)중앙연도')}" loading="lazy"${extra}>` : '';
 const telHref = (t) => 'tel:' + String(t).replace(/[^0-9+]/g, '');
 const baseUrl = String(site.url || '').replace(/\/$/, '');
 
@@ -55,6 +55,7 @@ ${PRIVATE ? '<meta name="robots" content="noindex, nofollow">\n' : ''}<meta name
 ${site.naver_verification ? `<meta name="naver-site-verification" content="${esc(site.naver_verification)}">` : ''}
 ${site.google_verification ? `<meta name="google-site-verification" content="${esc(site.google_verification)}">` : ''}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Barlow+Condensed:wght@400;500;600&family=Cinzel:wght@700&display=swap">
@@ -139,7 +140,7 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
 // ---------- HOME ----------
 {
   const slides = list(home.slides);
-  const sl = slides.map((s, i) => `<div class="slide${i === 0 ? ' on' : ''}" data-cap="${esc(s.caption)}">${i === 0 ? `<img src="${esc(s.image)}" alt="" fetchpriority="high">` : img(s.image)}</div>`).join('');
+  const sl = slides.map((s, i) => `<div class="slide${i === 0 ? ' on' : ''}" data-cap="${esc(s.caption)}">${i === 0 ? `<img src="${esc(s.image)}" alt="${esc(s.caption || site.short_name)}" fetchpriority="high">` : img(s.image, s.caption)}</div>`).join('');
   const pad = (n) => String(n).padStart(2, '0');
   const numItem = (n) => `<b>${esc(n.value)}${n.suffix ? `<sup>${esc(n.suffix)}</sup>` : ''}</b><span>${esc(n.label)}</span>`;
   const numGroups = [];
@@ -182,8 +183,8 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
 </div></section>
 
 <section class="ptiles">
-  <a class="ptile" href="/product/stack/">${img(home.product1_image)}<span class="plus" aria-hidden="true">+</span><div class="t"><div class="en">Product 01</div><h3>${esc(home.product1_title)}</h3><p>${esc(home.product1_text)}</p></div></a>
-  <a class="ptile" href="/product/lpf/">${img(home.product2_image)}<span class="plus" aria-hidden="true">+</span><div class="t"><div class="en">Product 02</div><h3>${esc(home.product2_title)}</h3><p>${esc(home.product2_text)}</p></div></a>
+  <a class="ptile" href="/product/stack/">${img(home.product1_image, home.product1_title)}<span class="plus" aria-hidden="true">+</span><div class="t"><div class="en">Product 01</div><h3>${esc(home.product1_title)}</h3><p>${esc(home.product1_text)}</p></div></a>
+  <a class="ptile" href="/product/lpf/">${img(home.product2_image, home.product2_title)}<span class="plus" aria-hidden="true">+</span><div class="t"><div class="en">Product 02</div><h3>${esc(home.product2_title)}</h3><p>${esc(home.product2_text)}</p></div></a>
 </section>
 
 <section class="sec eng"><div class="wrap">

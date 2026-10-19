@@ -32,7 +32,7 @@ const NAV = [
 const logo = `<svg viewBox="0 0 240 92" aria-hidden="true"><ellipse class="ell" cx="132" cy="52" rx="104" ry="30" transform="rotate(-11 132 52)" fill="none" stroke-width="7"/><path d="M6 13 H56 V62 q0 10 -9 10" fill="none" stroke="#C8303A" stroke-width="6"/><text x="62" y="70" font-family="Cinzel, Times New Roman, serif" font-weight="700" font-size="30" fill="#C8303A" textLength="150" lengthAdjust="spacingAndGlyphs">UNGANG</text></svg>`;
 
 function layout({ title, desc, url, section, body, image }) {
-  const fullTitle = title ? `${title} | ${site.short_name}` : site.seo_title;
+  const fullTitle = title ? `${title} | 중앙연도` : site.seo_title;
   const d = desc || site.seo_description;
   const canonical = baseUrl + url;
   const ogImg = baseUrl + (image || home.about_image || '');
@@ -60,7 +60,7 @@ ${site.google_verification ? `<meta name="google-site-verification" content="${e
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Barlow+Condensed:wght@400;500;600&family=Cinzel:wght@700&display=swap">
 <link rel="stylesheet" href="/css/style.css">
-<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'Organization', name: site.name, alternateName: site.name_en, url: baseUrl || undefined, telephone: site.tel, email: site.email, address: { '@type': 'PostalAddress', streetAddress: site.address, addressCountry: 'KR' }, foundingDate: '2013-03-13' }).replace(/</g, '\\u003c')}</script>
+<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'Organization', name: site.name, alternateName: ['중앙연도', site.short_name, site.name_en], url: baseUrl || undefined, telephone: site.tel, email: site.email, address: { '@type': 'PostalAddress', streetAddress: site.address, addressCountry: 'KR' }, foundingDate: '2013-03-13' }).replace(/</g, '\\u003c')}</script>
 </head>
 <body class="over">
 <header class="top" id="top">

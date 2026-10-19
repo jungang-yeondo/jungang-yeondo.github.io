@@ -161,7 +161,7 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
   <div class="hero-txt"><div class="wrap">
     <div class="en rise">${esc(home.hero_eyebrow)}</div>
     <h1 class="rise">${lines(home.hero_title)}</h1>
-    <p class="rise">${esc(home.hero_text)}</p>
+    <p class="rise">${br(home.hero_text)}</p>
   </div></div>
   <div class="hero-bar"><div class="wrap">
     <div class="cnt"><b id="sIdx">01</b> / ${pad(slides.length)}</div>

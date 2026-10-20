@@ -1,9 +1,11 @@
 {
   "banner": "/uploads/wonju2.jpg",
+  "stack_banner": "/uploads/banner-stack.jpg",
+  "lpf_banner": "/uploads/banner-lpf.jpg",
   "stack_title": "스테인리스\n조립식 이중연도",
   "stack_quote": "열 손실을 최소화하는\n25mm 공기 단열층",
   "stack_intro": "내부관과 외부 커버 사이에 25mm 공기 단열층을 형성하여 우수한 단열 효과를 발휘합니다. 고온 환경 등 현장 조건에 맞춰 추가 보온 시공이 가능하며, 외관이 미려하고 유지관리가 용이합니다.",
-  "stack_image": "/uploads/yongin1.jpg",
+  "stack_image": "/uploads/이중연도.jpg",
   "features": [
     {
       "en": "Economy",
@@ -179,7 +181,5 @@
     {
       "text": "패킹 사양 - 현장 여건 및 사용 온도에 따른 맞춤 패킹 적용 (고열 발전기: 세라믹 패킹 / 냉온수기 및 보일러: 특수 실란트 패킹)"
     }
-  ],
-  "stack_banner": "/uploads/banner-stack.jpg",
-  "lpf_banner": "/uploads/banner-lpf.jpg"
+  ]
 }

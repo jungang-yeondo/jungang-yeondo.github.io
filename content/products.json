@@ -179,5 +179,7 @@
     {
       "text": "패킹 사양 - 현장 여건 및 사용 온도에 따른 맞춤 패킹 적용 (고열 발전기: 세라믹 패킹 / 냉온수기 및 보일러: 특수 실란트 패킹)"
     }
-  ]
+  ],
+  "stack_banner": "/uploads/banner-stack.jpg",
+  "lpf_banner": "/uploads/banner-lpf.jpg"
 }

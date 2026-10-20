@@ -140,10 +140,9 @@ collections:
             widget: list
             fields: [{ name: en, label: 영문, widget: string }, { name: title, label: 제목, widget: string }, { name: text, label: 설명, widget: text }]
           - name: lineup
-            label: "[스테인리스] 구성 (단관·이중관·삼중관 순서)"
+            label: "[스테인리스] 구성 (사진 + 설명)"
             widget: list
-            max: 3
-            fields: [{ name: title, label: 이름, widget: string }, { name: text, label: 설명, widget: string }, { name: formula, label: 관경식, widget: string }]
+            fields: [{ name: image, label: 사진, widget: image, required: false }, { name: en, label: "영문 작은 제목", widget: string, required: false }, { name: title, label: 이름, widget: string }, { name: text, label: 설명, widget: text }, { name: formula, label: 관경식, widget: string }]
           - { name: lineup_note, label: "[스테인리스] 관경 예시 문구", widget: string }
           - name: spec_rows
             label: "[스테인리스] 재질·두께 표"

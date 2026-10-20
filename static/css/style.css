@@ -352,3 +352,15 @@ footer .c{grid-column:1/-1;font-size:13px;padding-top:22px;border-top:1px solid 
 @media (max-width:640px){.lpf-story{grid-template-columns:1fr}}
 
 .nums .under{padding-top:0;margin-top:28px}
+
+/* 제품 구성: 사진 + 설명 */
+.lineup2{display:grid;gap:0;border-top:1px solid var(--line)}
+.lineup2 .row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:32px;align-items:center;padding:28px 0;border-bottom:1px solid var(--line)}
+.lineup2 .ph img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--bg-2)}
+.lineup2 .ph.ic{display:flex;justify-content:center;aspect-ratio:4/3;align-items:center;background:var(--bg-2)}
+.lineup2 .tx{min-width:0}
+.lineup2 .tx .en{display:block;font-size:13px;color:var(--red);letter-spacing:.14em;margin-bottom:8px}
+.lineup2 .tx b{display:block;font-size:22px;margin-bottom:10px}
+.lineup2 .tx p{color:var(--muted);line-height:1.75;margin:0 0 16px}
+.lineup2 .tx .f{display:inline-block;font-family:var(--font-en);font-size:19px;letter-spacing:.02em;padding-top:12px;border-top:1px solid var(--line)}
+@media (max-width:700px){.lineup2 .row{grid-template-columns:1fr;gap:16px}}

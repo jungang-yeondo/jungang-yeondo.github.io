@@ -30,19 +30,32 @@
   ],
   "lineup": [
     {
+      "en": "Single Wall",
       "title": "단관",
-      "text": "STS304 내부관 단일 구성. 기계실 내부 노출 구간 등.",
-      "formula": "관경  D"
+      "image": "/uploads/lineup-single.jpg",
+      "text": "STS304 내부관 한 겹으로 된 구성입니다. 기계실 안쪽처럼 단열이 따로 필요 없는 노출 구간에 씁니다.",
+      "formula": "관경 D"
     },
     {
+      "en": "Double Wall · Air Insulated",
       "title": "공기단열 이중관",
-      "text": "내부관 + 25mm 공기층 + 외부 커버. 표준 사양.",
-      "formula": "내부관 관경  D + 50A"
+      "image": "/uploads/lineup-double.jpg",
+      "text": "내부관과 외부 커버 사이를 스페이서로 25mm 띄워 공기층으로 단열합니다. 별도 보온 작업이 필요 없는 표준 사양입니다.",
+      "formula": "내부관 관경 D + 50A"
     },
     {
-      "title": "보온 삼중관",
-      "text": "이중관 외부에 보온재와 외장관을 추가 결합한 구조로, 옥외 노출 및 외기 온도가 낮은 구간의 열 손실과 결로 발생을 완벽히 방지.",
-      "formula": "50T  D + 150A  ·  100T  D + 250A"
+      "en": "Triple Wall · 50T",
+      "title": "보온 삼중관 (보온재 50T)",
+      "image": "/uploads/lineup-triple-50t.jpg",
+      "text": "이중관 바깥에 50mm 보온재와 외장관을 더한 구조입니다. 옥외로 노출되거나 외기 온도가 낮은 구간의 열 손실과 결로를 줄입니다.",
+      "formula": "관경 D + 150A"
+    },
+    {
+      "en": "Triple Wall · 100T",
+      "title": "보온 삼중관 (보온재 100T)",
+      "image": "/uploads/lineup-triple-100t.jpg",
+      "text": "보온재를 100mm로 두껍게 채운 구조입니다. 한랭지나 긴 옥외 구간처럼 더 높은 단열이 필요한 곳에 씁니다.",
+      "formula": "관경 D + 250A"
     }
   ],
   "lineup_note": "예) 인너관 300A 기준 → 이중관 350A · 50T 삼중관 450A · 100T 삼중관 550A",

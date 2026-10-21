@@ -371,3 +371,14 @@ footer .c{grid-column:1/-1;font-size:13px;padding-top:22px;border-top:1px solid 
 @keyframes mnavIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 .mnav.open{animation:mnavIn .35s ease both}
 .mnav.open a,.mnav.open b{animation:mnavIn .4s ease both}
+
+/* 보유 설비 */
+.facil{display:grid;border-top:1px solid var(--line)}
+.facil .row{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:32px;align-items:center;padding:28px 0;border-bottom:1px solid var(--line)}
+.facil .ph{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.facil .ph img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--bg-2)}
+.facil .tx{min-width:0}
+.facil .tx .en{display:block;font-size:13px;color:var(--red);letter-spacing:.14em;margin-bottom:8px}
+.facil .tx b{display:block;font-size:22px;margin-bottom:10px}
+.facil .tx p{color:var(--muted);line-height:1.75;margin:0}
+@media (max-width:760px){.facil .row{grid-template-columns:1fr;gap:16px}}

@@ -364,3 +364,10 @@ footer .c{grid-column:1/-1;font-size:13px;padding-top:22px;border-top:1px solid 
 .lineup2 .tx p{color:var(--muted);line-height:1.75;margin:0 0 16px}
 .lineup2 .tx .f{display:inline-block;font-family:var(--font-en);font-size:19px;letter-spacing:.02em;padding-top:12px;border-top:1px solid var(--line)}
 @media (max-width:700px){.lineup2 .row{grid-template-columns:1fr;gap:16px}}
+
+/* 메뉴 애니메이션 */
+.gnb .sub{display:block;visibility:hidden;opacity:0;pointer-events:none;transform:translateX(-50%) translateY(-10px);clip-path:inset(0 0 100% 0);transition:opacity .28s ease,transform .32s ease,clip-path .32s ease,visibility 0s linear .32s}
+.gnb .item:hover .sub,.gnb .item:focus-within .sub{visibility:visible;opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);clip-path:inset(0 0 0 0);transition:opacity .28s ease,transform .32s ease,clip-path .32s ease,visibility 0s}
+@keyframes mnavIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.mnav.open{animation:mnavIn .35s ease both}
+.mnav.open a,.mnav.open b{animation:mnavIn .4s ease both}

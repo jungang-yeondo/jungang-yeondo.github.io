@@ -194,7 +194,7 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
     <p>${esc(home.eng_text)}</p>
     <ul>${specs}</ul>
   </div>
-  <video class="eng-motion" src="/uploads/duct-motion.mp4" autoplay muted loop playsinline preload="auto" aria-label="이중연도 단면: 외부 커버, 스페이서, 25mm 공기단열층, 내부관"></video>
+  <img class="eng-motion" src="/uploads/duct-motion.webp" alt="이중연도 단면: 외부 커버, 스페이서, 25mm 공기단열층, 내부관" loading="lazy" decoding="async">
 </div></section>
 
 <section class="sec"><div class="wrap">

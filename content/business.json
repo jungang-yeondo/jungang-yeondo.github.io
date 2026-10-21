@@ -64,6 +64,13 @@
       "text": "핸드 커팅기나 플라즈마 대신 CAD 전개도를 그대로 레이저로 절단하기 때문에 곡선 이형관 부품도 치수가 일정하고, 절단면이 깨끗해 추가 손질이 거의 필요 없습니다."
     },
     {
+      "en": "Automatic Seam Welding",
+      "title": "원통 자동 심 용접",
+      "image1": "/uploads/facility-seam-weld-01.jpg",
+      "image2": "/uploads/facility-seam-weld-02.jpg",
+      "text": "판재를 원통으로 말아 맞댄 몸통 이음부를 자동 용접기로 한 번에 용접합니다. 여러 차례 시험을 거쳐 최적의 용접 조건을 맞춰 두어, 이음부 전체가 같은 품질로 접합되고 누연이나 수증기 응축으로 인한 누수가 생기지 않습니다."
+    },
+    {
       "en": "Laser Welding",
       "title": "레이저 용접",
       "image1": "/uploads/facility-laser-weld-01.jpg",

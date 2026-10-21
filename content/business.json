@@ -2,7 +2,7 @@
   "banner": "/uploads/yongin2.jpg",
   "fields": [
     {
-      "image": "/uploads/sac.jpg",
+      "image": "/uploads/KakaoTalk_20261021_150047548.jpg",
       "label": "Boiler",
       "title": "보일러 연도",
       "text": "기계실 보일러 출구부터 옥상 최상단까지 수직 연도와 수평 브리칭에 들어가는 직관·이형관·부속을 제작합니다. 학교·병원·공동주택·업무시설."
@@ -18,6 +18,30 @@
       "label": "Chiller · Condensing",
       "title": "냉온수기 · 콘덴싱",
       "text": "응축수가 많은 장비용으로 내열실리콘 패킹과 드레인 캡을 적용한 연도를 제작합니다."
+    }
+  ],
+  "facilities_title": "보유 설비 · 제작 기술",
+  "facilities": [
+    {
+      "image1": "/uploads/facility-laser-cut-01.jpg",
+      "image2": "/uploads/facility-laser-cut-02.jpg",
+      "en": "CNC Fiber Laser Cutting",
+      "title": "CNC 파이버 레이저 커팅",
+      "text": "핸드 커팅기나 플라즈마 대신 CAD 전개도를 그대로 레이저로 절단하기 때문에 곡선 이형관 부품도 치수가 일정하고, 절단면이 깨끗해 추가 손질이 거의 필요 없습니다."
+    },
+    {
+      "image1": "/uploads/facility-seam-weld-01.jpg",
+      "image2": "/uploads/facility-seam-weld-02.jpg",
+      "en": "Automatic Seam Welding",
+      "title": "자동 심 용접",
+      "text": "판재를 원통으로 말아 맞댄 몸통 이음부를 자동 용접기로 한 번에 용접합니다.\n여러 차례 시험을 거쳐 최적의 용접 조건을 맞춰 두어, 이음부 전체가 같은 품질로 접합됩니다.\n사람 손에 따라 달라지지 않아 제품마다 용접 품질이 일정하고, 기밀이 중요한 몸통 이음부를 안정적으로 만듭니다."
+    },
+    {
+      "image1": "/uploads/facility-laser-weld-01.jpg",
+      "image2": "/uploads/facility-laser-weld-02.jpg",
+      "en": "Laser Welding",
+      "title": "레이저 용접",
+      "text": "열이 좁은 범위에만 들어가 얇은 스테인리스 판의 휨과 변색이 적고, 용접선이 가늘고 고릅니다. 부위와 두께에 따라 TIG 용접을 함께 사용합니다."
     }
   ],
   "process": [
@@ -52,30 +76,6 @@
     {
       "title": "현장 납품",
       "text": "현장 일정에 맞춰 상차"
-    }
-  ],
-  "facilities_title": "보유 설비 · 제작 기술",
-  "facilities": [
-    {
-      "en": "CNC Fiber Laser Cutting",
-      "title": "CNC 파이버 레이저 커팅",
-      "image1": "/uploads/facility-laser-cut-01.jpg",
-      "image2": "/uploads/facility-laser-cut-02.jpg",
-      "text": "핸드 커팅기나 플라즈마 대신 CAD 전개도를 그대로 레이저로 절단하기 때문에 곡선 이형관 부품도 치수가 일정하고, 절단면이 깨끗해 추가 손질이 거의 필요 없습니다."
-    },
-    {
-      "en": "Automatic Seam Welding",
-      "title": "자동 심 용접",
-      "image1": "/uploads/facility-seam-weld-01.jpg",
-      "image2": "/uploads/facility-seam-weld-02.jpg",
-      "text": "판재를 원통으로 말아 맞댄 몸통 이음부를 자동 용접기로 한 번에 용접합니다.\n여러 차례 시험을 거쳐 최적의 용접 조건을 맞춰 두어, 이음부 전체가 같은 품질로 접합됩니다.\n사람 손에 따라 달라지지 않아 제품마다 용접 품질이 일정하고, 기밀이 중요한 몸통 이음부를 안정적으로 만듭니다."
-    },
-    {
-      "en": "Laser Welding",
-      "title": "레이저 용접",
-      "image1": "/uploads/facility-laser-weld-01.jpg",
-      "image2": "/uploads/facility-laser-weld-02.jpg",
-      "text": "열이 좁은 범위에만 들어가 얇은 스테인리스 판의 휨과 변색이 적고, 용접선이 가늘고 고릅니다. 부위와 두께에 따라 TIG 용접을 함께 사용합니다."
     }
   ]
 }

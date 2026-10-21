@@ -355,7 +355,7 @@ function render() {
   for (const p of pages) {
     const file = p.url.endsWith('.html') ? path.join(OUT, p.url) : path.join(OUT, p.url, 'index.html');
     fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, yrs(p.html).replace(/(src|href)="(\/uploads\/[^"?]+)"/g, (m, a, s) => a + '="' + s + '?v=' + ver(s) + '"'));
+    fs.writeFileSync(file, yrs(p.html).replace(/(src|href)="(\/(?:uploads|css|js)\/[^"?]+)"/g, (m, a, s) => a + '="' + s + '?v=' + ver(s) + '"'));
   }
   const today = new Date().toISOString().slice(0, 10);
   const urls = pages.filter((p) => !p.url.endsWith('.html') && !p.url.includes('thanks')).map((p) => `<url><loc>${baseUrl}${p.url}</loc><lastmod>${today}</lastmod></url>`).join('');

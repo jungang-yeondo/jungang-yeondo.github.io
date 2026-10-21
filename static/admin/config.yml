@@ -118,6 +118,12 @@ collections:
               - { name: label, label: "영문 라벨", widget: string }
               - { name: title, label: 제목, widget: string }
               - { name: text, label: 설명, widget: text }
+          - { name: facilities_title, label: "보유 설비 제목", widget: string, required: false }
+          - name: facilities
+            label: "보유 설비 (사진 2장 + 설명)"
+            widget: list
+            required: false
+            fields: [{ name: image1, label: 사진1, widget: image }, { name: image2, label: 사진2, widget: image, required: false }, { name: en, label: "영문 작은 제목", widget: string, required: false }, { name: title, label: 이름, widget: string }, { name: text, label: 설명, widget: text }]
           - name: process
             label: "진행 절차"
             widget: list

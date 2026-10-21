@@ -2,9 +2,15 @@
   "banner": "/uploads/중앙연도 전경 (1).png",
   "downloads": [
     {
-      "title": "회사소개서 · 제품 카탈로그",
-      "desc": "제품 규격·연도 설치 시방서·원자재 시험성적서·KS 인증·시공실적",
-      "file": "/uploads/jungangyeondo-company-profile.pdf",
+      "title": "LPF연도 카탈로그",
+      "desc": "LPF 기밀연도 구조·패킹·규격·시험 결과",
+      "file": "/uploads/jungangyeondo-lpf-catalog.pdf",
+      "status": ""
+    },
+    {
+      "title": "일반연도 카탈로그",
+      "desc": "조립식 스테인리스 이중연도 사양·부품·설치 사례",
+      "file": "/uploads/jungangyeondo-catalog.pdf",
       "status": ""
     },
     {

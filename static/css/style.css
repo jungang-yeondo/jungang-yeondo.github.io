@@ -382,3 +382,6 @@ footer .c{grid-column:1/-1;font-size:13px;padding-top:22px;border-top:1px solid 
 .facil .tx b{display:block;font-size:22px;margin-bottom:10px}
 .facil .tx p{color:var(--muted);line-height:1.75;margin:0}
 @media (max-width:760px){.facil .row{grid-template-columns:1fr;gap:16px}}
+
+/* 메인 단면 모션 */
+.eng-motion{display:block;width:100%;max-width:600px;height:auto;aspect-ratio:1364/1184;margin:0 auto;mix-blend-mode:lighten;object-fit:contain}

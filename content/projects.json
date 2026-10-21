@@ -43,11 +43,6 @@
       "contractor": "영익엔지니어링(주)"
     },
     {
-      "name": "도쿄 일렉트론 코리아",
-      "category": "산업",
-      "contractor": "미래스택"
-    },
-    {
       "name": "서울아산병원",
       "category": "의료",
       "contractor": "(주)중앙이엔지"
@@ -151,6 +146,11 @@
       "name": "현대자동차 전주공장",
       "category": "산업",
       "contractor": "상우플랜"
+    },
+    {
+      "name": "도쿄 일렉트론 코리아",
+      "category": "산업",
+      "contractor": "미래스택"
     },
     {
       "name": "LG에너지솔루션 오창",

@@ -243,7 +243,8 @@ add('/business/', {
   title: '사업분야', section: 'business', image: biz.banner,
   body: subPage({ en: 'Business', title: '사업분야', banner: biz.banner, section: 'business', current: '/business/', body:
     two('Field', '적용 분야', `<div class="biz3">${list(biz.fields).map((f) => `<article><div class="im">${img(f.image, f.title)}</div><span class="en">${esc(f.label)}</span><b>${esc(f.title)}</b><p>${esc(f.text)}</p></article>`).join('')}</div>`) +
-    two('Process', '수주부터 납품까지', `<ol class="steps" style="grid-template-columns:repeat(${Math.min(5, list(biz.process).length) || 1},1fr)">${list(biz.process).map((p) => `<li><b style="color:var(--ink);display:block;margin-bottom:6px">${esc(p.title)}</b>${esc(p.text)}</li>`).join('')}</ol>`) }),
+    two('Process', '수주부터 납품까지', `<ol class="steps" style="grid-template-columns:repeat(${Math.min(5, list(biz.process).length) || 1},1fr)">${list(biz.process).map((p) => `<li><b style="color:var(--ink);display:block;margin-bottom:6px">${esc(p.title)}</b>${esc(p.text)}</li>`).join('')}</ol>`) +
+    (list(biz.facilities).length ? two('Facility', esc(biz.facilities_title || '보유 설비 · 제작 기술'), `<div class="facil">${list(biz.facilities).map((f) => `<div class="row"><div class="ph">${img(f.image1, f.title)}${f.image2 ? img(f.image2, f.title) : ''}</div><div class="tx">${f.en ? `<span class="en">${esc(f.en)}</span>` : ''}<b>${esc(f.title)}</b><p>${esc(f.text)}</p></div></div>`).join('')}</div>`) : '') }),
 });
 
 // ---------- PRODUCTS ----------

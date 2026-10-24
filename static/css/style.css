@@ -400,3 +400,8 @@ footer .c{grid-column:1/-1;font-size:13px;padding-top:22px;border-top:1px solid 
 .pcard span{display:block;font-size:14px;line-height:1.75;opacity:.75}
 @media(max-width:900px){.pcards{grid-template-columns:repeat(2,1fr);gap:20px}}
 @media(max-width:560px){.pcards{grid-template-columns:1fr}}
+
+/* 부품 3D 뷰어 */
+.p3d{position:relative;width:100%;height:100%;cursor:grab;touch-action:pan-y;background:radial-gradient(circle at 50% 38%,#1f2a3d,#0c121c 75%)}
+.p3d:active{cursor:grabbing}.p3d canvas{display:block;width:100%;height:100%}
+.p3d .hint{position:absolute;left:10px;bottom:8px;font-size:11px;color:#fff;opacity:.55;pointer-events:none;transition:opacity .3s}.p3d.on .hint{opacity:0}

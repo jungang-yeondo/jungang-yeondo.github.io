@@ -94,7 +94,7 @@
     const root = new T.Group(); root.add(obj); scene.add(root); root.rotation.set(tilt, 0.5, 0);
     const sphere = box.getBoundingSphere(new T.Sphere());
     const camera = new T.PerspectiveCamera(30, 4 / 3, 1, 50000);
-    const dist = sphere.radius / Math.sin(T.MathUtils.degToRad(30) / 2) * 0.82;
+    const dist = sphere.radius / Math.sin(T.MathUtils.degToRad(30) / 2) * 0.6;
     camera.position.set(0, sphere.radius * 0.05, dist); camera.lookAt(0, 0, 0);
     const size = () => { const w = el.clientWidth, h = el.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); };
     size(); window.addEventListener('resize', size);

@@ -24,7 +24,7 @@ const baseUrl = String(site.url || '').replace(/\/$/, '');
 const NAV = [
   { key: 'company', label: '회사소개', href: '/company/greeting/', sub: [['인사말', '/company/greeting/'], ['회사개요', '/company/overview/'], ['연혁', '/company/history/'], ['오시는 길', '/company/location/']] },
   { key: 'business', label: '사업분야', href: '/business/', sub: [['사업분야', '/business/']] },
-  { key: 'product', label: '제품소개', href: '/product/stack/', sub: [['스테인리스 연도', '/product/stack/'], ['LPF 기밀연도', '/product/lpf/']] },
+  { key: 'product', label: '제품소개', href: '/product/stack/', sub: [['스테인리스 연도', '/product/stack/'], ['LPF 기밀연도', '/product/lpf/'], ['주요 부품', '/product/parts/']] },
   { key: 'projects', label: '납품실적', href: '/projects/', sub: [['납품실적', '/projects/'], ['현장 사진', '/projects/gallery/'], ['인증·특허', '/projects/certification/']] },
   { key: 'support', label: '고객지원', href: '/support/downloads/', sub: [['자료실', '/support/downloads/'], ['온라인 문의', '/support/contact/']] },
 ];
@@ -264,7 +264,14 @@ add('/product/stack/', {
     two('Line-up', '구성 · 관경 산정', `<div class="lineup2">${list(prod.lineup).map((l, i) => `<div class="row">${l.image ? `<div class="ph">${img(l.image, l.title)}</div>` : `<div class="ph ic">${ICONS[Math.min(i, 2)]}</div>`}<div class="tx">${l.en ? `<span class="en">${esc(l.en)}</span>` : ''}<b>${esc(l.title)}</b><p>${esc(l.text)}</p><span class="f">${esc(l.formula)}</span></div></div>`).join('')}</div><p class="note">${esc(prod.lineup_note)}</p>`) +
     two('Specification', '재질 · 두께', `<div class="tw"><table class="tbl"><thead><tr><th>구분</th><th class="c">~ Ø900</th><th class="c">Ø1000 – 1500</th><th class="c">Ø1600 ~</th><th>재질</th></tr></thead><tbody>${list(prod.spec_rows).map((r) => `<tr><td>${esc(r.name)}</td><td class="c num">${esc(r.a)}</td><td class="c num">${esc(r.b)}</td><td class="c num">${esc(r.c)}</td><td>${esc(r.material)}</td></tr>`).join('')}</tbody></table></div><p class="note">${esc(prod.spec_note)}</p>
 <div class="tw" style="margin-top:44px"><table class="tbl"><thead><tr><th>지지 철물</th><th>규격</th><th>설치 위치</th></tr></thead><tbody>${list(prod.support_rows).map((r) => `<tr><td>${esc(r.name)}</td><td>${esc(r.spec)}</td><td>${esc(r.where)}</td></tr>`).join('')}</tbody></table></div>`) +
-    two('Components', '주요 부품', `<div class="parts">${list(prod.parts).map((p) => `<div><code>${esc(p.code)}</code><b>${esc(p.title)}</b><span>${esc(p.text)}</span></div>`).join('')}</div>`) }),
+    two('Components', '주요 부품', `<div class="parts">${list(prod.parts).map((p) => `<div><code>${esc(p.code)}</code><b>${esc(p.title)}</b><span>${esc(p.text)}</span></div>`).join('')}</div><p class="parts-more"><a href="/product/parts/">부품 사진으로 보기 →</a></p>`) }),
+});
+
+add('/product/parts/', {
+  title: '주요 부품', section: 'product', image: prod.stack_image,
+  desc: '중앙연도 연도 주요 부품 — 합류관, 지지대, 길이 조절관, 삿갓, 드레인 엔드캡, 엘보, 플랜지 어댑터 등 부품별 사진과 설명.',
+  body: subPage({ en: 'Products', title: '주요 부품', banner: prod.parts_banner || prod.stack_banner || prod.banner, section: 'product', current: '/product/parts/', body:
+    two('Components', '주요 부품', `${prod.parts_intro ? `<p class="lead" style="margin-bottom:28px">${br(prod.parts_intro)}</p>` : ''}<div class="pcards">${list(prod.parts).map((p) => `<div class="pcard"><div class="ph">${p.image ? img(p.image, p.title) : '<div class="noimg">사진 준비 중</div>'}</div><div class="tx"><code>${esc(p.code)}</code><b>${esc(p.title)}</b><span>${esc(p.text)}</span></div></div>`).join('')}</div>`) }),
 });
 add('/product/lpf/', {
   title: 'LPF 기밀연도', section: 'product', image: prod.banner,

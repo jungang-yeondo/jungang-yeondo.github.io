@@ -405,3 +405,10 @@ footer .c{grid-column:1/-1;font-size:13px;padding-top:22px;border-top:1px solid 
 .p3d{position:relative;width:100%;height:100%;cursor:grab;touch-action:pan-y;background:radial-gradient(circle at 50% 38%,#1f2a3d,#0c121c 75%)}
 .p3d:active{cursor:grabbing}.p3d canvas{display:block;width:100%;height:100%}
 .p3d .hint{position:absolute;left:10px;bottom:8px;font-size:11px;color:#fff;opacity:.55;pointer-events:none;transition:opacity .3s}.p3d.on .hint{opacity:0}
+
+/* 부품 카드: 사진 크게, 코드·이름 한 줄 */
+.pcard .ph{aspect-ratio:1/1;margin-bottom:22px}
+.pcard .nm{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.pcard .nm code{display:inline;margin:0;font-size:20px;font-weight:700}
+.pcard .nm i{font-style:normal;opacity:.4;font-size:20px}
+.pcard .nm b{display:inline;margin:0;font-size:22px}

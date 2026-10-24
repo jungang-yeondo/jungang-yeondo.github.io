@@ -412,3 +412,8 @@ footer .c{grid-column:1/-1;font-size:13px;padding-top:22px;border-top:1px solid 
 .pcard .nm code{display:inline;margin:0;font-size:20px;font-weight:700}
 .pcard .nm i{font-style:normal;opacity:.4;font-size:20px}
 .pcard .nm b{display:inline;margin:0;font-size:22px}
+
+/* 3D 모델 카드: 2칸 너비 3D 화면 + 오른쪽 설명 */
+.pcard.has3d{grid-column:1/-1;display:grid;grid-template-columns:2fr 1fr;gap:28px;align-items:center}
+.pcard.has3d .ph{aspect-ratio:16/10;margin:0}
+@media(max-width:900px){.pcard.has3d{grid-template-columns:1fr;gap:18px}.pcard.has3d .ph{aspect-ratio:4/3}}

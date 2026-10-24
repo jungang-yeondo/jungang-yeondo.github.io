@@ -164,10 +164,12 @@ collections:
             label: "[스테인리스] 지지 철물 표"
             widget: list
             fields: [{ name: name, label: 구분, widget: string }, { name: spec, label: 규격, widget: string }, { name: where, label: 설치 위치, widget: string }]
+          - { name: parts_banner, label: "[주요 부품] 상단 배너 사진", widget: image, required: false }
+          - { name: parts_intro, label: "[주요 부품] 소개 문구", widget: text, required: false }
           - name: parts
-            label: "[스테인리스] 주요 부품"
+            label: "[주요 부품] 부품 목록 (스테인리스 연도 · 주요 부품 페이지 공용)"
             widget: list
-            fields: [{ name: code, label: 코드, widget: string }, { name: title, label: 이름, widget: string }, { name: text, label: 설명, widget: string }]
+            fields: [{ name: image, label: 사진, widget: image, required: false }, { name: code, label: 코드, widget: string }, { name: title, label: 이름, widget: string }, { name: text, label: 설명, widget: text }]
           - { name: lpf_quote, label: "[LPF] 큰 문구", widget: text }
           - { name: lpf_intro, label: "[LPF] 설명", widget: text }
           - { name: lpf_note, label: "[LPF] 상표·특허 안내", widget: string }

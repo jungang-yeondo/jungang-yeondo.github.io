@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>EL90 곡관 3D 미리보기</title>
+<style>
+  :root{--bg:#0b111c;--fg:#e8ecf2;--muted:#8d97a8;--accent:#e0444d}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}
+  .wrap{max-width:960px;margin:0 auto;padding:28px 16px}
+  .card{display:grid;grid-template-columns:1.3fr 1fr;gap:28px;align-items:center}
+  .stage{position:relative;aspect-ratio:4/3;border-radius:10px;background:radial-gradient(circle at 50% 40%,#1b2536,#0d1420 70%);overflow:hidden;touch-action:none;cursor:grab}
+  .stage:active{cursor:grabbing}
+  canvas{display:block;width:100%;height:100%}
+  .hint{position:absolute;left:12px;bottom:10px;font-size:12px;color:var(--muted)}
+  code{color:var(--accent);font-family:inherit;letter-spacing:.04em}
+  h1{font-size:22px;margin:6px 0 10px}
+  p{color:var(--muted);line-height:1.75;font-size:14px;margin:0 0 10px}
+  .spec{font-size:13px;color:var(--muted);border-top:1px solid rgba(255,255,255,.12);padding-top:12px}
+  @media(max-width:720px){.card{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="stage" id="stage"><canvas id="c"></canvas><div class="hint">드래그해서 돌려보세요 · 휠로 확대</div></div>
+    <div>
+      <code>EL90</code>
+      <h1>곡관 (90°)</h1>
+      <p>연도 배관 시공 중 장애물을 회피하거나 배기 라인의 방향을 전환할 때 사용하는 곡관 부속입니다.</p>
+      <div class="spec">맛보기 모델 · 내부관 Ø300 / 외부 커버 Ø350 (공기단열층 25mm) · 5분할 마디형</div>
+    </div>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+const canvas=document.getElementById('c'), stage=document.getElementById('stage');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.outputEncoding=THREE.sRGBEncoding;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.05;
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(35,4/3,1,10000);
+
+// 반사용 환경맵 (밝은 패널이 있는 방)
+const pmrem=new THREE.PMREMGenerator(renderer);
+const env=new THREE.Scene();
+env.background=new THREE.Color(0x2a3240);
+const panel=(w,h,x,y,z,ry,rx,c)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({color:c,side:THREE.DoubleSide}));m.position.set(x,y,z);m.rotation.set(rx||0,ry||0,0);env.add(m);};
+panel(8,3,0,5,0,0,Math.PI/2,0xffffff);
+panel(4,6,-6,1,0,Math.PI/2,0,0xbfd2ff);
+panel(4,6,6,1,0,-Math.PI/2,0,0xffe9d0);
+panel(10,2,0,-4,0,0,Math.PI/2,0x10141c);
+scene.environment=pmrem.fromScene(env,0.04).texture;
+
+scene.add(new THREE.HemisphereLight(0xdfe8ff,0x1a2030,0.6));
+const key=new THREE.DirectionalLight(0xffffff,1.1);key.position.set(600,900,700);scene.add(key);
+const rim=new THREE.DirectionalLight(0x9fb8ff,0.6);rim.position.set(-700,300,-600);scene.add(rim);
+
+const steel=new THREE.MeshStandardMaterial({color:0xc9ced6,metalness:.92,roughness:.32,side:THREE.DoubleSide});
+const inner=new THREE.MeshStandardMaterial({color:0xa9afb8,metalness:.85,roughness:.45,side:THREE.DoubleSide});
+const seamM=new THREE.MeshStandardMaterial({color:0x8a8f98,metalness:.8,roughness:.5});
+
+// ===== 마디형(lobster-back) 90° 곡관 =====
+const D_IN=300, D_OUT=350, R=420, N=5;      // 관경, 곡률 반경(중심선), 마디 수
+const angles=[0]; const step=Math.PI/2/(N-1);  // 양끝 반마디 + 가운데 마디
+angles.push(step/2); for(let i=1;i<N-1;i++) angles.push(step/2+i*step); angles[angles.length-1]=Math.PI/2-step/2; angles.push(Math.PI/2);
+// 중심선 꺾은선: 각 마디의 직선 방향은 마디 중앙각의 접선
+const segs=[]; // 각 마디: 시작각, 끝각
+for(let i=0;i<angles.length-1;i++) segs.push([angles[i],angles[i+1]]);
+const C=(t)=>new THREE.Vector3(R-R*Math.cos(t),R*Math.sin(t),0); // 곡선 위 점 (XY 평면에서 굽힘)
+// 마디 꼭짓점(꺾은선): 각 마디 중앙각 접선의 교점
+const mid=segs.map(([a,b])=>(a+b)/2);
+const dirOf=(t)=>new THREE.Vector3(Math.sin(t),Math.cos(t),0).normalize();
+function lineIntersect(p1,d1,p2,d2){ // XY 평면 두 직선 교점
+  const den=d1.x*d2.y-d1.y*d2.x; const t=((p2.x-p1.x)*d2.y-(p2.y-p1.y)*d2.x)/den; return p1.clone().add(d1.clone().multiplyScalar(t));}
+const tanPt=(t)=>{const r=R/Math.cos(step/2*0+0);return C(t);};
+const pts=[C(0)];
+for(let i=0;i<mid.length-1;i++){
+  // 마디 직선은 해당 구간 양끝 곡선점을 잇는 현(chord) 방향과 평행한 접선으로 근사
+  const p1=C(mid[i]).clone(), d1=dirOf(mid[i]); const p2=C(mid[i+1]).clone(), d2=dirOf(mid[i+1]);
+  pts.push(lineIntersect(p1,d1,p2,d2));
+}
+pts.push(C(Math.PI/2));
+// 시작/끝점은 첫·마지막 마디 직선 위로 보정
+pts[0]=lineIntersect(C(mid[0]),dirOf(mid[0]),new THREE.Vector3(0,0,0),new THREE.Vector3(1,0,0));
+pts[pts.length-1]=lineIntersect(C(mid[mid.length-1]),dirOf(mid[mid.length-1]),new THREE.Vector3(R,R,0),new THREE.Vector3(0,1,0));
+
+const Z=new THREE.Vector3(0,0,1);
+function mitreNormal(k){ // k번째 꼭짓점의 절단면 법선
+  if(k===0) return pts[1].clone().sub(pts[0]).normalize();
+  if(k===pts.length-1) return pts[k].clone().sub(pts[k-1]).normalize();
+  const a=pts[k].clone().sub(pts[k-1]).normalize(), b=pts[k+1].clone().sub(pts[k]).normalize();
+  return a.add(b).normalize();
+}
+function pipe(radius,mat,radial=96){
+  const g=new THREE.Group();
+  for(let s=0;s<pts.length-1;s++){
+    const A=pts[s],B=pts[s+1], d=B.clone().sub(A).normalize();
+    const u=Z.clone(), v=new THREE.Vector3().crossVectors(d,u).normalize();
+    const nA=mitreNormal(s), nB=mitreNormal(s+1);
+    const pos=[], idx=[];
+    for(let j=0;j<=radial;j++){
+      const f=j/radial*Math.PI*2, off=u.clone().multiplyScalar(Math.cos(f)*radius).add(v.clone().multiplyScalar(Math.sin(f)*radius));
+      for(const [P,n] of [[A,nA],[B,nB]]){
+        const q=P.clone().add(off); // 원통 위 점을 절단면으로 투영 (축 방향)
+        const t=-(q.clone().sub(P).dot(n))/d.dot(n); q.add(d.clone().multiplyScalar(t)); pos.push(q.x,q.y,q.z);
+      }
+    }
+    for(let j=0;j<radial;j++){const a=j*2,b=a+1,c=a+2,e=a+3; idx.push(a,c,b,b,c,e);}
+    const geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); geo.setIndex(idx); geo.computeVertexNormals();
+    g.add(new THREE.Mesh(geo,mat));
+  }
+  return g;
+}
+const elbow=new THREE.Group();
+elbow.add(pipe(D_OUT/2,steel));
+elbow.add(pipe(D_IN/2,inner));
+// 마디 용접선
+for(let k=1;k<pts.length-1;k++){
+  const n=mitreNormal(k); const pts2=[];
+  const prev=pts[k].clone().sub(pts[k-1]).normalize(); const u=Z.clone(), v=new THREE.Vector3().crossVectors(prev,u).normalize();
+  for(let j=0;j<=128;j++){const f=j/128*Math.PI*2; const q=pts[k].clone().add(u.clone().multiplyScalar(Math.cos(f)*(D_OUT/2+1.2))).add(v.clone().multiplyScalar(Math.sin(f)*(D_OUT/2+1.2))); const t=-(q.clone().sub(pts[k]).dot(n))/prev.dot(n); q.add(prev.clone().multiplyScalar(t)); pts2.push(q);}
+  const tube=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts2,true),256,2.2,6,true); elbow.add(new THREE.Mesh(tube,seamM));
+}
+// 양끝: 공기단열층 단면 링 + 비드 밴드
+function endRing(P,dir){
+  const ring=new THREE.Mesh(new THREE.RingGeometry(D_IN/2,D_OUT/2,96),new THREE.MeshStandardMaterial({color:0x6d737c,metalness:.6,roughness:.6,side:THREE.DoubleSide}));
+  ring.position.copy(P); ring.lookAt(P.clone().add(dir)); elbow.add(ring);
+  const band=new THREE.Mesh(new THREE.TorusGeometry(D_OUT/2+2,4,10,128),seamM); band.position.copy(P.clone().sub(dir.clone().multiplyScalar(22))); band.lookAt(band.position.clone().add(dir)); elbow.add(band);
+}
+endRing(pts[0],pts[0].clone().sub(pts[1]).normalize());
+endRing(pts[pts.length-1],pts[pts.length-1].clone().sub(pts[pts.length-2]).normalize());
+
+// 가운데 정렬
+const box=new THREE.Box3().setFromObject(elbow), ctr=box.getCenter(new THREE.Vector3()); elbow.position.sub(ctr);
+const root=new THREE.Group(); root.add(elbow); scene.add(root);
+root.rotation.set(-0.35,0.7,0);
+
+// 바닥 그림자 느낌
+const sh=new THREE.Mesh(new THREE.CircleGeometry(330,64),new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.28}));
+sh.rotation.x=-Math.PI/2; sh.position.y=-340; sh.scale.set(1,.55,1); scene.add(sh);
+
+let dist=1500; const target=new THREE.Vector3();
+function place(){camera.position.set(0,120,dist);camera.lookAt(target);}
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+addEventListener('resize',resize); resize(); place();
+
+// 드래그 회전 / 휠·핀치 확대 / 자동 회전
+let drag=false,lx=0,ly=0,vx=0.004,vy=0,idle=0; const ptrs=new Map(); let pinch0=0,dist0=dist;
+stage.addEventListener('pointerdown',e=>{stage.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,[e.clientX,e.clientY]);drag=true;lx=e.clientX;ly=e.clientY;idle=0;
+  if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinch0=Math.hypot(a[0]-b[0],a[1]-b[1]);dist0=dist;}});
+stage.addEventListener('pointermove',e=>{if(!ptrs.has(e.pointerId))return;ptrs.set(e.pointerId,[e.clientX,e.clientY]);
+  if(ptrs.size===2){const [a,b]=[...ptrs.values()];const d=Math.hypot(a[0]-b[0],a[1]-b[1]);dist=Math.min(2600,Math.max(800,dist0*pinch0/d));place();return;}
+  if(!drag)return;const dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;vx=dx*0.008;vy=dy*0.008;root.rotation.y+=vx;root.rotation.x=Math.max(-1.3,Math.min(1.3,root.rotation.x+vy));});
+const up=e=>{ptrs.delete(e.pointerId);if(ptrs.size===0)drag=false;};
+stage.addEventListener('pointerup',up);stage.addEventListener('pointercancel',up);
+stage.addEventListener('wheel',e=>{e.preventDefault();dist=Math.min(2600,Math.max(800,dist*(1+Math.sign(e.deltaY)*0.08)));place();},{passive:false});
+
+(function loop(){requestAnimationFrame(loop);
+  if(!drag){idle++;vx*=0.95;vy*=0.9;root.rotation.y+=vx;root.rotation.x=Math.max(-1.3,Math.min(1.3,root.rotation.x+vy));if(idle>90)root.rotation.y+=0.004;}
+  renderer.render(scene,camera);})();
+})();
+</script>
+</body>
+</html>

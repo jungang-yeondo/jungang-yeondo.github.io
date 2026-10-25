@@ -247,11 +247,58 @@
     return buildBranched(R1, R2, r1, r2, yT, yO, Math.PI / 4, c, S, 0.3);
   }
 
-  const MODELS = { sk: buildSK, lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
+  // ---------- 모델: EL90 / EL45 곡관 (마디형, 이중관) ----------
+  function mitreTube(g, mat, pts, r) {
+    const Z = new T.Vector3(0, 0, 1), N = 140;
+    const nrm = (k) => {
+      if (k === 0) return pts[1].clone().sub(pts[0]).normalize();
+      if (k === pts.length - 1) return pts[k].clone().sub(pts[k - 1]).normalize();
+      const a = pts[k].clone().sub(pts[k - 1]).normalize(), b = pts[k + 1].clone().sub(pts[k]).normalize();
+      return a.add(b).normalize();
+    };
+    for (let s = 0; s < pts.length - 1; s++) {
+      const A = pts[s], B = pts[s + 1], d = B.clone().sub(A).normalize();
+      const v = new T.Vector3().crossVectors(d, Z).normalize();
+      const nA = nrm(s), nB = nrm(s + 1), pos = [], idx = [];
+      for (let j = 0; j <= N; j++) {
+        const f = j / N * Math.PI * 2;
+        const off = Z.clone().multiplyScalar(Math.cos(f) * r).add(v.clone().multiplyScalar(Math.sin(f) * r));
+        for (const [P, n] of [[A, nA], [B, nB]]) {
+          const q = P.clone().add(off); const tt = -(q.clone().sub(P).dot(n)) / d.dot(n); q.add(d.clone().multiplyScalar(tt)); pos.push(q.x, q.y, q.z);
+        }
+      }
+      for (let j = 0; j < N; j++) { const p = j * 2; idx.push(p, p + 2, p + 1, p + 1, p + 2, p + 3); }
+      const geo = new T.BufferGeometry(); geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3)); geo.setIndex(idx); geo.computeVertexNormals();
+      g.add(new T.Mesh(geo, mat));
+    }
+  }
+  function buildElbow(deg) {
+    const M = mats(); const g = new T.Group();
+    const R1 = 150, R2 = 175, Rb = R2 * 1.5, th = deg * Math.PI / 180, n = Math.round(deg / 45) + 1, u = th / (n - 1);
+    const arc = (f) => new T.Vector3(Rb - Rb * Math.cos(f), Rb * Math.sin(f), 0);
+    const tan = (f) => new T.Vector3(Math.sin(f), Math.cos(f), 0);
+    const meet = (p1, d1, p2, d2) => { const den = d1.x * d2.y - d1.y * d2.x; const t = ((p2.x - p1.x) * d2.y - (p2.y - p1.y) * d2.x) / den; return p1.clone().add(d1.clone().multiplyScalar(t)); };
+    const pts = [arc(0)];
+    for (let i = 0; i < n - 1; i++) pts.push(meet(arc(i * u), tan(i * u), arc((i + 1) * u), tan((i + 1) * u)));
+    pts.push(arc(th));
+    mitreTube(g, M.steel, pts, R1);
+    mitreTube(g, M.outer, pts, R2);
+    const E = 60;
+    const sg = new T.Group(); sg.rotation.z = Math.PI; sg.position.copy(arc(0));
+    doublePipe(sg, M, R1, R2, 0, E + 40, 0, E, false, true); g.add(sg);
+    const eg = new T.Group(); eg.rotation.z = -th; eg.position.copy(arc(th));
+    doublePipe(eg, M, R1, R2, 0, E + 40, 0, E, false, true); g.add(eg);
+    return { obj: g, tilt: 0.25 };
+  }
+
+  const MODELS = { sk: buildSK, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
   // ---------- 뷰어 ----------
+  // 전환 버튼으로 함께 보여줄 모델 묶음
+  const SETS = { mt: [['MT', 'mt'], ['NT', 'nt']], lt: [['LT', 'lt'], ['JT', 'jt']], el: [['EL90', 'el90'], ['EL45', 'el45']] };
   function mount(el) {
-    const make = MODELS[el.dataset.model]; if (!make) return;
+    const set = SETS[el.dataset.model] || [[null, el.dataset.model]];
+    if (!set.every(([, n]) => MODELS[n])) return;
     const canvas = document.createElement('canvas'); el.prepend(canvas);
     const renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -262,27 +309,55 @@
     scene.environment = envMap(renderer);
     scene.add(new T.HemisphereLight(0xffffff, 0x20242c, 0.25));
     const key = new T.DirectionalLight(0xffffff, 0.6); key.position.set(700, 1200, 900); scene.add(key);
-    const { obj, tilt } = make();
-    const box = new T.Box3().setFromObject(obj); obj.position.sub(box.getCenter(new T.Vector3()));
-    const root = new T.Group(); root.add(obj); scene.add(root); root.rotation.set(tilt, 0.5, 0);
-    const sphere = box.getBoundingSphere(new T.Sphere());
+    const root = new T.Group(); scene.add(root); root.rotation.y = 0.5;
     const camera = new T.PerspectiveCamera(30, 4 / 3, 1, 50000);
-    const halfW = (box.max.x - box.min.x) / 2, halfH = (box.max.y - box.min.y) / 2, tanH = Math.tan(T.MathUtils.degToRad(15));
-    const size = () => { const w = el.clientWidth, h = el.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
-      const d = Math.max(halfW * 1.04 / (tanH * Math.min(camera.aspect, 1.3)), halfH * 1.4 / tanH, sphere.radius * 1.2); camera.position.set(0, sphere.radius * 0.05, d); camera.lookAt(0, 0, 0); };
-    size(); window.addEventListener('resize', size);
+    const tanH = Math.tan(T.MathUtils.degToRad(15));
+    let cur = null, halfW = 1, halfH = 1, rad = 1;
+    const size = () => {
+      const w = el.clientWidth, h = el.clientHeight; if (!w || !h) return;
+      renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+      const d = Math.max(halfW * 1.04 / (tanH * Math.min(camera.aspect, 1.3)), halfH * 1.4 / tanH, rad * 1.2);
+      camera.position.set(0, rad * 0.05, d); camera.lookAt(0, 0, 0);
+    };
+    const cache = {};
+    const show = (name) => {
+      if (!cache[name]) {
+        const { obj, tilt } = MODELS[name]();
+        const box = new T.Box3().setFromObject(obj); obj.position.sub(box.getCenter(new T.Vector3()));
+        const sz = box.getSize(new T.Vector3());
+        cache[name] = { obj, tilt, hw: sz.x / 2, hh: sz.y / 2, rad: box.getBoundingSphere(new T.Sphere()).radius };
+      }
+      const m = cache[name];
+      if (cur) root.remove(cur);
+      cur = m.obj; root.add(cur); root.rotation.x = m.tilt;
+      halfW = m.hw; halfH = m.hh; rad = m.rad; size();
+    };
+    if (set.length > 1) {
+      const sw = document.createElement('div'); sw.className = 'sw';
+      set.forEach(([label, name], i) => {
+        const b = document.createElement('button'); b.type = 'button'; b.textContent = label; if (!i) b.classList.add('on');
+        b.addEventListener('click', () => { sw.querySelectorAll('button').forEach((x) => x.classList.remove('on')); b.classList.add('on'); show(name); });
+        sw.appendChild(b);
+      });
+      sw.addEventListener('pointerdown', (e) => e.stopPropagation());
+      el.appendChild(sw);
+    }
+    show(set[0][1]);
+    window.addEventListener('resize', size);
 
     let drag = false, lx = 0, ly = 0, vx = 0.004, vy = 0, idle = 999, visible = false;
-    el.addEventListener('pointerdown', (e) => { drag = true; lx = e.clientX; ly = e.clientY; idle = 0; el.setPointerCapture(e.pointerId); el.classList.add('on'); });
+    const onSw = (e) => !!(e.target && e.target.closest && e.target.closest('.sw'));
+    el.addEventListener('pointerdown', (e) => { if (onSw(e)) return; drag = true; lx = e.clientX; ly = e.clientY; idle = 0; el.setPointerCapture(e.pointerId); el.classList.add('on'); });
     el.addEventListener('pointermove', (e) => {
       if (!drag) return; const dx = e.clientX - lx, dy = e.clientY - ly; lx = e.clientX; ly = e.clientY;
-      vx = Math.max(-0.06, Math.min(0.06, dx * 0.009)); vy = Math.max(-0.04, Math.min(0.04, dy * 0.009)); root.rotation.y += vx; root.rotation.x = Math.max(-1.45, Math.min(1.45, root.rotation.x + vy));
+      vx = Math.max(-0.06, Math.min(0.06, dx * 0.009)); vy = Math.max(-0.04, Math.min(0.04, dy * 0.009));
+      root.rotation.y += vx; root.rotation.x = Math.max(-1.45, Math.min(1.45, root.rotation.x + vy));
     });
     const up = () => { drag = false; };
-    // 3D 영역을 잡고 움직일 때 페이지 스크롤 막기 (모바일)
-    el.addEventListener('touchstart', (e) => { if (e.touches.length === 1) e.preventDefault(); }, { passive: false });
-    el.addEventListener('touchmove', (e) => { if (e.touches.length === 1) e.preventDefault(); }, { passive: false });
     el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+    // 3D 영역을 잡고 움직일 때 페이지 스크롤 막기 (모바일). 전환 버튼은 제외
+    el.addEventListener('touchstart', (e) => { if (e.touches.length === 1 && !onSw(e)) e.preventDefault(); }, { passive: false });
+    el.addEventListener('touchmove', (e) => { if (e.touches.length === 1 && !onSw(e)) e.preventDefault(); }, { passive: false });
     new IntersectionObserver((es) => { visible = es[0].isIntersecting; }, { rootMargin: '100px' }).observe(el);
     (function loop() {
       requestAnimationFrame(loop); if (!visible) return;

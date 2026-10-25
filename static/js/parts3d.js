@@ -97,6 +97,12 @@
       ann(R2 - d, R2, s * (yO - 20), M.steel2); ann(R2 - d, R2, s * (yO - 32), M.steel2);
     }
     cyl(R2, -yO + 32, yO - 32, M.steel2);
+    // 공기단열층 틈: 외부관 끝 안쪽을 어둡게 (두 관이 구분되어 보이도록)
+    const gapM = new T.MeshStandardMaterial({ color: 0x07090c, metalness: 0, roughness: 1, side: T.DoubleSide });
+    for (const s of [1, -1]) {
+      ann(R1 + 0.5, R2 - 0.5, s * (yO - 6), gapM);
+      const lin = new T.Mesh(new T.CylinderGeometry(R2 - 0.6, R2 - 0.6, 6, 180, 1, true), gapM); lin.position.y = s * (yO - 3); g.add(lin);
+    }
     ring(R2, 1, yO, M.rod); ring(R2, 1, -yO, M.rod);
     // 외부관 세로 이음 용접선
     const seam = new T.Mesh(new T.BoxGeometry(3, 2 * yO - 4, 1.2), M.weld);

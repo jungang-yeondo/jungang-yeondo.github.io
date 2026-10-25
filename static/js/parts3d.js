@@ -183,37 +183,66 @@
     cyl(R2, s0, s1, M.outer);
   }
 
-  // ---------- 모델: MT / NT 90도 합류관 ----------
-  // 메인관 외부관 길이 = 가지관 관경 + 200, 가지관은 메인 외부관에서 100mm 돌출, 메인 위아래 여유 100
-  function buildTee(nt) {
+  // ---------- 공용: 가지관 (인너는 메인 인너에, 아우트는 메인 아우트에 붙음 / 메인관은 그 자리만 뚫림) ----------
+  function holeMat(base, P, u, r, uInv) {
+    const m = base.clone();
+    m.onBeforeCompile = (sh) => {
+      sh.uniforms.uInv = uInv; sh.uniforms.uP = { value: P }; sh.uniforms.uU = { value: u }; sh.uniforms.uR = { value: r };
+      sh.vertexShader = 'varying vec3 vWP;\n' + sh.vertexShader.replace('#include <project_vertex>', '#include <project_vertex>\n vWP = (modelMatrix * vec4(transformed, 1.0)).xyz;');
+      sh.fragmentShader = 'varying vec3 vWP;\nuniform mat4 uInv; uniform vec3 uP; uniform vec3 uU; uniform float uR;\n' +
+        sh.fragmentShader.replace('void main() {', 'void main() {\n vec3 lp = (uInv * vec4(vWP, 1.0)).xyz - uP; float tt = dot(lp, uU); if (tt > 0.0 && length(lp - tt * uU) < uR) discard;');
+    };
+    return m;
+  }
+  // 메인관 원통(반지름 Rm)과 만나는 곡선(새들)에서 시작해 축 방향 tEnd까지 이어지는 관
+  function saddleT(Rm, P, u, r, f) {
+    const bx = P.x + r * Math.sin(f) * u.y, bz = r * Math.cos(f);
+    return (Math.sqrt(Math.max(Rm * Rm - bz * bz, 0)) - bx) / u.x;
+  }
+  function saddleTube(g, mat, Rm, P, u, r, tEnd) {
+    const N = 180, pos = [], idx = [];
+    for (let i = 0; i <= N; i++) {
+      const f = i / N * Math.PI * 2, t0 = saddleT(Rm, P, u, r, f);
+      const B = new T.Vector3(P.x + r * Math.sin(f) * u.y, P.y - r * Math.sin(f) * u.x, r * Math.cos(f));
+      for (const tt of [t0, tEnd]) pos.push(B.x + tt * u.x, B.y + tt * u.y, B.z);
+    }
+    for (let i = 0; i < N; i++) { const p = i * 2; idx.push(p, p + 2, p + 1, p + 1, p + 2, p + 3); }
+    const geo = new T.BufferGeometry(); geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3)); geo.setIndex(idx); geo.computeVertexNormals();
+    g.add(new T.Mesh(geo, mat));
+  }
+  // 메인 이중관 + 가지관. ang: 메인 축과 가지관 사이 각도, c: 가지관 축이 메인 축과 만나는 높이, extra: 가지관이 메인 밖으로 나오는 길이
+  function buildBranched(R1, R2, r1, r2, yT, yO, ang, c, extra, tilt) {
     const M = mats(); const g = new T.Group();
-    const R1 = 150, R2 = 175;                         // 메인 D300 / D350
-    const r1 = nt ? 100 : R1, r2 = nt ? 125 : R2;     // 가지관 (MT 동일, NT 작게)
-    const yO = (2 * r2 + 200) / 2, yT = yO + 40;
-    doublePipe(g, M, R1, R2, -yT, yT, -yO, yO, true, true);
-    const bg = new T.Group(); bg.rotation.z = -Math.PI / 2;  // 가지관: +x 방향
-    const xO = R2 + 100;
-    doublePipe(bg, M, r1, r2, R1, xO + 40, 0, xO, false, true);
+    const P = new T.Vector3(0, c, 0), u = new T.Vector3(Math.sin(ang), Math.cos(ang), 0);
+    const uInv = { value: new T.Matrix4() };
+    const MM = Object.assign({}, M, { steel: holeMat(M.steel, P, u, r1, uInv), outer: holeMat(M.outer, P, u, r2, uInv) });
+    doublePipe(g, MM, R1, R2, -yT, yT, -yO, yO, true, true);
+    let tUp = 0; for (let i = 0; i < 180; i++) { const f = i / 180 * Math.PI * 2; tUp = Math.max(tUp, saddleT(R2, P, u, r2, f), saddleT(R1, P, u, r1, f)); }
+    const Ls = tUp + 2, Lo = tUp + extra;
+    saddleTube(g, M.steel, R1, P, u, r1, Ls);
+    saddleTube(g, M.outer, R2, P, u, r2, Ls);
+    const bg = new T.Group(); bg.rotation.z = -ang; bg.position.copy(P);
+    doublePipe(bg, M, r1, r2, Ls, Lo + 40, Ls, Lo, false, true);
     g.add(bg);
-    return { obj: g, tilt: 0.35 };
+    g.traverse((o) => { if (o.isMesh && (o.material === MM.steel || o.material === MM.outer)) o.onBeforeRender = () => { uInv.value.copy(g.matrixWorld).invert(); }; });
+    return { obj: g, tilt };
   }
 
+  // ---------- 모델: MT / NT 90도 합류관 ----------
+  // 메인 외부관 길이 = 가지관 관경 + 200, 가지관은 메인 외부관에서 100mm 돌출
+  function buildTee(nt) {
+    const R1 = 150, R2 = 175, r1 = nt ? 100 : R1, r2 = nt ? 125 : R2;
+    const yO = (2 * r2 + 200) / 2;
+    return buildBranched(R1, R2, r1, r2, yO + 40, yO, Math.PI / 2, 0, 100, 0.35);
+  }
 
   // ---------- 모델: LT / JT Y형 합류관 (45°) ----------
-  // 인너 기준: 메인 인너 길이 = 가지관 관경 × 1.4 + 200, 아우트 = 인너 - 80, 가지관 아래 접합부는 메인 하단에서 100
+  // 인너 기준: 메인 인너 길이 = 가지관 관경 × 1.4 + 200 (가지관 구멍 위아래 100씩), 아우트 = 인너 - 80
   function buildY(jt) {
-    const M = mats(); const g = new T.Group();
-    const R1 = 150, R2 = 175;
-    const r1 = jt ? 100 : R1, r2 = jt ? 125 : R2;     // LT 동일, JT 가지관 작게
+    const R1 = 150, R2 = 175, r1 = jt ? 100 : R1, r2 = jt ? 125 : R2;
     const yT = (2 * r1 * 1.4 + 200) / 2, yO = yT - 40;
-    doublePipe(g, M, R1, R2, -yT, yT, -yO, yO, true, true);
-    const s45 = Math.SQRT1_2;
-    const c = -yO + 100 - R2 + 2 * s45 * r2;           // 가지관 축이 메인 축과 만나는 높이
-    const Lo = (yO - c - s45 * r2) / s45;               // 가지관 끝 윗선 = 메인 상단 높이
-    const bg = new T.Group(); bg.rotation.z = -Math.PI / 4; bg.position.y = c;
-    doublePipe(bg, M, r1, r2, R1, Lo + 40, 0, Lo, false, true);
-    g.add(bg);
-    return { obj: g, tilt: 0.3 };
+    const c = -yT + 100 - R1 + Math.SQRT2 * r1 - 4;   // 인너 구멍 아래끝 = 메인 인너 하단 + 100
+    return buildBranched(R1, R2, r1, r2, yT, yO, Math.PI / 4, c, 150, 0.3);
   }
 
   const MODELS = { sk: buildSK, lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };

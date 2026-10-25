@@ -124,7 +124,7 @@
       }
       g.add(grp);
     }
-    if (iv) makeFR(g, M, R2 + 1.5, -20, true); // FR 용접 위치: 센터
+    if (iv) makeFR(g, M, R2 + 1.5, -25, true); // FR 용접 위치: 센터
     return { obj: g, tilt: 0.42 };
   }
 

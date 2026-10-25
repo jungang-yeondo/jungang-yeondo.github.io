@@ -169,7 +169,7 @@ collections:
           - name: parts
             label: "[주요 부품] 부품 목록 (스테인리스 연도 · 주요 부품 페이지 공용)"
             widget: list
-            fields: [{ name: image, label: 사진, widget: image, required: false }, { name: model, label: "3D 모델 (선택하면 사진 대신 회전 3D 표시)", widget: select, options: [{ label: "SK 삿갓", value: sk }, { label: "977/477 직관 (이중관)", value: pipe977 }, { label: "IV 고정지지관", value: iv }, { label: "FR 유동방지대", value: fr }], required: false }, { name: code, label: 코드, widget: string }, { name: title, label: 이름, widget: string }, { name: text, label: 설명, widget: text }]
+            fields: [{ name: image, label: 사진, widget: image, required: false }, { name: model, label: "3D 모델 (선택하면 사진 대신 회전 3D 표시)", widget: select, options: [{ label: "SK 삿갓", value: sk }, { label: "977/477 직관 (이중관)", value: pipe977 }, { label: "IV 고정지지관", value: iv }, { label: "FR 유동방지대", value: fr }, { label: "MT 90도 합류관 (가지관 동일)", value: mt }, { label: "NT 90도 합류관 (가지관 작음)", value: nt }], required: false }, { name: code, label: 코드, widget: string }, { name: title, label: 이름, widget: string }, { name: text, label: 설명, widget: text }]
           - { name: lpf_quote, label: "[LPF] 큰 문구", widget: text }
           - { name: lpf_intro, label: "[LPF] 설명", widget: text }
           - { name: lpf_note, label: "[LPF] 상표·특허 안내", widget: string }

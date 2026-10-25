@@ -75,7 +75,7 @@
 
 
   // ---------- 모델: 977/477 직관 (공기단열 이중관) ----------
-  function buildPipe() {
+  function buildPipe(iv) {
     const M = mats();
     const g = new T.Group();
     const R1 = 150, R2 = 175, L = 480, OUT = 40; // 477 기준: 내부관 480, 외부관 400(-80), D300 / D350(+50A)
@@ -107,19 +107,51 @@
     // 외부관 세로 이음 용접선
     const seam = new T.Mesh(new T.BoxGeometry(3, 2 * yO - 4, 1.2), M.weld);
     seam.position.set(Math.cos(0.4) * (R2 + 0.6), 0, Math.sin(0.4) * (R2 + 0.6)); seam.rotation.y = Math.PI / 2 - 0.4; g.add(seam);
-    // 브라켓: 내부관에 세로로 붙고 외부관 끝에 걸쳐 용접 (양 끝 4개씩)
+    // 브라켓 (양 끝 4개씩). IV는 중간다리로 보강된 IV 전용 스페이서
     for (const s of [1, -1]) for (let k = 0; k < 4; k++) {
-      const a = k * Math.PI / 2 + Math.PI / 4, rot = Math.PI / 2 - a;
-      const v = new T.Mesh(new T.BoxGeometry(22, 58, 2), M.rod);
-      v.position.set(Math.cos(a) * (R1 + 1.2), s * (yO + 9), Math.sin(a) * (R1 + 1.2)); v.rotation.y = rot; g.add(v);
-      const h = new T.Mesh(new T.BoxGeometry(22, 2, R2 - R1 + 4), M.rod);
-      const rm = (R1 + R2) / 2 + 1;
-      h.position.set(Math.cos(a) * rm, s * (yO + 1), Math.sin(a) * rm); h.rotation.y = rot; g.add(h);
+      const grp = new T.Group(); grp.rotation.y = k * Math.PI / 2 + Math.PI / 4;
+      const W = iv ? 25 : 22;
+      const box = (w, h, d, x, y, z, rx) => { const m = new T.Mesh(new T.BoxGeometry(w, h, d), M.rod); m.position.set(x, y, z); if (rx) m.rotation.x = rx; grp.add(m); };
+      box(W, 58, 2, 0, s * (yO + 9), R1 + 1.2);                       // 내부관에 붙는 세로판
+      box(W, 2, R2 - R1 + 4, 0, s * (yO + 1), (R1 + R2) / 2 + 1);     // 외부관 끝에 걸치는 가로판
+      if (iv) {
+        box(W, 40, 2, 0, s * (yO - 20), R2 - 1.5);                    // 외부관 안쪽 세로판
+        const y0 = s * (yO + 20), y1 = s * (yO - 30), z0 = R1 + 1.2, z1 = R2 - 1.5;
+        const len = Math.hypot(y1 - y0, z1 - z0);
+        box(W, len, 2, 0, (y0 + y1) / 2, (z0 + z1) / 2, Math.atan2(z1 - z0, y1 - y0)); // 중간다리 보강
+      }
+      g.add(grp);
     }
+    if (iv) makeFR(g, M, R2 + 1.5, -20); // FR 용접 위치: 센터
     return { obj: g, tilt: 0.42 };
   }
 
-  const MODELS = { sk: buildSK, pipe977: buildPipe };
+
+  // ---------- FR 유동방지대: 40×3T 앵글을 말아 만든 반쪽 2개 + 엽전(40×40, Ø12) 볼트 체결 ----------
+  function makeFR(g, M, R, y0) {
+    const W = 40, gap = 12, gA = 2 * Math.asin(gap / R);
+    for (const s0 of [0, Math.PI]) {
+      const st = s0 + gA / 2, len = Math.PI - gA;
+      const band = new T.Mesh(new T.CylinderGeometry(R, R, W, 90, 1, true, st, len), M.steel); band.position.y = y0 + W / 2; g.add(band);
+      const bt = new T.Mesh(new T.CylinderGeometry(R + 3, R + 3, W, 90, 1, true, st, len), M.steel2); bt.position.y = y0 + W / 2; g.add(bt);
+      const fl = new T.Mesh(new T.CylinderGeometry(R + W, R, 0.01, 90, 1, true, st, len), M.steel2); fl.position.y = y0; g.add(fl);
+      const fl2 = new T.Mesh(new T.CylinderGeometry(R + W, R, 0.01, 90, 1, true, st, len), M.steel); fl2.position.y = y0 + 3; g.add(fl2);
+      const edge = new T.Mesh(new T.CylinderGeometry(R + W, R + W, 3, 90, 1, true, st, len), M.rod); edge.position.y = y0 + 1.5; g.add(edge);
+    }
+    const sh = new T.Shape(); sh.moveTo(-20, -20); sh.lineTo(20, -20); sh.lineTo(20, 20); sh.lineTo(-20, 20); sh.lineTo(-20, -20);
+    const hole = new T.Path(); hole.absarc(0, 0, 6, 0, Math.PI * 2, true); sh.holes.push(hole);
+    const tabG = new T.ExtrudeGeometry(sh, { depth: 3, bevelEnabled: false, curveSegments: 24 }); tabG.translate(0, 0, -1.5);
+    for (const s0 of [0, Math.PI]) {
+      const grp = new T.Group(); grp.rotation.y = s0;
+      for (const sx of [1, -1]) { const p = new T.Mesh(tabG, M.steel); p.rotation.y = Math.PI / 2; p.position.set(sx * (gap + 1.5), y0 + 20, R + 20); grp.add(p); }
+      const bolt = new T.Mesh(new T.CylinderGeometry(5, 5, gap * 2 + 30, 12), M.rod); bolt.rotation.z = Math.PI / 2; bolt.position.set(0, y0 + 20, R + 20); grp.add(bolt);
+      for (const sx of [1, -1]) { const n = new T.Mesh(new T.CylinderGeometry(9.5, 9.5, 7, 6), M.weld); n.rotation.z = Math.PI / 2; n.position.set(sx * (gap + 3 + 3.5), y0 + 20, R + 20); grp.add(n); }
+      g.add(grp);
+    }
+  }
+  function buildFR() { const M = mats(); const g = new T.Group(); makeFR(g, M, 175, 0); return { obj: g, tilt: 0.55 }; }
+
+  const MODELS = { sk: buildSK, pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
   // ---------- 뷰어 ----------
   function mount(el) {

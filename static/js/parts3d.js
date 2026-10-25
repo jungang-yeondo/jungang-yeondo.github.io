@@ -153,7 +153,52 @@
   }
   function buildFR() { const M = mats(); const g = new T.Group(); makeFR(g, M, 175, 0); return { obj: g, tilt: 0.55 }; }
 
-  const MODELS = { sk: buildSK, pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
+
+  // ---------- 공용: 이중관 한 토막 (y축 방향). lo/hi: 그 끝에 밑깎이·홈·브라켓 마감 ----------
+  function doublePipe(gg, M, R1, R2, a0, a1, b0, b1, lo, hi) {
+    const cyl = (r, y0, y1, m) => { const c = new T.Mesh(new T.CylinderGeometry(r, r, y1 - y0, 160, 1, true), m); c.position.y = (y0 + y1) / 2; gg.add(c); };
+    const ann = (r0, r1, y, m) => { const o = new T.Mesh(new T.RingGeometry(r0, r1, 160), m); o.rotation.x = -Math.PI / 2; o.position.y = y; gg.add(o); };
+    const ring = (r, t, y, m) => { const o = new T.Mesh(new T.TorusGeometry(r, t, 8, 180), m); o.rotation.x = Math.PI / 2; o.position.y = y; gg.add(o); };
+    const gapM = new T.MeshStandardMaterial({ color: 0x07090c, metalness: 0, roughness: 1, side: T.DoubleSide });
+    cyl(R1, a0, a1, M.steel);
+    const d = 2.5; let s0 = b0, s1 = b1;
+    const ends = []; if (lo) ends.push([-1, a0, b0]); if (hi) ends.push([1, a1, b1]);
+    for (const [s, a, b] of ends) {
+      ann(R1, R1 + 10, a, M.steel); ring(R1 + 10, 1.2, a, M.rod);
+      cyl(R2, Math.min(b, b - s * 20), Math.max(b, b - s * 20), M.outer);
+      cyl(R2 - d, Math.min(b - s * 20, b - s * 32), Math.max(b - s * 20, b - s * 32), M.outer);
+      ann(R2 - d, R2, b - s * 20, M.outer); ann(R2 - d, R2, b - s * 32, M.outer);
+      ring(R2, 1, b, M.rod);
+      ann(R1 + 0.5, R2 - 0.5, b - s * 6, gapM);
+      const lin = new T.Mesh(new T.CylinderGeometry(R2 - 0.6, R2 - 0.6, 6, 160, 1, true), gapM); lin.position.y = b - s * 3; gg.add(lin);
+      if (s < 0) s0 = b0 + 32; else s1 = b1 - 32;
+      const P = Math.abs(a - b);
+      for (let k = 0; k < 4; k++) {
+        const grp = new T.Group(); grp.rotation.y = k * Math.PI / 2 + Math.PI / 4;
+        const v = new T.Mesh(new T.BoxGeometry(22, P + 18, 2), M.rod); v.position.set(0, b + s * (P - 22) / 2, R1 + 1.2); grp.add(v);
+        const h = new T.Mesh(new T.BoxGeometry(22, 2, R2 - R1 + 4), M.rod); h.position.set(0, b + s, (R1 + R2) / 2 + 1); grp.add(h);
+        gg.add(grp);
+      }
+    }
+    cyl(R2, s0, s1, M.outer);
+  }
+
+  // ---------- 모델: MT / NT 90도 합류관 ----------
+  // 메인관 외부관 길이 = 가지관 관경 + 200, 가지관은 메인 외부관에서 100mm 돌출, 메인 위아래 여유 100
+  function buildTee(nt) {
+    const M = mats(); const g = new T.Group();
+    const R1 = 150, R2 = 175;                         // 메인 D300 / D350
+    const r1 = nt ? 100 : R1, r2 = nt ? 125 : R2;     // 가지관 (MT 동일, NT 작게)
+    const yO = (2 * r2 + 200) / 2, yT = yO + 40;
+    doublePipe(g, M, R1, R2, -yT, yT, -yO, yO, true, true);
+    const bg = new T.Group(); bg.rotation.z = -Math.PI / 2;  // 가지관: +x 방향
+    const xO = R2 + 100;
+    doublePipe(bg, M, r1, r2, R1, xO + 40, 0, xO, false, true);
+    g.add(bg);
+    return { obj: g, tilt: 0.35 };
+  }
+
+  const MODELS = { sk: buildSK, mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
   // ---------- 뷰어 ----------
   function mount(el) {

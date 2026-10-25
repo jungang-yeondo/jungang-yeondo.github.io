@@ -79,19 +79,19 @@
   function buildPipe() {
     const M = mats();
     const g = new T.Group();
-    const R1 = 150, R2 = 175, L = 977, OUT = 55; // 내부관 D300, 외부관 D350(+50A), 내부관 돌출
+    const R1 = 150, R2 = 175, L = 480, OUT = 40; // 477 기준: 내부관 480, 외부관 400(-80), D300 / D350(+50A)
     const yT = L / 2, yO = L / 2 - OUT;
     const V = (r, y) => new T.Vector2(r, y);
     // 내부관: 양 끝 10mm 밖으로 꺾음(밑깎이, V밴드 조립용)
     const ip = [V(R1 + 10, -yT), V(R1 + 1, -yT), V(R1, -yT + 2), V(R1, yT - 2), V(R1 + 1, yT), V(R1 + 10, yT)];
-    g.add(new T.Mesh(new T.LatheGeometry(ip, 180), M.steel));
+    g.add(new T.Mesh(new T.LatheGeometry(ip.reverse(), 180), M.steel));
     const ring = (r, t, y, m) => { const o = new T.Mesh(new T.TorusGeometry(r, t, 8, 200), m); o.rotation.x = Math.PI / 2; o.position.y = y; g.add(o); };
     ring(R1 + 10, 1.2, yT, M.rod); ring(R1 + 10, 1.2, -yT, M.rod);
     // 외부관: 끝에서 20mm 아래 폭 12mm, 깊이 2.5mm 홈 (C카바 체결용)
     const d = 2.5;
     const op = [V(R2, -yO), V(R2, -yO + 20), V(R2 - d, -yO + 23), V(R2 - d, -yO + 29), V(R2, -yO + 32),
                 V(R2, yO - 32), V(R2 - d, yO - 29), V(R2 - d, yO - 23), V(R2, yO - 20), V(R2, yO)];
-    g.add(new T.Mesh(new T.LatheGeometry(op, 180), M.steel2));
+    g.add(new T.Mesh(new T.LatheGeometry(op.reverse(), 180), M.steel2));
     ring(R2, 1, yO, M.rod); ring(R2, 1, -yO, M.rod);
     // 외부관 세로 이음 용접선
     const seam = new T.Mesh(new T.BoxGeometry(3, 2 * yO - 4, 1.2), M.weld);
@@ -99,13 +99,13 @@
     // 브라켓: 내부관에 세로로 붙고 외부관 끝에 걸쳐 용접 (양 끝 4개씩)
     for (const s of [1, -1]) for (let k = 0; k < 4; k++) {
       const a = k * Math.PI / 2 + Math.PI / 4, rot = Math.PI / 2 - a;
-      const v = new T.Mesh(new T.BoxGeometry(22, 70, 2), M.rod);
-      v.position.set(Math.cos(a) * (R1 + 1.2), s * (yO + 15), Math.sin(a) * (R1 + 1.2)); v.rotation.y = rot; g.add(v);
+      const v = new T.Mesh(new T.BoxGeometry(22, 58, 2), M.rod);
+      v.position.set(Math.cos(a) * (R1 + 1.2), s * (yO + 9), Math.sin(a) * (R1 + 1.2)); v.rotation.y = rot; g.add(v);
       const h = new T.Mesh(new T.BoxGeometry(22, 2, R2 - R1 + 4), M.rod);
       const rm = (R1 + R2) / 2 + 1;
       h.position.set(Math.cos(a) * rm, s * (yO + 1), Math.sin(a) * rm); h.rotation.y = rot; g.add(h);
     }
-    return { obj: g, tilt: 0.38 };
+    return { obj: g, tilt: 0.42 };
   }
 
   const MODELS = { sk: buildSK, pipe977: buildPipe };

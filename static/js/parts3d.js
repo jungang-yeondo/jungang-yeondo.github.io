@@ -16,20 +16,22 @@
     };
     // 공장 천장 형광등 줄 + 창문 + 어두운 바닥 → 반질반질한 반사 대비
     strip(14, 0.5, 0, 6, -2.5, Math.PI / 2, 0, 0xffffff);
-    strip(14, 0.5, 0, 6, 0, Math.PI / 2, 0, 0xf2f6ff);
+    strip(14, 0.5, 0, 6, 0, Math.PI / 2, 0, 0xf4f4f2);
     strip(14, 0.5, 0, 6, 2.5, Math.PI / 2, 0, 0xffffff);
-    strip(4, 6, -8, 1.5, 0, 0, Math.PI / 2, 0xcfdcf0);
+    strip(4, 6, -8, 1.5, 0, 0, Math.PI / 2, 0xd9d9d6);
     strip(1.2, 6, 8, 1.5, -2, 0, -Math.PI / 2, 0xfff1dc);
     strip(1.2, 6, 8, 1.5, 2, 0, -Math.PI / 2, 0xfff1dc);
-    strip(3, 3, 0, 1, -8, 0, 0, 0x8b97a8);
+    strip(3, 3, 0, 1, -8, 0, 0, 0x8e8e8c);
     strip(20, 20, 0, -5, 0, Math.PI / 2, 0, 0x101216);
     return pm.fromScene(s, 0.02).texture;
   }
   function mats() {
     return {
-      steel: new T.MeshStandardMaterial({ color: 0xdfe2e6, metalness: 1, roughness: 0.12, side: T.DoubleSide }),
-      steel2: new T.MeshStandardMaterial({ color: 0xc9cdd2, metalness: 1, roughness: 0.16, side: T.DoubleSide }),
-      rod: new T.MeshStandardMaterial({ color: 0xe8eaed, metalness: 1, roughness: 0.08 }),
+      steel: new T.MeshStandardMaterial({ color: 0xcfcfcc, metalness: 1, roughness: 0.17, side: T.DoubleSide }),
+      steel2: new T.MeshStandardMaterial({ color: 0xbdbdba, metalness: 1, roughness: 0.2, side: T.DoubleSide }),
+      // 외부관·FR: 내부관보다 어둡고 은은한 무광 SUS
+      outer: new T.MeshStandardMaterial({ color: 0x8c8f93, metalness: 0.9, roughness: 0.34, side: T.DoubleSide }),
+      rod: new T.MeshStandardMaterial({ color: 0xd8d8d5, metalness: 1, roughness: 0.12 }),
       weld: new T.MeshStandardMaterial({ color: 0x8e939a, metalness: 0.85, roughness: 0.45 }),
     };
   }
@@ -92,11 +94,11 @@
     // 외부관: 끝에서 20mm 아래 폭 12mm, 깊이 2.5mm 홈 (C카바 체결용)
     const d = 2.5;
     for (const s of [1, -1]) {
-      cyl(R2, s > 0 ? yO - 20 : -yO, s > 0 ? yO : -yO + 20, M.steel2);
-      cyl(R2 - d, s > 0 ? yO - 32 : -yO + 20, s > 0 ? yO - 20 : -yO + 32, M.steel2);
-      ann(R2 - d, R2, s * (yO - 20), M.steel2); ann(R2 - d, R2, s * (yO - 32), M.steel2);
+      cyl(R2, s > 0 ? yO - 20 : -yO, s > 0 ? yO : -yO + 20, M.outer);
+      cyl(R2 - d, s > 0 ? yO - 32 : -yO + 20, s > 0 ? yO - 20 : -yO + 32, M.outer);
+      ann(R2 - d, R2, s * (yO - 20), M.outer); ann(R2 - d, R2, s * (yO - 32), M.outer);
     }
-    cyl(R2, -yO + 32, yO - 32, M.steel2);
+    cyl(R2, -yO + 32, yO - 32, M.outer);
     // 공기단열층 틈: 외부관 끝 안쪽을 어둡게 (두 관이 구분되어 보이도록)
     const gapM = new T.MeshStandardMaterial({ color: 0x07090c, metalness: 0, roughness: 1, side: T.DoubleSide });
     for (const s of [1, -1]) {
@@ -132,10 +134,10 @@
     const W = 40, gap = 12, gA = 2 * Math.asin(gap / R);
     for (const s0 of [0, Math.PI]) {
       const st = s0 + gA / 2, len = Math.PI - gA;
-      const band = new T.Mesh(new T.CylinderGeometry(R, R, W, 90, 1, true, st, len), M.steel); band.position.y = y0 + W / 2; g.add(band);
-      const bt = new T.Mesh(new T.CylinderGeometry(R + 3, R + 3, W, 90, 1, true, st, len), M.steel2); bt.position.y = y0 + W / 2; g.add(bt);
-      const fl = new T.Mesh(new T.CylinderGeometry(R + W, R, 0.01, 90, 1, true, st, len), M.steel2); fl.position.y = y0; g.add(fl);
-      const fl2 = new T.Mesh(new T.CylinderGeometry(R + W, R, 0.01, 90, 1, true, st, len), M.steel); fl2.position.y = y0 + 3; g.add(fl2);
+      const band = new T.Mesh(new T.CylinderGeometry(R, R, W, 90, 1, true, st, len), M.outer); band.position.y = y0 + W / 2; g.add(band);
+      const bt = new T.Mesh(new T.CylinderGeometry(R + 3, R + 3, W, 90, 1, true, st, len), M.outer); bt.position.y = y0 + W / 2; g.add(bt);
+      const fl = new T.Mesh(new T.CylinderGeometry(R + W, R, 0.01, 90, 1, true, st, len), M.outer); fl.position.y = y0; g.add(fl);
+      const fl2 = new T.Mesh(new T.CylinderGeometry(R + W, R, 0.01, 90, 1, true, st, len), M.outer); fl2.position.y = y0 + 3; g.add(fl2);
       const edge = new T.Mesh(new T.CylinderGeometry(R + W, R + W, 3, 90, 1, true, st, len), M.rod); edge.position.y = y0 + 1.5; g.add(edge);
     }
     const sh = new T.Shape(); sh.moveTo(-20, -20); sh.lineTo(20, -20); sh.lineTo(20, 20); sh.lineTo(-20, 20); sh.lineTo(-20, -20);
@@ -143,7 +145,7 @@
     const tabG = new T.ExtrudeGeometry(sh, { depth: 3, bevelEnabled: false, curveSegments: 24 }); tabG.translate(0, 0, -1.5);
     for (const s0 of [0, Math.PI]) {
       const grp = new T.Group(); grp.rotation.y = s0;
-      for (const sx of [1, -1]) { const p = new T.Mesh(tabG, M.steel); p.rotation.y = Math.PI / 2; p.position.set(sx * (gap + 1.5), y0 + 20, R + 20); grp.add(p); }
+      for (const sx of [1, -1]) { const p = new T.Mesh(tabG, M.outer); p.rotation.y = Math.PI / 2; p.position.set(sx * (gap + 1.5), y0 + 20, R + 20); grp.add(p); }
       const bolt = new T.Mesh(new T.CylinderGeometry(5, 5, gap * 2 + 30, 12), M.rod); bolt.rotation.z = Math.PI / 2; bolt.position.set(0, y0 + 20, R + 20); grp.add(bolt);
       for (const sx of [1, -1]) { const n = new T.Mesh(new T.CylinderGeometry(9.5, 9.5, 7, 6), M.weld); n.rotation.z = Math.PI / 2; n.position.set(sx * (gap + 3 + 3.5), y0 + 20, R + 20); grp.add(n); }
       g.add(grp);

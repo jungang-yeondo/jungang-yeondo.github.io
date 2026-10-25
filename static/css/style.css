@@ -417,3 +417,11 @@ footer .c{grid-column:1/-1;font-size:13px;padding-top:22px;border-top:1px solid 
 .pcard.has3d{grid-column:1/-1;display:grid;grid-template-columns:2fr 1fr;gap:28px;align-items:center}
 .pcard.has3d .ph{aspect-ratio:16/10;margin:0}
 @media(max-width:900px){.pcard.has3d{grid-template-columns:1fr;gap:18px}.pcard.has3d .ph{aspect-ratio:4/3}}
+
+/* 기기 설정과 관계없이 항상 남색(다크) 배경 */
+:root,:root[data-theme="light"]{--bg:#0B111C;--bg-2:#121A28;--ink:#E8ECF2;--muted:#9AA4B5;--line:#253043;--navy:#8FAEE6;--red:#E8606A;color-scheme:dark}
+/* 주요 부품: 모든 카드를 한 줄에 하나씩, 큰 화면 + 오른쪽 설명 */
+.pcards{grid-template-columns:1fr;gap:36px}
+.pcard{display:grid;grid-template-columns:2fr 1fr;gap:28px;align-items:center}
+.pcard .ph{aspect-ratio:16/10;margin:0}
+@media(max-width:900px){.pcards{grid-template-columns:1fr}.pcard{grid-template-columns:1fr;gap:18px}.pcard .ph{aspect-ratio:4/3}}

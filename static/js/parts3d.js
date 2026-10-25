@@ -124,16 +124,16 @@
       }
       g.add(grp);
     }
-    if (iv) makeFR(g, M, R2 + 1.5, -20); // FR 용접 위치: 센터
+    if (iv) makeFR(g, M, R2 + 1.5, -20, true); // FR 용접 위치: 센터
     return { obj: g, tilt: 0.42 };
   }
 
 
   // ---------- FR 유동방지대: 40×3T 앵글을 말아 만든 반쪽 2개 + 엽전(40×40, Ø12) 볼트 체결 ----------
-  function makeFR(g, M, R, y0) {
+  function makeFR(g, M, R, y0, one) { // one: 한 바퀴를 한 곳만 자른 형태 (IV용)
     const W = 40, gap = 12, gA = 2 * Math.asin(gap / R);
-    for (const s0 of [0, Math.PI]) {
-      const st = s0 + gA / 2, len = Math.PI - gA;
+    for (const s0 of (one ? [0] : [0, Math.PI])) {
+      const st = s0 + gA / 2, len = (one ? 2 * Math.PI : Math.PI) - gA;
       const band = new T.Mesh(new T.CylinderGeometry(R, R, W, 90, 1, true, st, len), M.outer); band.position.y = y0 + W / 2; g.add(band);
       const bt = new T.Mesh(new T.CylinderGeometry(R + 3, R + 3, W, 90, 1, true, st, len), M.outer); bt.position.y = y0 + W / 2; g.add(bt);
       const fl = new T.Mesh(new T.CylinderGeometry(R + W, R, 0.01, 90, 1, true, st, len), M.outer); fl.position.y = y0; g.add(fl);
@@ -143,7 +143,7 @@
     const sh = new T.Shape(); sh.moveTo(-20, -20); sh.lineTo(20, -20); sh.lineTo(20, 20); sh.lineTo(-20, 20); sh.lineTo(-20, -20);
     const hole = new T.Path(); hole.absarc(0, 0, 6, 0, Math.PI * 2, true); sh.holes.push(hole);
     const tabG = new T.ExtrudeGeometry(sh, { depth: 3, bevelEnabled: false, curveSegments: 24 }); tabG.translate(0, 0, -1.5);
-    for (const s0 of [0, Math.PI]) {
+    for (const s0 of (one ? [0] : [0, Math.PI])) {
       const grp = new T.Group(); grp.rotation.y = s0;
       for (const sx of [1, -1]) { const p = new T.Mesh(tabG, M.outer); p.rotation.y = Math.PI / 2; p.position.set(sx * (gap + 1.5), y0 + 20, R + 20); grp.add(p); }
       const bolt = new T.Mesh(new T.CylinderGeometry(5, 5, gap * 2 + 30, 12), M.rod); bolt.rotation.z = Math.PI / 2; bolt.position.set(0, y0 + 20, R + 20); grp.add(bolt);

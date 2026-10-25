@@ -198,7 +198,25 @@
     return { obj: g, tilt: 0.35 };
   }
 
-  const MODELS = { sk: buildSK, mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
+
+  // ---------- 모델: LT / JT Y형 합류관 (45°) ----------
+  // 인너 기준: 메인 인너 길이 = 가지관 관경 × 1.4 + 200, 아우트 = 인너 - 80, 가지관 아래 접합부는 메인 하단에서 100
+  function buildY(jt) {
+    const M = mats(); const g = new T.Group();
+    const R1 = 150, R2 = 175;
+    const r1 = jt ? 100 : R1, r2 = jt ? 125 : R2;     // LT 동일, JT 가지관 작게
+    const yT = (2 * r1 * 1.4 + 200) / 2, yO = yT - 40;
+    doublePipe(g, M, R1, R2, -yT, yT, -yO, yO, true, true);
+    const s45 = Math.SQRT1_2;
+    const c = -yO + 100 - R2 + 2 * s45 * r2;           // 가지관 축이 메인 축과 만나는 높이
+    const Lo = (yO - c - s45 * r2) / s45;               // 가지관 끝 윗선 = 메인 상단 높이
+    const bg = new T.Group(); bg.rotation.z = -Math.PI / 4; bg.position.y = c;
+    doublePipe(bg, M, r1, r2, R1, Lo + 40, 0, Lo, false, true);
+    g.add(bg);
+    return { obj: g, tilt: 0.3 };
+  }
+
+  const MODELS = { sk: buildSK, lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
   // ---------- 뷰어 ----------
   function mount(el) {

@@ -140,14 +140,14 @@
       const fl2 = new T.Mesh(new T.CylinderGeometry(R + W, R, 0.01, 90, 1, true, st, len), M.outer); fl2.position.y = y0 + TK; g.add(fl2);
       const edge = new T.Mesh(new T.CylinderGeometry(R + W, R + W, TK, 90, 1, true, st, len), M.rod); edge.position.y = y0 + TK / 2; g.add(edge);
     }
-    const sh = new T.Shape(); sh.moveTo(-20, -20); sh.lineTo(20, -20); sh.lineTo(20, 20); sh.lineTo(-20, 20); sh.lineTo(-20, -20);
+    const sh = new T.Shape(); const h2 = W / 2; sh.moveTo(-h2, -h2); sh.lineTo(h2, -h2); sh.lineTo(h2, h2); sh.lineTo(-h2, h2); sh.lineTo(-h2, -h2); // 엽전 = 링 폭과 같은 크기
     const hole = new T.Path(); hole.absarc(0, 0, 6, 0, Math.PI * 2, true); sh.holes.push(hole);
-    const tabG = new T.ExtrudeGeometry(sh, { depth: 3, bevelEnabled: false, curveSegments: 24 }); tabG.translate(0, 0, -1.5);
+    const tabG = new T.ExtrudeGeometry(sh, { depth: TK, bevelEnabled: false, curveSegments: 24 }); tabG.translate(0, 0, -TK / 2);
     for (const s0 of (one ? [0] : [0, Math.PI])) {
       const grp = new T.Group(); grp.rotation.y = s0;
-      for (const sx of [1, -1]) { const p = new T.Mesh(tabG, M.outer); p.rotation.y = Math.PI / 2; p.position.set(sx * (gap + 1.5), y0 + W / 2, R + 20); grp.add(p); }
-      const bolt = new T.Mesh(new T.CylinderGeometry(5, 5, gap * 2 + 30, 12), M.rod); bolt.rotation.z = Math.PI / 2; bolt.position.set(0, y0 + W / 2, R + 20); grp.add(bolt);
-      for (const sx of [1, -1]) { const n = new T.Mesh(new T.CylinderGeometry(9.5, 9.5, 7, 6), M.weld); n.rotation.z = Math.PI / 2; n.position.set(sx * (gap + 3 + 3.5), y0 + W / 2, R + 20); grp.add(n); }
+      for (const sx of [1, -1]) { const p = new T.Mesh(tabG, M.outer); p.rotation.y = Math.PI / 2; p.position.set(sx * (gap + 1.5), y0 + W / 2, R + W / 2); grp.add(p); }
+      const bolt = new T.Mesh(new T.CylinderGeometry(5, 5, gap * 2 + 30, 12), M.rod); bolt.rotation.z = Math.PI / 2; bolt.position.set(0, y0 + W / 2, R + W / 2); grp.add(bolt);
+      for (const sx of [1, -1]) { const n = new T.Mesh(new T.CylinderGeometry(9.5, 9.5, 7, 6), M.weld); n.rotation.z = Math.PI / 2; n.position.set(sx * (gap + 3 + 3.5), y0 + W / 2, R + W / 2); grp.add(n); }
       g.add(grp);
     }
   }

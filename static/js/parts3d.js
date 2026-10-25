@@ -237,12 +237,14 @@
   }
 
   // ---------- 모델: LT / JT Y형 합류관 (45°) ----------
-  // 인너 기준: 메인 인너 길이 = 가지관 관경 × 1.4 + 200 (가지관 구멍 위아래 100씩), 아우트 = 인너 - 80
+  // 가지관 아래 접합부 = 메인 하단 + 100, 위쪽 사타구니(가지관 윗선이 메인에 붙는 점)에서
+  // 메인관 끝까지와 가지관 끝까지의 짧은 면 길이를 같게(200) 맞춤
   function buildY(jt) {
     const R1 = 150, R2 = 175, r1 = jt ? 100 : R1, r2 = jt ? 125 : R2;
-    const yT = (2 * r1 * 1.4 + 200) / 2, yO = yT - 40;
-    const c = -yT + 100 - R1 + Math.SQRT2 * r1 - 4;   // 인너 구멍 아래끝 = 메인 인너 하단 + 100
-    return buildBranched(R1, R2, r1, r2, yT, yO, Math.PI / 4, c, 150, 0.3);
+    const S = 200, open = 2 * Math.SQRT2 * r2;           // 메인 외부관 위 가지관 구멍 높이
+    const yO = (100 + open + S) / 2, yT = yO + 40;
+    const c = -yO + 100 - R2 + Math.SQRT2 * r2;          // 가지관 축이 메인 축과 만나는 높이
+    return buildBranched(R1, R2, r1, r2, yT, yO, Math.PI / 4, c, S, 0.3);
   }
 
   const MODELS = { sk: buildSK, lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };

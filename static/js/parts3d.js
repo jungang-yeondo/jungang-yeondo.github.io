@@ -6,7 +6,7 @@
   // ---------- 공용: 광택 스테인리스(SUS304) 재질 ----------
   let ENV = null;
   function envMap(renderer) {
-    if (ENV) return ENV;
+    // 뷰어(캔버스)마다 따로 생성: 다른 WebGL 컨텍스트의 텍스처는 공유 불가
     const pm = new T.PMREMGenerator(renderer);
     const s = new T.Scene();
     s.background = new T.Color(0x05070a);
@@ -23,8 +23,7 @@
     strip(1.2, 6, 8, 1.5, 2, 0, -Math.PI / 2, 0xfff1dc);
     strip(3, 3, 0, 1, -8, 0, 0, 0x8b97a8);
     strip(20, 20, 0, -5, 0, Math.PI / 2, 0, 0x101216);
-    ENV = pm.fromScene(s, 0.02).texture;
-    return ENV;
+    return pm.fromScene(s, 0.02).texture;
   }
   function mats() {
     return {
@@ -98,7 +97,6 @@
       ann(R2 - d, R2, s * (yO - 20), M.steel2); ann(R2 - d, R2, s * (yO - 32), M.steel2);
     }
     cyl(R2, -yO + 32, yO - 32, M.steel2);
-    ann(R1, R2, yO, M.weld); ann(R1, R2, -yO, M.weld);
     ring(R2, 1, yO, M.rod); ring(R2, 1, -yO, M.rod);
     // 외부관 세로 이음 용접선
     const seam = new T.Mesh(new T.BoxGeometry(3, 2 * yO - 4, 1.2), M.weld);

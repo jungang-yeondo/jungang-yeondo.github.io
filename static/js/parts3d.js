@@ -574,6 +574,23 @@
     return { obj: g, tilt: 0.5, zoom: 1.45 };
   }
 
+  // ---------- 모델: VT 카운터 플래싱 ----------
+  // SUS 0.8T 사각판, 사방으로 턱(접어 내림), 윗면 가운데 원형 구멍
+  function buildVT() {
+    const M = mats(); const g = new T.Group();
+    const S = 600, Hs = 100, tk = 0.8, rh = 180;
+    const sh = new T.Shape(); sh.moveTo(-S / 2, -S / 2); sh.lineTo(S / 2, -S / 2); sh.lineTo(S / 2, S / 2); sh.lineTo(-S / 2, S / 2); sh.lineTo(-S / 2, -S / 2);
+    const hole = new T.Path(); hole.absarc(0, 0, rh, 0, Math.PI * 2, true); sh.holes.push(hole);
+    const top = new T.Mesh(new T.ExtrudeGeometry(sh, { depth: tk, bevelEnabled: false, curveSegments: 96 }), M.steel); top.rotation.x = -Math.PI / 2; g.add(top);
+    for (let k = 0; k < 4; k++) {
+      const side = new T.Group(); side.rotation.y = k * Math.PI / 2;
+      const p = new T.Mesh(new T.BoxGeometry(S, Hs, tk), M.steel2); p.position.set(0, tk - Hs / 2, S / 2 - tk / 2); side.add(p);
+      const bend = new T.Mesh(new T.CylinderGeometry(1.2, 1.2, S, 8, 1, false, 0, Math.PI / 2), M.steel); bend.rotation.z = Math.PI / 2; bend.position.set(0, tk - 1.2, S / 2 - 1.2); side.add(bend); // 접힌 모서리
+      g.add(side);
+    }
+    return { obj: g, tilt: 0.5, zoom: 1.3 };
+  }
+
   // ---------- 모델: BJ 발전기용 열팽창 주름관 ----------
   // 477로 제작, 주름 때문에 440. 아우트는 민자(반투명으로 보이게), 인너만 주름관(5산 @25 = 125)
   function buildBJ() {
@@ -652,7 +669,7 @@
     return { obj: g, tilt: 0.45, zoom: 1.2 };
   }
 
-  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, dsh: () => buildDS(false), dsv: () => buildDS(true), bj: buildBJ, sc: buildSC, vdc: () => buildCap(true), hdc: () => buildCap(false), el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR, pa: buildPA };
+  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, dsh: () => buildDS(false), dsv: () => buildDS(true), bj: buildBJ, sc: buildSC, vdc: () => buildCap(true), hdc: () => buildCap(false), el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR, pa: buildPA, vt: buildVT };
 
   // ---------- 뷰어 ----------
   // 전환 버튼으로 함께 보여줄 모델 묶음

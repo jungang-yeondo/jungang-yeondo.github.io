@@ -457,21 +457,40 @@
     const dmp = new T.Group(); g.add(dmp);
     const disk = new T.Mesh(new T.CylinderGeometry(R1 - 15, R1 - 15, 3, 96), M.steel); disk.renderOrder = 2; dmp.add(disk);
     for (const x of [-80, 0, 80]) { const b = new T.Mesh(new T.BoxGeometry(24, 8, 22), M.outer); b.position.set(x, 4, 0); dmp.add(b); }
-    // 손잡이 받침판 + OPEN/SHUT 눈금
-    const plate = new T.Mesh(new T.BoxGeometry(2, 110, 130), M.outer); plate.position.x = R2 + 2; g.add(plate);
-    const cv = document.createElement('canvas'); cv.width = 260; cv.height = 220; const x = cv.getContext('2d');
-    x.fillStyle = '#9ea3a9'; x.fillRect(0, 0, 260, 220);
-    x.strokeStyle = '#2b2f36'; x.lineWidth = 3; x.beginPath(); x.arc(130, 70, 90, Math.PI * 0.25, Math.PI * 0.75); x.stroke();
-    for (let k = 0; k <= 8; k++) { const a = Math.PI * 0.25 + k * Math.PI * 0.5 / 8; x.beginPath(); x.moveTo(130 + Math.cos(a) * 90, 70 + Math.sin(a) * 90); x.lineTo(130 + Math.cos(a) * (k % 4 ? 102 : 110), 70 + Math.sin(a) * (k % 4 ? 102 : 110)); x.stroke(); }
-    x.font = 'bold 26px sans-serif'; x.textAlign = 'center'; x.fillStyle = '#2b2f36'; x.fillText('OPEN', 52, 205); x.fillStyle = '#b3262e'; x.fillText('SHUT', 208, 205);
-    const tex = new T.CanvasTexture(cv); tex.encoding = T.sRGBEncoding;
-    const label = new T.Mesh(new T.PlaneGeometry(130, 110), new T.MeshStandardMaterial({ map: tex, metalness: 0.4, roughness: 0.5 }));
-    label.rotation.y = Math.PI / 2; label.position.set(R2 + 3.2, 0, 0); g.add(label);
-    // 손잡이 레버 (환봉 끝, 원판과 같이 돌아감)
-    const lev = new T.Group(); lev.position.x = R2 + 10; g.add(lev);
-    const hub = new T.Mesh(new T.CylinderGeometry(13, 13, 10, 6), M.rod); hub.rotation.z = Math.PI / 2; lev.add(hub);
-    const arm = new T.Mesh(new T.BoxGeometry(5, 95, 18), M.rod); arm.position.y = -50; lev.add(arm);
-    const grip = new T.Mesh(new T.CylinderGeometry(10, 10, 5, 24), M.rod); grip.rotation.z = Math.PI / 2; grip.position.y = -98; lev.add(grip);
+    // ---- 손잡이 (도면 기준 디테일) ----
+    const PX = R2 + 1, PW = 130, PH = 120, PY = -10;
+    const rr = (w, h, r) => { const s = new T.Shape(), x = -w / 2, y = -h / 2; s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r); s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h); s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r); s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y); return s; };
+    const toYZ = (mesh, x) => { mesh.rotation.y = Math.PI / 2; mesh.position.x = x; return mesh; };
+    // 받침판 (둥근 사각) + 양옆 관 쪽으로 꺾인 날개
+    const pl = toYZ(new T.Mesh(new T.ExtrudeGeometry(rr(PW, PH, 10), { depth: 2, bevelEnabled: false }), M.outer), PX); pl.position.y = PY; g.add(pl);
+    for (const s of [1, -1]) { const w = new T.Mesh(new T.BoxGeometry(14, PH - 6, 2), M.outer); w.position.set(PX - 6, PY, s * (PW / 2 + 1)); w.rotation.y = s * 0.35; g.add(w); }
+    // 눈금판: 반원 눈금 + OPEN / SHUT + 위쪽 지시 삼각형
+    const K = 2, cv = document.createElement('canvas'); cv.width = PW * K; cv.height = PH * K; const x = cv.getContext('2d');
+    x.fillStyle = '#aeb3b9'; x.fillRect(0, 0, cv.width, cv.height);
+    const cx = cv.width / 2, cy = (PH / 2 + PY) * K;
+    x.strokeStyle = '#30343b'; x.lineWidth = 3; x.beginPath(); x.arc(cx, cy, 44 * K, Math.PI * 1.15, Math.PI * 1.85); x.stroke();
+    for (let k = 0; k <= 8; k++) { const an = Math.PI * 1.15 + k * Math.PI * 0.7 / 8, L = k % 4 ? 6 : 10; x.beginPath(); x.moveTo(cx + Math.cos(an) * 44 * K, cy + Math.sin(an) * 44 * K); x.lineTo(cx + Math.cos(an) * (44 + L) * K, cy + Math.sin(an) * (44 + L) * K); x.stroke(); }
+    x.fillStyle = '#30343b'; x.beginPath(); x.moveTo(cx, cy - 36 * K); x.lineTo(cx - 5 * K, cy - 27 * K); x.lineTo(cx + 5 * K, cy - 27 * K); x.fill();
+    x.font = 'bold ' + 9 * K + 'px sans-serif'; x.textAlign = 'center';
+    x.save(); x.translate(cx - 48 * K, cy - 2 * K); x.rotate(-1.1); x.fillStyle = '#30343b'; x.fillText('OPEN', 0, 0); x.restore();
+    x.save(); x.translate(cx + 48 * K, cy - 2 * K); x.rotate(1.1); x.fillStyle = '#b3262e'; x.fillText('SHUT', 0, 0); x.restore();
+    const tex = new T.CanvasTexture(cv); tex.encoding = T.sRGBEncoding; tex.anisotropy = 4;
+    const label = toYZ(new T.Mesh(new T.PlaneGeometry(PW - 8, PH - 8), new T.MeshStandardMaterial({ map: tex, metalness: 0.5, roughness: 0.45 })), PX + 2.2);
+    label.scale.set(PW / (PW - 8), PH / (PH - 8), 1); label.scale.set(1, 1, 1); label.position.y = PY; g.add(label);
+    // 가이드 호 (레버가 지나가는 고정판)
+    const guide = toYZ(new T.Mesh(new T.RingGeometry(34, 46, 40, 1, -Math.PI / 2 - 0.9, 1.8), M.rod), PX + 3.5); g.add(guide);
+    const guide2 = toYZ(new T.Mesh(new T.RingGeometry(34, 46, 40, 1, -Math.PI / 2 - 0.9, 1.8), M.rod), PX + 2.8); guide2.rotation.y = -Math.PI / 2; g.add(guide2);
+    // 레버 (환봉 끝, 원판과 같이 돌아감)
+    const lev = new T.Group(); lev.position.x = PX + 6; g.add(lev);
+    const hub = new T.Mesh(new T.CylinderGeometry(15, 15, 8, 32), M.rod); hub.rotation.z = Math.PI / 2; lev.add(hub);
+    const nut = new T.Mesh(new T.CylinderGeometry(8, 8, 6, 6), M.weld); nut.rotation.z = Math.PI / 2; nut.position.x = 7; lev.add(nut);
+    const sb = new T.Mesh(new T.BoxGeometry(8, 8, 10), M.rod); sb.position.set(0, 4, 18); lev.add(sb);                 // 고정 볼트 받침
+    const sbh = new T.Mesh(new T.CylinderGeometry(5, 5, 6, 6), M.weld); sbh.rotation.x = Math.PI / 2; sbh.position.set(0, 4, 26); lev.add(sbh); // 고정 볼트 머리
+    const ls = new T.Shape(); ls.moveTo(-11, 0); ls.lineTo(-11, -112); ls.absarc(0, -112, 11, Math.PI, 0, false); ls.lineTo(11, 0); ls.lineTo(-11, 0);
+    const slot = new T.Path(); slot.moveTo(-2, -55); slot.lineTo(-2, -110); slot.absarc(0, -110, 2, Math.PI, 0, false); slot.lineTo(2, -55); slot.lineTo(-2, -55); ls.holes.push(slot);
+    const arm = new T.Mesh(new T.ExtrudeGeometry(ls, { depth: 4, bevelEnabled: true, bevelThickness: 0.8, bevelSize: 0.8, bevelSegments: 2, curveSegments: 16 }), M.rod);
+    arm.rotation.y = Math.PI / 2; arm.position.x = 2; lev.add(arm);
+    const scr = new T.Mesh(new T.CylinderGeometry(4, 4, 3, 16), M.weld); scr.rotation.z = Math.PI / 2; scr.position.set(7.5, -40, 0); lev.add(scr);
     let a = 0, target = 0;   // 0 = SHUT(닫힘), π/2 = OPEN(완전 열림)
     const apply = () => { dmp.rotation.x = -a; lev.rotation.x = Math.PI / 4 - a; };
     apply();

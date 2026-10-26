@@ -555,6 +555,25 @@
     return { obj: w, tilt: 0.3, zoom: 1.1 };
   }
 
+  // ---------- 모델: PA 하중 지지대 ----------
+  // 앵글(50×50×5)을 45°로 절단해 네모로 용접한 틀. 윗면 날개는 안쪽, 세운 날개는 바깥 테두리
+  function buildPA() {
+    const M = mats(); const g = new T.Group();
+    const W = 700, D = 640, A = 50, tk = 5;
+    const wM = new T.MeshStandardMaterial({ color: 0x7d838b, metalness: 0.8, roughness: 0.5, polygonOffset: true, polygonOffsetFactor: -2 });
+    const prism = (pts, h, mat) => { const s = new T.Shape(); pts.forEach(([x, z], i) => (i ? s.lineTo(x, z) : s.moveTo(x, z))); const m = new T.Mesh(new T.ExtrudeGeometry(s, { depth: h, bevelEnabled: false }), mat); m.rotation.x = Math.PI / 2; return m; };
+    for (let k = 0; k < 4; k++) {
+      const a = (k % 2 ? D : W) / 2, b = (k % 2 ? W : D) / 2, side = new T.Group(); side.rotation.y = k * Math.PI / 2;
+      side.add(prism([[-a, b], [a, b], [a - A, b - A], [-a + A, b - A]], tk, M.steel));           // 윗면 날개 (안쪽으로)
+      side.add(prism([[-a, b], [a, b], [a - tk, b - tk], [-a + tk, b - tk]], A, M.steel2));      // 세운 날개 (바깥 테두리)
+      // 모서리 45° 용접 자국 (돌출 없음)
+      const sw = new T.Mesh(new T.PlaneGeometry(2.4, A * Math.SQRT2), wM); sw.rotation.set(-Math.PI / 2, 0, Math.PI / 4); sw.position.set(a - A / 2, 0.05, b - A / 2); side.add(sw);
+      const sv = new T.Mesh(new T.PlaneGeometry(2.4, A), wM); sv.rotation.y = Math.PI / 4; sv.position.set(a + 0.05, -A / 2, b + 0.05); side.add(sv);
+      g.add(side);
+    }
+    return { obj: g, tilt: 0.5, zoom: 1.05 };
+  }
+
   // ---------- 모델: BJ 발전기용 열팽창 주름관 ----------
   // 477로 제작, 주름 때문에 440. 아우트는 민자(반투명으로 보이게), 인너만 주름관(5산 @25 = 125)
   function buildBJ() {
@@ -633,7 +652,7 @@
     return { obj: g, tilt: 0.45, zoom: 1.2 };
   }
 
-  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, dsh: () => buildDS(false), dsv: () => buildDS(true), bj: buildBJ, sc: buildSC, vdc: () => buildCap(true), hdc: () => buildCap(false), el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
+  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, dsh: () => buildDS(false), dsv: () => buildDS(true), bj: buildBJ, sc: buildSC, vdc: () => buildCap(true), hdc: () => buildCap(false), el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR, pa: buildPA };
 
   // ---------- 뷰어 ----------
   // 전환 버튼으로 함께 보여줄 모델 묶음

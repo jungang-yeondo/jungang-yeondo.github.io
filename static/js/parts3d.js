@@ -291,37 +291,42 @@
     return { obj: g, tilt: 0.25 };
   }
 
-  // ---------- 모델: AG / SS 길이 조절관 (슬립섹션) + AG 카바 ----------
-  // 인너: 한쪽만 밑깎이, 지름 8 줄여(D292) 다른 관 안쪽으로 끼움 / 카바: 이중관일 때 아우트에 덮는 분할 카바
-  function buildAG() {
+  // ---------- 모델: AG / SS 길이 조절관 (슬립섹션 속관) + AG 카바 ----------
+  // 속관: 한쪽만 밑깎이, 지름 8 줄여(D292) 다른 관 안쪽으로 끼움
+  function buildAGin() {
     const M = mats(); const g = new T.Group();
-    // 슬립섹션 인너관
-    const rs = 146, L = 477, sp = new T.Group(); sp.position.x = -215;
-    const c1 = new T.Mesh(new T.CylinderGeometry(rs, rs, L, 160, 1, true), M.steel); sp.add(c1);
-    const fl = new T.Mesh(new T.RingGeometry(rs, rs + 10, 160), M.steel); fl.rotation.x = -Math.PI / 2; fl.position.y = L / 2; sp.add(fl);
-    const rim = new T.Mesh(new T.TorusGeometry(rs + 10, 1.2, 8, 180), M.rod); rim.rotation.x = Math.PI / 2; rim.position.y = L / 2; sp.add(rim);
-    const seam = new T.Mesh(new T.BoxGeometry(3, L - 4, 1.2), M.weld); seam.position.set(Math.sin(0.5) * (rs + 0.6), 0, Math.cos(0.5) * (rs + 0.6)); seam.rotation.y = 0.5; sp.add(seam);
-    g.add(sp);
-    // AG 카바: 외부관(D350)을 감싸는 판, 세로 이음부를 90° 꺾어 볼트 체결
-    const rc = 178, Hc = 420, gap = 3, ga = 2 * Math.asin(gap / rc), cv = new T.Group(); cv.position.x = 215;
-    cv.add(new T.Mesh(new T.CylinderGeometry(rc, rc, Hc, 180, 1, true, ga / 2, Math.PI * 2 - ga), M.outer));
-    for (const s of [1, -1]) {
-      const tab = new T.Mesh(new T.BoxGeometry(2, Hc, 26), M.outer); tab.position.set(s * (gap + 1), 0, rc + 12); cv.add(tab);
-      const lip = new T.Mesh(new T.TorusGeometry(rc, 1.4, 8, 180, Math.PI * 2 - ga), M.rod); lip.rotation.set(Math.PI / 2, 0, Math.PI / 2 + ga / 2); lip.position.y = s * Hc / 2; cv.add(lip);
+    const rs = 146, L = 477;
+    g.add(new T.Mesh(new T.CylinderGeometry(rs, rs, L, 160, 1, true), M.steel));
+    const fl = new T.Mesh(new T.RingGeometry(rs, rs + 10, 160), M.steel); fl.rotation.x = -Math.PI / 2; fl.position.y = L / 2; g.add(fl);
+    const rim = new T.Mesh(new T.TorusGeometry(rs + 10, 1.2, 8, 180), M.rod); rim.rotation.x = Math.PI / 2; rim.position.y = L / 2; g.add(rim);
+    const seam = new T.Mesh(new T.BoxGeometry(3, L - 4, 1.2), M.weld); seam.position.set(Math.sin(0.5) * (rs + 0.6), 0, Math.cos(0.5) * (rs + 0.6)); seam.rotation.y = 0.5; g.add(seam);
+    return { obj: g, tilt: 0.3 };
+  }
+  // 카바: 이중관일 때 아우트(D350)에 덮는 분할 카바. 이음부 한쪽에 겹침판, 양쪽 브라켓을 볼트로 체결
+  function buildAGcv() {
+    const M = mats(); const g = new T.Group();
+    const rc = 178, Hc = 420, gap = 3, ga = 2 * Math.asin(gap / rc), ov = 55 / rc;
+    g.add(new T.Mesh(new T.CylinderGeometry(rc, rc, Hc, 180, 1, true, ga / 2, Math.PI * 2 - ga), M.outer));
+    // 겹침판: 이음부 안쪽에 덧대어 반대편 밑으로 들어감
+    g.add(new T.Mesh(new T.CylinderGeometry(rc - 1.6, rc - 1.6, Hc, 40, 1, true, -ga / 2 - 0.02, ga + ov), M.outer));
+    const edge = new T.Mesh(new T.BoxGeometry(1.5, Hc, 1.5), M.weld); edge.position.set(Math.sin(ga / 2 + ov) * (rc - 0.8), 0, Math.cos(ga / 2 + ov) * (rc - 0.8)); g.add(edge);
+    for (const s of [1, -1]) { const lip = new T.Mesh(new T.TorusGeometry(rc, 1.4, 8, 200), M.rod); lip.rotation.x = Math.PI / 2; lip.position.y = s * Hc / 2; g.add(lip); }
+    // 브라켓 2조 (위·아래), 조마다 볼트 2개
+    for (const yc of [Hc / 2 - 80, -Hc / 2 + 80]) {
+      for (const s of [1, -1]) { const p = new T.Mesh(new T.BoxGeometry(2.5, 100, 24), M.outer); p.position.set(s * (gap + 1.2), yc, rc + 12); g.add(p); }
+      for (const y of [yc + 25, yc - 25]) {
+        const bo = new T.Mesh(new T.CylinderGeometry(4, 4, gap * 2 + 30, 12), M.rod); bo.rotation.z = Math.PI / 2; bo.position.set(0, y, rc + 14); g.add(bo);
+        for (const s of [1, -1]) { const n = new T.Mesh(new T.CylinderGeometry(7.5, 7.5, 6, 6), M.weld); n.rotation.z = Math.PI / 2; n.position.set(s * (gap + 2.5 + 3), y, rc + 14); g.add(n); }
+      }
     }
-    for (const y of [Hc / 2 - 55, Hc / 2 - 105, -Hc / 2 + 105, -Hc / 2 + 55]) {
-      const b = new T.Mesh(new T.CylinderGeometry(4, 4, gap * 2 + 26, 12), M.rod); b.rotation.z = Math.PI / 2; b.position.set(0, y, rc + 14); cv.add(b);
-      for (const s of [1, -1]) { const n = new T.Mesh(new T.CylinderGeometry(7.5, 7.5, 6, 6), M.weld); n.rotation.z = Math.PI / 2; n.position.set(s * (gap + 2 + 3), y, rc + 14); cv.add(n); }
-    }
-    g.add(cv);
-    return { obj: g, tilt: 0.3, fit: 1.75 };
+    return { obj: g, tilt: 0.3 };
   }
 
-  const MODELS = { sk: buildSK, ag: buildAG, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
+  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
   // ---------- 뷰어 ----------
   // 전환 버튼으로 함께 보여줄 모델 묶음
-  const SETS = { mt: [['MT', 'mt'], ['NT', 'nt']], lt: [['LT', 'lt'], ['JT', 'jt']], el: [['EL90', 'el90'], ['EL45', 'el45']] };
+  const SETS = { mt: [['MT', 'mt'], ['NT', 'nt']], lt: [['LT', 'lt'], ['JT', 'jt']], el: [['EL90', 'el90'], ['EL45', 'el45']], ag: [['속관', 'agin'], ['카바', 'agcv']] };
   function mount(el) {
     const set = SETS[el.dataset.model] || [[null, el.dataset.model]];
     if (!set.every(([, n]) => MODELS[n])) return;

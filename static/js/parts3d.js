@@ -401,7 +401,7 @@
     // 사각 옆면: 사각판 ~ 바닥 후렌지
     const side = new T.Mesh(new T.CylinderGeometry(top * Math.SQRT2, half * Math.SQRT2, 300, 4, 1, true), flat);
     side.rotation.y = Math.PI / 4; side.position.y = 150; g.add(side);
-    return { obj: g, tilt: 0.45, zoom: 0.95 };
+    return { obj: g, tilt: 0.45, zoom: 0.8 };
   }
   function buildFDhp() {
     const M = mats(); const g = new T.Group();
@@ -416,7 +416,7 @@
     for (let i = 0; i < N; i++) { const p = i * 2; idx.push(p, p + 1, p + 2, p + 1, p + 3, p + 2); }
     const geo = new T.BufferGeometry(); geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3)); geo.setIndex(idx); geo.computeVertexNormals();
     g.add(new T.Mesh(geo, M.steel));
-    return { obj: g, tilt: 0.45, zoom: 0.95 };
+    return { obj: g, tilt: 0.45, zoom: 1.2 };
   }
 
   const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };

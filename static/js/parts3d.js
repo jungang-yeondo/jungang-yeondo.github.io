@@ -296,14 +296,14 @@
   function buildAG() {
     const M = mats(); const g = new T.Group();
     // 슬립섹션 인너관
-    const rs = 146, L = 477, sp = new T.Group(); sp.position.x = -260;
+    const rs = 146, L = 477, sp = new T.Group(); sp.position.x = -215;
     const c1 = new T.Mesh(new T.CylinderGeometry(rs, rs, L, 160, 1, true), M.steel); sp.add(c1);
     const fl = new T.Mesh(new T.RingGeometry(rs, rs + 10, 160), M.steel); fl.rotation.x = -Math.PI / 2; fl.position.y = L / 2; sp.add(fl);
     const rim = new T.Mesh(new T.TorusGeometry(rs + 10, 1.2, 8, 180), M.rod); rim.rotation.x = Math.PI / 2; rim.position.y = L / 2; sp.add(rim);
     const seam = new T.Mesh(new T.BoxGeometry(3, L - 4, 1.2), M.weld); seam.position.set(Math.sin(0.5) * (rs + 0.6), 0, Math.cos(0.5) * (rs + 0.6)); seam.rotation.y = 0.5; sp.add(seam);
     g.add(sp);
     // AG 카바: 외부관(D350)을 감싸는 판, 세로 이음부를 90° 꺾어 볼트 체결
-    const rc = 178, Hc = 420, gap = 3, ga = 2 * Math.asin(gap / rc), cv = new T.Group(); cv.position.x = 260;
+    const rc = 178, Hc = 420, gap = 3, ga = 2 * Math.asin(gap / rc), cv = new T.Group(); cv.position.x = 215;
     cv.add(new T.Mesh(new T.CylinderGeometry(rc, rc, Hc, 180, 1, true, ga / 2, Math.PI * 2 - ga), M.outer));
     for (const s of [1, -1]) {
       const tab = new T.Mesh(new T.BoxGeometry(2, Hc, 26), M.outer); tab.position.set(s * (gap + 1), 0, rc + 12); cv.add(tab);
@@ -314,7 +314,7 @@
       for (const s of [1, -1]) { const n = new T.Mesh(new T.CylinderGeometry(7.5, 7.5, 6, 6), M.weld); n.rotation.z = Math.PI / 2; n.position.set(s * (gap + 2 + 3), y, rc + 14); cv.add(n); }
     }
     g.add(cv);
-    return { obj: g, tilt: 0.3 };
+    return { obj: g, tilt: 0.3, fit: 1.75 };
   }
 
   const MODELS = { sk: buildSK, ag: buildAG, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
@@ -338,25 +338,25 @@
     const root = new T.Group(); scene.add(root); root.rotation.y = 0.5;
     const camera = new T.PerspectiveCamera(30, 4 / 3, 1, 50000);
     const tanH = Math.tan(T.MathUtils.degToRad(15));
-    let cur = null, halfW = 1, halfH = 1, rad = 1;
+    let cur = null, halfW = 1, halfH = 1, rad = 1, fitK = 1.2;
     const size = () => {
       const w = el.clientWidth, h = el.clientHeight; if (!w || !h) return;
       renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
-      const d = Math.max(halfW * 1.04 / (tanH * Math.min(camera.aspect, 1.3)), halfH * 1.4 / tanH, rad * 1.2);
+      const d = Math.max(halfW * 1.04 / (tanH * Math.min(camera.aspect, 1.3)), halfH * 1.4 / tanH, rad * fitK);
       camera.position.set(0, rad * 0.05, d); camera.lookAt(0, 0, 0);
     };
     const cache = {};
     const show = (name) => {
       if (!cache[name]) {
-        const { obj, tilt } = MODELS[name]();
+        const { obj, tilt, fit } = MODELS[name]();
         const box = new T.Box3().setFromObject(obj); obj.position.sub(box.getCenter(new T.Vector3()));
         const sz = box.getSize(new T.Vector3());
-        cache[name] = { obj, tilt, hw: sz.x / 2, hh: sz.y / 2, rad: box.getBoundingSphere(new T.Sphere()).radius };
+        cache[name] = { obj, tilt, fit: fit || 1.2, hw: sz.x / 2, hh: sz.y / 2, rad: box.getBoundingSphere(new T.Sphere()).radius };
       }
       const m = cache[name];
       if (cur) root.remove(cur);
       cur = m.obj; root.add(cur); root.rotation.x = m.tilt;
-      halfW = m.hw; halfH = m.hh; rad = m.rad; size();
+      halfW = m.hw; halfH = m.hh; rad = m.rad; fitK = m.fit; size();
     };
     if (set.length > 1) {
       const sw = document.createElement('div'); sw.className = 'sw';

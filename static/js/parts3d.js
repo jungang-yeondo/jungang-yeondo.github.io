@@ -353,11 +353,11 @@
     const ann = (r0, r1, y) => { const o = new T.Mesh(new T.RingGeometry(r0, r1, 160), M.steel); o.rotation.x = -Math.PI / 2; o.position.y = y; g.add(o); };
     const ring = (r, t, y, m) => { const o = new T.Mesh(new T.TorusGeometry(r, t, 8, 180), m); o.rotation.x = Math.PI / 2; o.position.y = y; g.add(o); };
     cyl(Rb, 130, 200);
-    const cone = new T.Mesh(new T.CylinderGeometry(Rb, Rs, 250, 160, 1, true), M.steel); cone.position.y = 5; g.add(cone);
-    cyl(Rs, -150, -120);
-    ring(Rb, 1.6, 130, M.weld); ring(Rs, 1.6, -120, M.weld);
+    const cone = new T.Mesh(new T.CylinderGeometry(Rb, Rs, 190, 160, 1, true), M.steel); cone.position.y = 35; g.add(cone);
+    cyl(Rs, -130, -60);   // 상부 띠와 같은 높이(70)
+    ring(Rb, 1.6, 130, M.weld); ring(Rs, 1.6, -60, M.weld);
     ann(Rb, Rb + 10, 200); ring(Rb + 10, 1.2, 200, M.rod);
-    ann(Rs, Rs + 10, -150); ring(Rs + 10, 1.2, -150, M.rod);
+    ann(Rs, Rs + 10, -130); ring(Rs + 10, 1.2, -130, M.rod);
     return { obj: g, tilt: 0.35, zoom: 1.35 };
   }
   function buildTRd() {

@@ -569,7 +569,36 @@
     return { obj: g, tilt: 0.4, zoom: 1.35 };
   }
 
-  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, bj: buildBJ, vdc: () => buildCap(true), hdc: () => buildCap(false), el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
+  // ---------- 모델: SC 우수 차단판 ----------
+  // 판 조각들을 리벳으로 이어 원뿔(경사 길이 120)로 말아 만든 판. 체결 전(벌어진 상태)
+  // 한쪽 끝: 겹침판이 더 나와 있고 브라켓은 안쪽에 / 다른 쪽 끝: 브라켓이 끝에. 브라켓은 볼트 구멍 2개
+  function buildSC() {
+    const M = mats(); const g = new T.Group();
+    const Ri = 180, Hc = 95, Ro = Ri + Math.sqrt(120 * 120 - Hc * Hc), L = 120, a = Math.atan2(Hc, Ro - Ri);
+    const open = 0.55, tB = open, tA = Math.PI * 2 - open, ov = 0.2;
+    g.add(new T.Mesh(new T.CylinderGeometry(Ri, Ro, Hc, 180, 1, true, tB, tA - tB + ov), M.steel));
+    // 경사면 위 로컬 좌표계 (th 각도의 모선 기준): x = 둘레 방향(th 감소 쪽), y = 면의 법선, z = 모선(위→아래)
+    const onLine = (th, objs) => { const grp = new T.Group(); grp.rotation.y = th; const inner = new T.Group(); inner.position.set(0, 0, (Ri + Ro) / 2); inner.rotation.x = a; grp.add(inner); objs.forEach((o) => inner.add(o)); g.add(grp); };
+    const rivet = (x, z) => { const s = new T.Mesh(new T.SphereGeometry(3, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2), M.rod); s.position.set(x, 0.5, z); return s; };
+    // 조각 이음선 + 리벳 (2곳)
+    for (const th of [2.0, 4.1]) {
+      const line = new T.Mesh(new T.BoxGeometry(1.2, 0.8, L), M.weld);
+      onLine(th, [line, rivet(-6, -45), rivet(-6, -15), rivet(-6, 15), rivet(-6, 45)]);
+    }
+    // 브라켓: 끝을 비스듬히 깎은 판, 볼트 구멍 2개, 면에 수직으로 섬
+    const sh = new T.Shape(); sh.moveTo(0, -48); sh.lineTo(10, -42); sh.lineTo(16, -36); sh.lineTo(16, 36); sh.lineTo(10, 42); sh.lineTo(0, 48); sh.lineTo(0, -48);
+    for (const v of [26, -26]) { const h = new T.Path(); h.absarc(8, v, 3.5, 0, Math.PI * 2, true); sh.holes.push(h); }
+    const bg = new T.ExtrudeGeometry(sh, { depth: 2, bevelEnabled: false, curveSegments: 16 }); bg.translate(0, 0, -1);
+    const bracket = (x, flip) => { const b = new T.Mesh(bg, M.rod); b.rotation.set(0, Math.PI / 2, Math.PI / 2); b.position.set(x, 0, 0); const foot = new T.Mesh(new T.BoxGeometry(14, 1.2, 96), M.rod); foot.position.set(x + (flip ? 7 : -7), 0.8, 0); return [b, foot]; };
+    // tB 끝: 브라켓이 끝에 / tA 끝: 겹침판이 더 나와 있고 브라켓은 그 안쪽
+    const rB = (Ri + Ro) / 2, offA = ov * rB;
+    onLine(tB, bracket(-2, false));
+    onLine(tA, [...bracket(2, true), rivet(16, -30), rivet(16, 30)]);
+    const edge = new T.Mesh(new T.BoxGeometry(1.2, 0.8, L), M.weld); onLine(tA + ov, [edge]);
+    return { obj: g, tilt: 0.45, zoom: 1.2 };
+  }
+
+  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, bj: buildBJ, sc: buildSC, vdc: () => buildCap(true), hdc: () => buildCap(false), el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
   // ---------- 뷰어 ----------
   // 전환 버튼으로 함께 보여줄 모델 묶음

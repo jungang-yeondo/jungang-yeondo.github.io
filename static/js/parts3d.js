@@ -520,6 +520,30 @@
     return { obj: g, tilt: 0.3, zoom: 1.1 };
   }
 
+  // ---------- 모델: DS477 응축수 배출관 ----------
+  // 477 이중관 중앙에 25A 니쁠을 인너 벽까지 닿게 용접 (인너 안쪽으로는 돌출 없음)
+  function buildDS() {
+    const M = mats(); const g = new T.Group();
+    const R1 = 150, R2 = 175, rn = 17;
+    const P = new T.Vector3(0, 0, 0), u = new T.Vector3(1, 0, 0), uInv = { value: new T.Matrix4() };
+    const MM = Object.assign({}, M, { steel: holeMat(M.steel, P, u, rn, uInv), outer: holeMat(M.outer, P, u, rn, uInv) });
+    doublePipe(g, MM, R1, R2, -240, 240, -200, 200, true, true);
+    const xw = R2 + 10, xe = xw + 30;
+    saddleTube(g, M.rod, R1, P, u, rn, xw); // 민자: 인너 벽면에서 시작 → 아우트 밖 10
+    const dark = new T.MeshStandardMaterial({ color: 0x0b0d10, metalness: 0.3, roughness: 0.8, side: T.BackSide });
+    const along = (geo, x0, x1, mat) => { const m = new T.Mesh(geo, mat); m.rotation.z = Math.PI / 2; m.position.x = (x0 + x1) / 2; g.add(m); return m; };
+    along(new T.CylinderGeometry(rn - 1.2, rn - 1.2, xe - xw, 32, 1, true), xw, xe, M.rod); // 나사부
+    for (let k = 0; k < 12; k++) { const tr = new T.Mesh(new T.TorusGeometry(rn - 1, 1.1, 6, 40), M.rod); tr.rotation.y = Math.PI / 2; tr.position.x = xw + 3 + k * 2.2; g.add(tr); }
+    along(new T.CylinderGeometry(rn - 4, rn - 4, xe - R1, 32, 1, true), R1, xe, dark); // 관통 구멍
+    const endR = new T.Mesh(new T.RingGeometry(rn - 4, rn - 1.2, 32), M.rod); endR.rotation.y = Math.PI / 2; endR.position.x = xe; g.add(endR);
+    const inR = new T.Mesh(new T.RingGeometry(rn - 4, rn, 32), M.rod); inR.rotation.y = -Math.PI / 2; inR.position.x = R1 + 0.2; g.add(inR); // 인너 벽면과 같은 높이(튀어나옴 없음)
+    // 아우트와 만나는 용접선
+    const pts = []; for (let i = 0; i <= 96; i++) { const f = i / 96 * Math.PI * 2, z = (rn + 1) * Math.cos(f); pts.push(new T.Vector3(Math.sqrt(R2 * R2 - z * z) + 0.8, -(rn + 1) * Math.sin(f), z)); }
+    g.add(new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts, true), 128, 1.6, 6, true), M.weld));
+    g.traverse((o) => { if (o.isMesh && (o.material === MM.steel || o.material === MM.outer)) o.onBeforeRender = () => { uInv.value.copy(g.matrixWorld).invert(); }; });
+    return { obj: g, tilt: 0.3, zoom: 1.1 };
+  }
+
   // ---------- 모델: BJ 발전기용 열팽창 주름관 ----------
   // 477로 제작, 주름 때문에 440. 아우트는 민자(반투명으로 보이게), 인너만 주름관(5산 @25 = 125)
   function buildBJ() {
@@ -598,7 +622,7 @@
     return { obj: g, tilt: 0.45, zoom: 1.2 };
   }
 
-  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, bj: buildBJ, sc: buildSC, vdc: () => buildCap(true), hdc: () => buildCap(false), el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
+  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, ds: buildDS, bj: buildBJ, sc: buildSC, vdc: () => buildCap(true), hdc: () => buildCap(false), el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
   // ---------- 뷰어 ----------
   // 전환 버튼으로 함께 보여줄 모델 묶음

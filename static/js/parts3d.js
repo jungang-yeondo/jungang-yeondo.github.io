@@ -372,11 +372,58 @@
     return { obj: g, tilt: 0.35, zoom: 1.3 };
   }
 
-  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
+  // ---------- 모델: FD 장비 연결용 사각 플랜지 (사각 / 호퍼) ----------
+  // 위: 70 띠(예: D500), 사각형은 띠 + 사각판(띠 지름 + 50) + 사각 옆면, 바닥: 볼트 구멍 있는 사각 후렌지
+  function fdBase(g, M, Rt, half) {
+    // 띠 70 + 위 밑깎이
+    const band = new T.Mesh(new T.CylinderGeometry(Rt, Rt, 70, 160, 1, true), M.steel); band.position.y = 335; g.add(band);
+    const fl = new T.Mesh(new T.RingGeometry(Rt, Rt + 10, 160), M.steel); fl.rotation.x = -Math.PI / 2; fl.position.y = 370; g.add(fl);
+    const rim = new T.Mesh(new T.TorusGeometry(Rt + 10, 1.2, 8, 180), M.rod); rim.rotation.x = Math.PI / 2; rim.position.y = 370; g.add(rim);
+    // 바닥 후렌지 (현장마다 다름: 보기 쉬운 형태)
+    const F = half + 50, sh = new T.Shape();
+    sh.moveTo(-F, -F); sh.lineTo(F, -F); sh.lineTo(F, F); sh.lineTo(-F, F); sh.lineTo(-F, -F);
+    const hole = new T.Path(); hole.moveTo(-half, -half); hole.lineTo(-half, half); hole.lineTo(half, half); hole.lineTo(half, -half); hole.lineTo(-half, -half); sh.holes.push(hole);
+    const hc = half + 25;
+    for (const t of [-0.8, -0.27, 0.27, 0.8]) for (const [x, y] of [[t * half, hc], [t * half, -hc], [hc, t * half], [-hc, t * half]]) { const h = new T.Path(); h.absarc(x, y, 9, 0, Math.PI * 2, true); sh.holes.push(h); }
+    for (const [x, y] of [[hc, hc], [-hc, hc], [hc, -hc], [-hc, -hc]]) { const h = new T.Path(); h.absarc(x, y, 9, 0, Math.PI * 2, true); sh.holes.push(h); }
+    const fg = new T.ExtrudeGeometry(sh, { depth: 8, bevelEnabled: false, curveSegments: 16 });
+    const flange = new T.Mesh(fg, M.outer); flange.rotation.x = -Math.PI / 2; flange.position.y = -8; g.add(flange);
+  }
+  function buildFDsq() {
+    const M = mats(); const g = new T.Group();
+    const Rt = 250, top = Rt + 25, half = 450;   // 띠 D500 → 사각판 550×550, 바닥 900×900
+    fdBase(g, M, Rt, half);
+    const flat = M.steel.clone(); flat.flatShading = true;
+    // 사각판(띠 지름 + 50) 가운데 원형 구멍
+    const ps = new T.Shape(); ps.moveTo(-top, -top); ps.lineTo(top, -top); ps.lineTo(top, top); ps.lineTo(-top, top); ps.lineTo(-top, -top);
+    const ph = new T.Path(); ph.absarc(0, 0, Rt, 0, Math.PI * 2, true); ps.holes.push(ph);
+    const plate = new T.Mesh(new T.ShapeGeometry(ps, 64), flat); plate.rotation.x = -Math.PI / 2; plate.position.y = 300; g.add(plate);
+    // 사각 옆면: 사각판 ~ 바닥 후렌지
+    const side = new T.Mesh(new T.CylinderGeometry(top * Math.SQRT2, half * Math.SQRT2, 300, 4, 1, true), flat);
+    side.rotation.y = Math.PI / 4; side.position.y = 150; g.add(side);
+    return { obj: g, tilt: 0.45, zoom: 1.1 };
+  }
+  function buildFDhp() {
+    const M = mats(); const g = new T.Group();
+    const Rt = 250, half = 450;
+    fdBase(g, M, Rt, half);
+    // 호퍼: 띠 아래 원형에서 바닥 사각으로 바로 이어지는 변환 면
+    const N = 160, pos = [], idx = [];
+    for (let i = 0; i <= N; i++) {
+      const f = i / N * Math.PI * 2, c = Math.cos(f), s = Math.sin(f), k = half / Math.max(Math.abs(c), Math.abs(s));
+      pos.push(Rt * c, 300, Rt * s, k * c, 0, k * s);
+    }
+    for (let i = 0; i < N; i++) { const p = i * 2; idx.push(p, p + 1, p + 2, p + 1, p + 3, p + 2); }
+    const geo = new T.BufferGeometry(); geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3)); geo.setIndex(idx); geo.computeVertexNormals();
+    g.add(new T.Mesh(geo, M.steel));
+    return { obj: g, tilt: 0.45, zoom: 1.1 };
+  }
+
+  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
   // ---------- 뷰어 ----------
   // 전환 버튼으로 함께 보여줄 모델 묶음
-  const SETS = { mt: [['MT', 'mt'], ['NT', 'nt']], lt: [['LT', 'lt'], ['JT', 'jt']], el: [['EL90', 'el90'], ['EL45', 'el45']], ag: [['속관', 'agin'], ['카바', 'agcv']], sr: [['속관', 'srin'], ['카바', 'srcv']], tr: [['단관', 'trs'], ['이중관', 'trd']] };
+  const SETS = { mt: [['MT', 'mt'], ['NT', 'nt']], lt: [['LT', 'lt'], ['JT', 'jt']], el: [['EL90', 'el90'], ['EL45', 'el45']], ag: [['속관', 'agin'], ['카바', 'agcv']], sr: [['속관', 'srin'], ['카바', 'srcv']], tr: [['단관', 'trs'], ['이중관', 'trd']], fd: [['사각', 'fdsq'], ['호퍼', 'fdhp']] };
   function mount(el) {
     const set = SETS[el.dataset.model] || [[null, el.dataset.model]];
     if (!set.every(([, n]) => MODELS[n])) return;

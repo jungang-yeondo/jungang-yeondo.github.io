@@ -440,7 +440,41 @@
     return { obj: g, tilt: 0.45, zoom: 1.05 };
   }
 
-  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
+  // ---------- 모델: DV477 유속 조절관 (수동 댐퍼) ----------
+  // 이중관 477 + 인너를 관통하는 환봉 + 내경보다 30 작은 원판(작은 브라켓으로 환봉에 끼워 용접) + 아우트의 손잡이(OPEN/SHUT 눈금)
+  function buildDV() {
+    const M = mats(); const g = new T.Group();
+    const R1 = 150, R2 = 175;
+    doublePipe(g, M, R1, R2, -240, 240, -200, 200, true, true);
+    // 환봉
+    const shaft = new T.Mesh(new T.CylinderGeometry(6, 6, 2 * R2 + 40, 16), M.rod); shaft.rotation.z = Math.PI / 2; g.add(shaft);
+    // 댐퍼 원판 + 브라켓 (환봉과 함께 회전)
+    const dmp = new T.Group(); g.add(dmp);
+    const disk = new T.Mesh(new T.CylinderGeometry(R1 - 15, R1 - 15, 3, 96), M.steel); dmp.add(disk);
+    for (const x of [-80, 0, 80]) { const b = new T.Mesh(new T.BoxGeometry(24, 8, 22), M.outer); b.position.set(x, 4, 0); dmp.add(b); }
+    // 손잡이 받침판 + OPEN/SHUT 눈금
+    const plate = new T.Mesh(new T.BoxGeometry(2, 110, 130), M.outer); plate.position.x = R2 + 2; g.add(plate);
+    const cv = document.createElement('canvas'); cv.width = 260; cv.height = 220; const x = cv.getContext('2d');
+    x.fillStyle = '#9ea3a9'; x.fillRect(0, 0, 260, 220);
+    x.strokeStyle = '#2b2f36'; x.lineWidth = 3; x.beginPath(); x.arc(130, 70, 90, Math.PI * 0.25, Math.PI * 0.75); x.stroke();
+    for (let k = 0; k <= 8; k++) { const a = Math.PI * 0.25 + k * Math.PI * 0.5 / 8; x.beginPath(); x.moveTo(130 + Math.cos(a) * 90, 70 + Math.sin(a) * 90); x.lineTo(130 + Math.cos(a) * (k % 4 ? 102 : 110), 70 + Math.sin(a) * (k % 4 ? 102 : 110)); x.stroke(); }
+    x.font = 'bold 26px sans-serif'; x.textAlign = 'center'; x.fillStyle = '#2b2f36'; x.fillText('OPEN', 52, 205); x.fillStyle = '#b3262e'; x.fillText('SHUT', 208, 205);
+    const tex = new T.CanvasTexture(cv); tex.encoding = T.sRGBEncoding;
+    const label = new T.Mesh(new T.PlaneGeometry(130, 110), new T.MeshStandardMaterial({ map: tex, metalness: 0.4, roughness: 0.5 }));
+    label.rotation.y = Math.PI / 2; label.position.set(R2 + 3.2, 0, 0); g.add(label);
+    // 손잡이 레버 (환봉 끝, 원판과 같이 돌아감)
+    const lev = new T.Group(); lev.position.x = R2 + 10; g.add(lev);
+    const hub = new T.Mesh(new T.CylinderGeometry(13, 13, 10, 6), M.rod); hub.rotation.z = Math.PI / 2; lev.add(hub);
+    const arm = new T.Mesh(new T.BoxGeometry(5, 95, 18), M.rod); arm.position.y = -50; lev.add(arm);
+    const grip = new T.Mesh(new T.CylinderGeometry(10, 10, 5, 24), M.rod); grip.rotation.z = Math.PI / 2; grip.position.y = -98; lev.add(grip);
+    let a = 0, target = 0;   // 0 = SHUT(닫힘), π/2 = OPEN(완전 열림)
+    const apply = () => { dmp.rotation.x = -a; lev.rotation.x = Math.PI / 4 - a; };
+    apply();
+    g.userData.tick = () => { if (Math.abs(target - a) > 0.001) { a += (target - a) * 0.08; apply(); } };
+    return { obj: g, tilt: 0.55, actions: [['OPEN', () => { target = Math.PI / 2; }], ['SHUT', () => { target = 0; }]], start: 1 };
+  }
+
+  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
   // ---------- 뷰어 ----------
   // 전환 버튼으로 함께 보여줄 모델 묶음
@@ -471,14 +505,26 @@
     const cache = {};
     const show = (name) => {
       if (!cache[name]) {
-        const { obj, tilt, fit, zoom } = MODELS[name]();
+        const { obj, tilt, fit, zoom, actions, start } = MODELS[name]();
         const box = new T.Box3().setFromObject(obj); obj.position.sub(box.getCenter(new T.Vector3()));
         const sz = box.getSize(new T.Vector3());
-        cache[name] = { obj, tilt, fit: fit || 1.2, zoom: zoom || 1, hw: sz.x / 2, hh: sz.y / 2, rad: box.getBoundingSphere(new T.Sphere()).radius };
+        cache[name] = { obj, tilt, actions, start: start || 0, fit: fit || 1.2, zoom: zoom || 1, hw: sz.x / 2, hh: sz.y / 2, rad: box.getBoundingSphere(new T.Sphere()).radius };
       }
       const m = cache[name];
       if (cur) root.remove(cur);
       cur = m.obj; root.add(cur); root.rotation.x = m.tilt;
+      // 동작 버튼 (예: 댐퍼 OPEN / SHUT)
+      const old = el.querySelector('.sw.act'); if (old) old.remove();
+      if (m.actions) {
+        const ad = document.createElement('div'); ad.className = 'sw act';
+        m.actions.forEach(([label, fn], i) => {
+          const b = document.createElement('button'); b.type = 'button'; b.textContent = label; if (i === m.start) b.classList.add('on');
+          b.addEventListener('click', () => { ad.querySelectorAll('button').forEach((x) => x.classList.remove('on')); b.classList.add('on'); fn(); });
+          ad.appendChild(b);
+        });
+        ad.addEventListener('pointerdown', (e) => e.stopPropagation());
+        el.appendChild(ad);
+      }
       halfW = m.hw; halfH = m.hh; rad = m.rad; fitK = m.fit; zoomK = m.zoom; size();
     };
     if (set.length > 1) {
@@ -511,6 +557,7 @@
     (function loop() {
       requestAnimationFrame(loop); if (!visible) return;
       if (!drag) { idle++; vx *= 0.95; vy *= 0.9; root.rotation.y += vx; root.rotation.x = Math.max(-1.45, Math.min(1.45, root.rotation.x + vy)); if (idle > 90) root.rotation.y += 0.004; }
+      if (cur && cur.userData.tick) cur.userData.tick();
       renderer.render(scene, camera);
     })();
   }

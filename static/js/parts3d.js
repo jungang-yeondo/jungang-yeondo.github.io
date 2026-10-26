@@ -407,20 +407,16 @@
     const M = mats(); const g = new T.Group();
     const Rt = 250, half = 450;
     fdBase(g, M, Rt, half);
-    // 호퍼: 띠 아래 원형에서 바닥 사각으로 둥글고 완만하게 변하는 면 (단면이 원 → 둥근 사각 → 사각으로 서서히 변함)
-    const N = 192, ROWS = 36, pos = [], idx = [];
-    for (let rI = 0; rI <= ROWS; rI++) {
-      const u = rI / ROWS, e = u * u * (3 - 2 * u);            // 완만한 변화
-      const size = Rt + (half - Rt) * e, p = 2 * Math.pow(25, u * u), y = 300 * (1 - u);
-      for (let i = 0; i <= N; i++) {
-        const f = i / N * Math.PI * 2, c = Math.cos(f), s = Math.sin(f);
-        const k = size / Math.pow(Math.pow(Math.abs(c), p) + Math.pow(Math.abs(s), p), 1 / p);
-        pos.push(k * c, y, k * s);
-      }
-    }
-    for (let rI = 0; rI < ROWS; rI++) for (let i = 0; i < N; i++) {
-      const a0 = rI * (N + 1) + i, b0 = a0 + N + 1;
-      idx.push(a0, b0, a0 + 1, a0 + 1, b0, b0 + 1);
+    // 호퍼(원형→사각 변환): 각 변은 평평한 삼각면, 모서리는 판을 말아서 만든 원뿔면(라운드)
+    const MS = 32, pos = [], idx = [], add = (x, y, z) => { pos.push(x, y, z); return pos.length / 3 - 1; };
+    const ring = []; for (let k = 0; k < 4 * MS; k++) { const f = k * (Math.PI / 2) / MS; ring.push(add(Rt * Math.cos(f), 300, Rt * Math.sin(f))); }
+    const R_ = (k) => ring[((k % (4 * MS)) + 4 * MS) % (4 * MS)];
+    const corner = (q) => { const f = q * Math.PI / 2 + Math.PI / 4; return [half * Math.sign(Math.cos(f)), 0, half * Math.sign(Math.sin(f))]; };
+    for (let q = 0; q < 4; q++) {
+      const C = corner(q);
+      for (let i = 0; i < MS; i++) { const c = add(C[0], C[1], C[2]); idx.push(c, R_(q * MS + i), R_(q * MS + i + 1)); }   // 모서리 원뿔면
+      const P = corner(q - 1 < 0 ? 3 : q - 1); const c1 = add(P[0], P[1], P[2]), c2 = add(C[0], C[1], C[2]);
+      idx.push(c1, R_(q * MS), c2);                                                                                   // 변의 평면 삼각형
     }
     const geo = new T.BufferGeometry(); geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3)); geo.setIndex(idx); geo.computeVertexNormals();
     g.add(new T.Mesh(geo, M.steel));

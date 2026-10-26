@@ -579,10 +579,11 @@
     g.add(new T.Mesh(new T.CylinderGeometry(Ri, Ro, Hc, 180, 1, true, tB, tA - tB + ov), M.steel));
     // 경사면 위 로컬 좌표계 (th 각도의 모선 기준): x = 둘레 방향(th 감소 쪽), y = 면의 법선, z = 모선(위→아래)
     const onLine = (th, objs) => { const grp = new T.Group(); grp.rotation.y = th; const inner = new T.Group(); inner.position.set(0, 0, (Ri + Ro) / 2); inner.rotation.x = a; grp.add(inner); objs.forEach((o) => inner.add(o)); g.add(grp); };
-    const rivet = (x, z) => { const s = new T.Mesh(new T.SphereGeometry(3, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2), M.rod); s.position.set(x, 0.5, z); return s; };
+    const spotM = new T.MeshStandardMaterial({ color: 0x6f747b, metalness: 0.7, roughness: 0.55, polygonOffset: true, polygonOffsetFactor: -2 });
+    const rivet = (x, z) => { const s = new T.Mesh(new T.CircleGeometry(3, 16), spotM); s.rotation.x = -Math.PI / 2; s.position.set(x, 0.15, z); return s; }; // 용접 자국(돌출 없음)
     // 조각 이음선 + 리벳 (2곳)
     for (const th of [2.0, 4.1]) {
-      const line = new T.Mesh(new T.BoxGeometry(1.2, 0.8, L), M.weld);
+      const line = new T.Mesh(new T.PlaneGeometry(1, L), spotM); line.rotation.x = -Math.PI / 2; line.position.y = 0.1;
       onLine(th, [line, rivet(-6, -45), rivet(-6, -15), rivet(-6, 15), rivet(-6, 45)]);
     }
     // 브라켓: 끝을 비스듬히 깎은 판, 볼트 구멍 2개, 면에 수직으로 섬

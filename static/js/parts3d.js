@@ -502,7 +502,28 @@
     return { obj: g, tilt: 0.3, zoom: 1.1 };
   }
 
-  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
+  // ---------- 모델: BJ 발전기용 열팽창 주름관 ----------
+  // 477로 제작, 주름 때문에 440. 아우트는 민자(반투명으로 보이게), 인너만 주름관(5산 @25 = 125)
+  function buildBJ() {
+    const M = mats(); const g = new T.Group();
+    const R1 = 150, R2 = 175, yT = 220, yO = 180;
+    const hide = new T.MeshBasicMaterial({ visible: false });
+    const see = (m, o) => { const c = m.clone(); c.transparent = true; c.opacity = o; c.depthWrite = false; return c; };
+    doublePipe(g, Object.assign({}, M, { steel: hide, outer: see(M.outer, 0.25), rod: see(M.rod, 0.5) }), R1, R2, -yT, yT, -yO, yO, true, true);
+    // 인너 주름관 (회전체)
+    const pts = [], V = (r, y) => pts.push(new T.Vector2(r, y));
+    V(R1, -yT); V(R1, -82); V(R1 + 6, -70);
+    for (let i = 0; i <= 250; i++) { const y = -62.5 + 125 * i / 250; V(R1 + 10 - 10 * Math.cos(2 * Math.PI * (y + 62.5) / 25), y); }
+    V(R1 + 6, 70); V(R1, 82); V(R1, yT);
+    const inner = new T.Mesh(new T.LatheGeometry(pts.reverse(), 160), M.steel); inner.renderOrder = 2; g.add(inner);
+    for (const s of [1, -1]) {
+      const fl = new T.Mesh(new T.RingGeometry(R1, R1 + 10, 160), M.steel); fl.rotation.x = -Math.PI / 2; fl.position.y = s * yT; g.add(fl);
+      const rim = new T.Mesh(new T.TorusGeometry(R1 + 10, 1.2, 8, 180), M.rod); rim.rotation.x = Math.PI / 2; rim.position.y = s * yT; g.add(rim);
+    }
+    return { obj: g, tilt: 0.35, zoom: 1.05 };
+  }
+
+  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, bj: buildBJ, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
   // ---------- 뷰어 ----------
   // 전환 버튼으로 함께 보여줄 모델 묶음

@@ -438,3 +438,12 @@ footer .c{grid-column:1/-1;font-size:13px;padding-top:22px;border-top:1px solid 
 
 .p3d .sw.act{right:auto;left:10px}
 .p3d .sw.act button.on{background:#2f6fd6;border-color:#2f6fd6}
+
+/* 메인 3D 모델 보기 칸 (영상) */
+.ptiles{grid-template-columns:repeat(3,1fr)}
+.ptile video{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.ptile:hover video{transform:scale(1.05)}
+.ptile.p3dv{background:#0c1424}
+.ptile.p3dv::after{background:linear-gradient(0deg,rgba(8,14,26,.9) 0%,rgba(8,14,26,.35) 40%,rgba(8,14,26,0) 70%)}
+@media (max-width:1000px){.ptiles{grid-template-columns:1fr 1fr}.ptile.p3dv{grid-column:1/-1}}
+@media (max-width:760px){.ptiles{grid-template-columns:1fr}}

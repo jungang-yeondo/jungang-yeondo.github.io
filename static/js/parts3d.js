@@ -588,7 +588,7 @@
       const bend = new T.Mesh(new T.CylinderGeometry(1.2, 1.2, S, 8, 1, false, 0, Math.PI / 2), M.steel); bend.rotation.z = Math.PI / 2; bend.position.set(0, tk - 1.2, S / 2 - 1.2); side.add(bend); // 접힌 모서리
       g.add(side);
     }
-    return { obj: g, tilt: 0.5, zoom: 1.3 };
+    return { obj: g, tilt: 0.5, zoom: 1.75 };
   }
 
   // ---------- 모델: BJ 발전기용 열팽창 주름관 ----------

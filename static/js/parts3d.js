@@ -470,7 +470,6 @@
     const cx = cv.width / 2, cy = (PH / 2 + PY) * K;
     x.strokeStyle = '#30343b'; x.lineWidth = 3; x.beginPath(); x.arc(cx, cy, 44 * K, Math.PI * 1.15, Math.PI * 1.85); x.stroke();
     for (let k = 0; k <= 8; k++) { const an = Math.PI * 1.15 + k * Math.PI * 0.7 / 8, L = k % 4 ? 6 : 10; x.beginPath(); x.moveTo(cx + Math.cos(an) * 44 * K, cy + Math.sin(an) * 44 * K); x.lineTo(cx + Math.cos(an) * (44 + L) * K, cy + Math.sin(an) * (44 + L) * K); x.stroke(); }
-    x.fillStyle = '#30343b'; x.beginPath(); x.moveTo(cx, cy - 36 * K); x.lineTo(cx - 5 * K, cy - 27 * K); x.lineTo(cx + 5 * K, cy - 27 * K); x.fill();
     x.font = 'bold ' + 9 * K + 'px sans-serif'; x.textAlign = 'center';
     x.save(); x.translate(cx - 48 * K, cy - 2 * K); x.rotate(-1.1); x.fillStyle = '#30343b'; x.fillText('OPEN', 0, 0); x.restore();
     x.save(); x.translate(cx + 48 * K, cy - 2 * K); x.rotate(1.1); x.fillStyle = '#b3262e'; x.fillText('SHUT', 0, 0); x.restore();
@@ -490,9 +489,12 @@
     const slot = new T.Path(); slot.moveTo(-2, -55); slot.lineTo(-2, -110); slot.absarc(0, -110, 2, Math.PI, 0, false); slot.lineTo(2, -55); slot.lineTo(-2, -55); ls.holes.push(slot);
     const arm = new T.Mesh(new T.ExtrudeGeometry(ls, { depth: 4, bevelEnabled: true, bevelThickness: 0.8, bevelSize: 0.8, bevelSegments: 2, curveSegments: 16 }), M.rod);
     arm.rotation.y = Math.PI / 2; arm.position.x = 2; lev.add(arm);
+    // 지시침: 허브 위쪽으로 뾰족하게, 눈금을 가리킴 (레버와 반대 방향)
+    const nd = new T.Shape(); nd.moveTo(-7, 12); nd.lineTo(7, 12); nd.lineTo(0, 40); nd.lineTo(-7, 12);
+    const needle = new T.Mesh(new T.ExtrudeGeometry(nd, { depth: 2.5, bevelEnabled: false }), M.weld); needle.rotation.y = Math.PI / 2; needle.position.x = 4; lev.add(needle);
     const scr = new T.Mesh(new T.CylinderGeometry(4, 4, 3, 16), M.weld); scr.rotation.z = Math.PI / 2; scr.position.set(7.5, -40, 0); lev.add(scr);
     let a = 0, target = 0;   // 0 = SHUT(닫힘), π/2 = OPEN(완전 열림)
-    const apply = () => { dmp.rotation.x = -a; lev.rotation.x = Math.PI / 4 - a; };
+    const apply = () => { dmp.rotation.x = -a; lev.rotation.x = -Math.PI / 4 + a; }; // SHUT: 지시침이 SHUT 쪽, OPEN: 90° 돌아 OPEN 쪽
     apply();
     g.userData.tick = () => { if (Math.abs(target - a) > 0.001) { a += (target - a) * 0.08; apply(); } };
     return { obj: g, tilt: 0.55, actions: [['OPEN', () => { target = Math.PI / 2; }], ['SHUT', () => { target = 0; }]], start: 1 };

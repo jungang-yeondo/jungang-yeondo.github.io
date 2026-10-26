@@ -339,10 +339,10 @@
     ring(Rb, 1.6, 1, M.weld); ring(Rs, 1.6, 0, M.weld);  // 용접선
     ann(Rb, Rb + 10, Hb); ring(Rb + 10, 1.2, Hb, M.rod);  // 위 밑깎이
     ann(Rs, Rs + 10, -Hb); ring(Rs + 10, 1.2, -Hb, M.rod); // 아래 밑깎이
-    return { obj: g, tilt: 0.35 };
+    return { obj: g, tilt: 0.35, zoom: 1.45 };
   }
   // SR 카바: 큰 관 아우트(D450)를 덮고, 아래 발판은 작은 관 아우트(D350)까지
-  function buildSRcv() { const M = mats(); const g = new T.Group(); makeCover(g, M, 228, 300, 178); return { obj: g, tilt: 0.3 }; }
+  function buildSRcv() { const M = mats(); const g = new T.Group(); makeCover(g, M, 228, 300, 178); return { obj: g, tilt: 0.3, zoom: 1.35 }; }
 
   const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
@@ -365,25 +365,25 @@
     const root = new T.Group(); scene.add(root); root.rotation.y = 0.5;
     const camera = new T.PerspectiveCamera(30, 4 / 3, 1, 50000);
     const tanH = Math.tan(T.MathUtils.degToRad(15));
-    let cur = null, halfW = 1, halfH = 1, rad = 1, fitK = 1.2;
+    let cur = null, halfW = 1, halfH = 1, rad = 1, fitK = 1.2, zoomK = 1;
     const size = () => {
       const w = el.clientWidth, h = el.clientHeight; if (!w || !h) return;
       renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
-      const d = Math.max(halfW * 1.04 / (tanH * Math.min(camera.aspect, 1.3)), halfH * 1.4 / tanH, rad * fitK);
+      const d = Math.max(halfW * 1.04 / (tanH * Math.min(camera.aspect, 1.3)), halfH * 1.4 / tanH, rad * fitK) * zoomK;
       camera.position.set(0, rad * 0.05, d); camera.lookAt(0, 0, 0);
     };
     const cache = {};
     const show = (name) => {
       if (!cache[name]) {
-        const { obj, tilt, fit } = MODELS[name]();
+        const { obj, tilt, fit, zoom } = MODELS[name]();
         const box = new T.Box3().setFromObject(obj); obj.position.sub(box.getCenter(new T.Vector3()));
         const sz = box.getSize(new T.Vector3());
-        cache[name] = { obj, tilt, fit: fit || 1.2, hw: sz.x / 2, hh: sz.y / 2, rad: box.getBoundingSphere(new T.Sphere()).radius };
+        cache[name] = { obj, tilt, fit: fit || 1.2, zoom: zoom || 1, hw: sz.x / 2, hh: sz.y / 2, rad: box.getBoundingSphere(new T.Sphere()).radius };
       }
       const m = cache[name];
       if (cur) root.remove(cur);
       cur = m.obj; root.add(cur); root.rotation.x = m.tilt;
-      halfW = m.hw; halfH = m.hh; rad = m.rad; fitK = m.fit; size();
+      halfW = m.hw; halfH = m.hh; rad = m.rad; fitK = m.fit; zoomK = m.zoom; size();
     };
     if (set.length > 1) {
       const sw = document.createElement('div'); sw.className = 'sw';

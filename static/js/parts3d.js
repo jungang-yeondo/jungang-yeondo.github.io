@@ -291,7 +291,33 @@
     return { obj: g, tilt: 0.25 };
   }
 
-  const MODELS = { sk: buildSK, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
+  // ---------- 모델: AG / SS 길이 조절관 (슬립섹션) + AG 카바 ----------
+  // 인너: 한쪽만 밑깎이, 지름 8 줄여(D292) 다른 관 안쪽으로 끼움 / 카바: 이중관일 때 아우트에 덮는 분할 카바
+  function buildAG() {
+    const M = mats(); const g = new T.Group();
+    // 슬립섹션 인너관
+    const rs = 146, L = 477, sp = new T.Group(); sp.position.x = -260;
+    const c1 = new T.Mesh(new T.CylinderGeometry(rs, rs, L, 160, 1, true), M.steel); sp.add(c1);
+    const fl = new T.Mesh(new T.RingGeometry(rs, rs + 10, 160), M.steel); fl.rotation.x = -Math.PI / 2; fl.position.y = L / 2; sp.add(fl);
+    const rim = new T.Mesh(new T.TorusGeometry(rs + 10, 1.2, 8, 180), M.rod); rim.rotation.x = Math.PI / 2; rim.position.y = L / 2; sp.add(rim);
+    const seam = new T.Mesh(new T.BoxGeometry(3, L - 4, 1.2), M.weld); seam.position.set(Math.sin(0.5) * (rs + 0.6), 0, Math.cos(0.5) * (rs + 0.6)); seam.rotation.y = 0.5; sp.add(seam);
+    g.add(sp);
+    // AG 카바: 외부관(D350)을 감싸는 판, 세로 이음부를 90° 꺾어 볼트 체결
+    const rc = 178, Hc = 420, gap = 3, ga = 2 * Math.asin(gap / rc), cv = new T.Group(); cv.position.x = 260;
+    cv.add(new T.Mesh(new T.CylinderGeometry(rc, rc, Hc, 180, 1, true, ga / 2, Math.PI * 2 - ga), M.outer));
+    for (const s of [1, -1]) {
+      const tab = new T.Mesh(new T.BoxGeometry(2, Hc, 26), M.outer); tab.position.set(s * (gap + 1), 0, rc + 12); cv.add(tab);
+      const lip = new T.Mesh(new T.TorusGeometry(rc, 1.4, 8, 180, Math.PI * 2 - ga), M.rod); lip.rotation.set(Math.PI / 2, 0, Math.PI / 2 + ga / 2); lip.position.y = s * Hc / 2; cv.add(lip);
+    }
+    for (const y of [Hc / 2 - 55, Hc / 2 - 105, -Hc / 2 + 105, -Hc / 2 + 55]) {
+      const b = new T.Mesh(new T.CylinderGeometry(4, 4, gap * 2 + 26, 12), M.rod); b.rotation.z = Math.PI / 2; b.position.set(0, y, rc + 14); cv.add(b);
+      for (const s of [1, -1]) { const n = new T.Mesh(new T.CylinderGeometry(7.5, 7.5, 6, 6), M.weld); n.rotation.z = Math.PI / 2; n.position.set(s * (gap + 2 + 3), y, rc + 14); cv.add(n); }
+    }
+    g.add(cv);
+    return { obj: g, tilt: 0.3 };
+  }
+
+  const MODELS = { sk: buildSK, ag: buildAG, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
   // ---------- 뷰어 ----------
   // 전환 버튼으로 함께 보여줄 모델 묶음

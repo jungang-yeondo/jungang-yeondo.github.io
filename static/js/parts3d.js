@@ -542,7 +542,7 @@
     g.add(new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts, true), 128, 1.6, 6, true), M.weld));
     if (vert) {
       // 수직관: 벽을 타고 흐르는 물을 받는 도넛 판(니쁠 구멍 바닥 높이) + 안쪽 고임턱(니쁠 구멍보다 높게)
-      const yb = -(rn - 4), wP = 10, hL = 40, tk = 2;
+      const yb = -(rn - 4), wP = 35, hL = 40, tk = 2;
       const plate = new T.Mesh(new T.RingGeometry(R1 - wP, R1, 160), M.steel); plate.rotation.x = -Math.PI / 2; plate.position.y = yb; g.add(plate);
       const plateU = new T.Mesh(new T.RingGeometry(R1 - wP, R1, 160), M.steel2); plateU.rotation.x = Math.PI / 2; plateU.position.y = yb - tk; g.add(plateU);
       const lip = new T.Mesh(new T.CylinderGeometry(R1 - wP, R1 - wP, hL + tk, 160, 1, true), M.steel); lip.position.y = yb - tk + (hL + tk) / 2; g.add(lip);

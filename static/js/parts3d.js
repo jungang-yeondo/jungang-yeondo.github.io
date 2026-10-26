@@ -566,7 +566,7 @@
       const wn = new T.Mesh(new T.TorusGeometry(rn + 0.5, 1.6, 8, 48), M.weld); wn.rotation.x = Math.PI / 2; wn.position.y = y0; g.add(wn);
       const hole = new T.Mesh(new T.RingGeometry(rn - 4, rn - 1.2, 32), M.rod); hole.rotation.x = Math.PI / 2; hole.position.y = y0 - 40; g.add(hole);
     }
-    return { obj: g, tilt: 0.4, zoom: 1.05 };
+    return { obj: g, tilt: 0.4, zoom: 1.35 };
   }
 
   const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, bj: buildBJ, vdc: () => buildCap(true), hdc: () => buildCap(false), el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };

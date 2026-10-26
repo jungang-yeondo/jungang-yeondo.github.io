@@ -187,6 +187,7 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
 <section class="ptiles">
   <a class="ptile" href="/product/stack/">${img(home.product1_image, home.product1_title)}<span class="plus" aria-hidden="true">+</span><div class="t"><div class="en">Product 01</div><h3>${esc(home.product1_title)}</h3><p>${esc(home.product1_text)}</p></div></a>
   <a class="ptile" href="/product/lpf/">${img(home.product2_image, home.product2_title)}<span class="plus" aria-hidden="true">+</span><div class="t"><div class="en">Product 02</div><h3>${esc(home.product2_title)}</h3><p>${esc(home.product2_text)}</p></div></a>
+  <a class="ptile p3dv" href="/product/parts/" aria-label="3D 모델 보기 — 주요 부품"><video src="/uploads/parts3d-loop.mp4" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video><span class="plus" aria-hidden="true">+</span><div class="t"><div class="en">3D Models</div><h3>3D 모델 보기</h3><p>주요 부품을 3D로 돌려보며 구조를 확인하세요.</p></div></a>
 </section>
 
 <section class="sec eng"><div class="wrap">

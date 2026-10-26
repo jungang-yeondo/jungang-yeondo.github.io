@@ -311,10 +311,6 @@
     g.add(new T.Mesh(new T.CylinderGeometry(rc, rc, Hc, 180, 1, true, tB, tA - tB), M.outer));
     g.add(new T.Mesh(new T.CylinderGeometry(rc - 1.6, rc - 1.6, Hc, 40, 1, true, tA - 0.01, ov), M.outer)); // 겹침판
     const step = new T.Mesh(new T.BoxGeometry(1.6, Hc, 2), M.rod); step.position.set(Math.sin(tA) * (rc - 0.8), 0, Math.cos(tA) * (rc - 0.8)); step.rotation.y = tA; g.add(step);
-    for (const s of [1, -1]) {
-      const lip = new T.Mesh(new T.TorusGeometry(rc, 1.4, 8, 200, tA - tB), M.rod); lip.rotation.set(Math.PI / 2, 0, -(Math.PI / 2 - tB)); lip.position.y = s * Hc / 2;
-      g.add(lip);
-    }
     // 브라켓: 끝을 비스듬히 깎은 판, 볼트 구멍 2개
     const sh = new T.Shape(); sh.moveTo(0, -55); sh.lineTo(12, -55); sh.lineTo(22, -42); sh.lineTo(22, 42); sh.lineTo(12, 55); sh.lineTo(0, 55); sh.lineTo(0, -55);
     for (const v of [25, -25]) { const h = new T.Path(); h.absarc(12, v, 4.5, 0, Math.PI * 2, true); sh.holes.push(h); }

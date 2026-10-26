@@ -483,8 +483,6 @@
     const lev = new T.Group(); lev.position.x = PX + 6; g.add(lev);
     const hub = new T.Mesh(new T.CylinderGeometry(15, 15, 8, 32), M.rod); hub.rotation.z = Math.PI / 2; lev.add(hub);
     const nut = new T.Mesh(new T.CylinderGeometry(8, 8, 6, 6), M.weld); nut.rotation.z = Math.PI / 2; nut.position.x = 7; lev.add(nut);
-    const sb = new T.Mesh(new T.BoxGeometry(8, 8, 10), M.rod); sb.position.set(0, 4, 18); lev.add(sb);                 // 고정 볼트 받침
-    const sbh = new T.Mesh(new T.CylinderGeometry(5, 5, 6, 6), M.weld); sbh.rotation.x = Math.PI / 2; sbh.position.set(0, 4, 26); lev.add(sbh); // 고정 볼트 머리
     const ls = new T.Shape(); ls.moveTo(-11, 0); ls.lineTo(-11, -112); ls.absarc(0, -112, 11, Math.PI, 0, false); ls.lineTo(11, 0); ls.lineTo(-11, 0);
     const slot = new T.Path(); slot.moveTo(-2, -55); slot.lineTo(-2, -110); slot.absarc(0, -110, 2, Math.PI, 0, false); slot.lineTo(2, -55); slot.lineTo(-2, -55); ls.holes.push(slot);
     const arm = new T.Mesh(new T.ExtrudeGeometry(ls, { depth: 4, bevelEnabled: true, bevelThickness: 0.8, bevelSize: 0.8, bevelSegments: 2, curveSegments: 16 }), M.rod);

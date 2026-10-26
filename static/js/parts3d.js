@@ -532,7 +532,7 @@
     // 인너 주름관 (회전체)
     const pts = [], V = (r, y) => pts.push(new T.Vector2(r, y));
     V(R1, -yT); V(R1, -82); V(R1 + 6, -70);
-    for (let i = 0; i <= 250; i++) { const y = -62.5 + 125 * i / 250; V(R1 + 10 - 10 * Math.cos(2 * Math.PI * (y + 62.5) / 25), y); }
+    for (let i = 0; i <= 500; i++) { const y = -62.5 + 125 * i / 500, c = Math.cos(2 * Math.PI * (y + 62.5) / 25); V(R1 + 10 - 10 * Math.sign(c) * Math.pow(Math.abs(c), 0.45), y); } // 산·골을 둥글게(U자)
     V(R1 + 6, 70); V(R1, 82); V(R1, yT);
     const inner = new T.Mesh(new T.LatheGeometry(pts.reverse(), 160), M.steel); inner.renderOrder = 2; g.add(inner);
     for (const s of [1, -1]) {

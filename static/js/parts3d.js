@@ -445,12 +445,15 @@
   function buildDV() {
     const M = mats(); const g = new T.Group();
     const R1 = 150, R2 = 175;
-    doublePipe(g, M, R1, R2, -240, 240, -200, 200, true, true);
+    // 관은 반투명으로: 안쪽 댐퍼 원판이 열리고 닫히는 모습이 보이도록
+    const see = (m, o) => { const c = m.clone(); c.transparent = true; c.opacity = o; c.depthWrite = false; return c; };
+    const MP = Object.assign({}, M, { steel: see(M.steel, 0.28), outer: see(M.outer, 0.22), rod: see(M.rod, 0.5) });
+    doublePipe(g, MP, R1, R2, -240, 240, -200, 200, true, true);
     // 환봉
     const shaft = new T.Mesh(new T.CylinderGeometry(6, 6, 2 * R2 + 40, 16), M.rod); shaft.rotation.z = Math.PI / 2; g.add(shaft);
     // 댐퍼 원판 + 브라켓 (환봉과 함께 회전)
     const dmp = new T.Group(); g.add(dmp);
-    const disk = new T.Mesh(new T.CylinderGeometry(R1 - 15, R1 - 15, 3, 96), M.steel); dmp.add(disk);
+    const disk = new T.Mesh(new T.CylinderGeometry(R1 - 15, R1 - 15, 3, 96), M.steel); disk.renderOrder = 2; dmp.add(disk);
     for (const x of [-80, 0, 80]) { const b = new T.Mesh(new T.BoxGeometry(24, 8, 22), M.outer); b.position.set(x, 4, 0); dmp.add(b); }
     // 손잡이 받침판 + OPEN/SHUT 눈금
     const plate = new T.Mesh(new T.BoxGeometry(2, 110, 130), M.outer); plate.position.x = R2 + 2; g.add(plate);

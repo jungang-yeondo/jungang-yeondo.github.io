@@ -302,22 +302,27 @@
     const seam = new T.Mesh(new T.BoxGeometry(3, L - 4, 1.2), M.weld); seam.position.set(Math.sin(0.5) * (rs + 0.6), 0, Math.cos(0.5) * (rs + 0.6)); seam.rotation.y = 0.5; g.add(seam);
     return { obj: g, tilt: 0.3 };
   }
-  // 카바: 이중관일 때 아우트(D350)에 덮는 분할 카바. 이음부 한쪽에 겹침판, 양쪽 브라켓을 볼트로 체결
+  // 카바: 이중관일 때 아우트(D350)에 덮는 분할 카바 (체결 전, 벌어진 상태)
+  // 한쪽 끝: 겹침판 + 브라켓 / 다른 쪽 끝: 브라켓. 브라켓은 위·아래 2조, 볼트 구멍 2개씩
   function buildAGcv() {
     const M = mats(); const g = new T.Group();
-    const rc = 178, Hc = 420, gap = 3, ga = 2 * Math.asin(gap / rc), ov = 55 / rc;
-    g.add(new T.Mesh(new T.CylinderGeometry(rc, rc, Hc, 180, 1, true, ga / 2, Math.PI * 2 - ga), M.outer));
-    // 겹침판: 이음부 안쪽에 덧대어 반대편 밑으로 들어감
-    g.add(new T.Mesh(new T.CylinderGeometry(rc - 1.6, rc - 1.6, Hc, 40, 1, true, -ga / 2 - 0.02, ga + ov), M.outer));
-    const edge = new T.Mesh(new T.BoxGeometry(1.5, Hc, 1.5), M.weld); edge.position.set(Math.sin(ga / 2 + ov) * (rc - 0.8), 0, Math.cos(ga / 2 + ov) * (rc - 0.8)); g.add(edge);
-    for (const s of [1, -1]) { const lip = new T.Mesh(new T.TorusGeometry(rc, 1.4, 8, 200), M.rod); lip.rotation.x = Math.PI / 2; lip.position.y = s * Hc / 2; g.add(lip); }
-    // 브라켓 2조 (위·아래), 조마다 볼트 2개
-    for (const yc of [Hc / 2 - 80, -Hc / 2 + 80]) {
-      for (const s of [1, -1]) { const p = new T.Mesh(new T.BoxGeometry(2.5, 100, 24), M.outer); p.position.set(s * (gap + 1.2), yc, rc + 12); g.add(p); }
-      for (const y of [yc + 25, yc - 25]) {
-        const bo = new T.Mesh(new T.CylinderGeometry(4, 4, gap * 2 + 30, 12), M.rod); bo.rotation.z = Math.PI / 2; bo.position.set(0, y, rc + 14); g.add(bo);
-        for (const s of [1, -1]) { const n = new T.Mesh(new T.CylinderGeometry(7.5, 7.5, 6, 6), M.weld); n.rotation.z = Math.PI / 2; n.position.set(s * (gap + 2.5 + 3), y, rc + 14); g.add(n); }
-      }
+    const rc = 178, Hc = 420, open = 0.5, ov = 60 / rc;
+    const tB = open, tA = Math.PI * 2 - open;                 // B: 브라켓만 / A: 겹침판 쪽
+    g.add(new T.Mesh(new T.CylinderGeometry(rc, rc, Hc, 180, 1, true, tB, tA - tB), M.outer));
+    g.add(new T.Mesh(new T.CylinderGeometry(rc - 1.6, rc - 1.6, Hc, 40, 1, true, tA - 0.01, ov), M.outer)); // 겹침판
+    const step = new T.Mesh(new T.BoxGeometry(1.6, Hc, 2), M.rod); step.position.set(Math.sin(tA) * (rc - 0.8), 0, Math.cos(tA) * (rc - 0.8)); step.rotation.y = tA; g.add(step);
+    for (const s of [1, -1]) {
+      const lip = new T.Mesh(new T.TorusGeometry(rc, 1.4, 8, 200, tA - tB), M.rod); lip.rotation.set(Math.PI / 2, 0, -(Math.PI / 2 - tB)); lip.position.y = s * Hc / 2;
+      g.add(lip);
+    }
+    // 브라켓: 끝을 비스듬히 깎은 판, 볼트 구멍 2개
+    const sh = new T.Shape(); sh.moveTo(0, -55); sh.lineTo(12, -55); sh.lineTo(22, -42); sh.lineTo(22, 42); sh.lineTo(12, 55); sh.lineTo(0, 55); sh.lineTo(0, -55);
+    for (const v of [25, -25]) { const h = new T.Path(); h.absarc(12, v, 4.5, 0, Math.PI * 2, true); sh.holes.push(h); }
+    const pg = new T.ExtrudeGeometry(sh, { depth: 2.5, bevelEnabled: false, curveSegments: 16 }); pg.translate(0, 0, -1.25);
+    for (const th of [tB + 0.03, tA - 0.03]) for (const yc of [Hc / 2 - 80, -Hc / 2 + 80]) {
+      const grp = new T.Group(); grp.rotation.y = th;
+      const p = new T.Mesh(pg, M.outer); p.rotation.y = -Math.PI / 2; p.position.set(0, yc, rc - 1); grp.add(p);
+      g.add(grp);
     }
     return { obj: g, tilt: 0.3 };
   }

@@ -231,7 +231,7 @@
   // ---------- 모델: MT / NT 90도 합류관 ----------
   // 메인 외부관 길이 = 가지관 관경 + 200, 가지관은 메인 외부관에서 100mm 돌출
   function buildTee(nt) {
-    const R1 = 150, R2 = 175, r1 = nt ? 100 : R1, r2 = nt ? 125 : R2;
+    const R1 = 150, R2 = 175, r1 = nt ? 75 : R1, r2 = nt ? 100 : R2;
     const yO = (2 * r2 + 200) / 2;
     return buildBranched(R1, R2, r1, r2, yO + 40, yO, Math.PI / 2, 0, 100, 0.35);
   }
@@ -240,7 +240,7 @@
   // 가지관 아래 접합부 = 메인 하단 + 100, 위쪽 사타구니(가지관 윗선이 메인에 붙는 점)에서
   // 메인관 끝까지와 가지관 끝까지의 짧은 면 길이를 같게(200) 맞춤
   function buildY(jt) {
-    const R1 = 150, R2 = 175, r1 = jt ? 100 : R1, r2 = jt ? 125 : R2;
+    const R1 = 150, R2 = 175, r1 = jt ? 75 : R1, r2 = jt ? 100 : R2;
     const S = 200, open = 2 * Math.SQRT2 * r2;           // 메인 외부관 위 가지관 구멍 높이
     const yO = (100 + open + S) / 2, yT = yO + 40;
     const c = -yO + 100 - R2 + Math.SQRT2 * r2;          // 가지관 축이 메인 축과 만나는 높이

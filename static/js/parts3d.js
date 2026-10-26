@@ -330,7 +330,7 @@
   // 속관: 큰 관 띠(100) + 도넛 판 + 작은 관 띠(100), 양 끝 밑깎이
   function buildSRin() {
     const M = mats(); const g = new T.Group();
-    const Rb = 200, Rs = 150, Hb = 100;
+    const Rb = 230, Rs = 140, Hb = 100;
     const cyl = (r, y0, y1) => { const c = new T.Mesh(new T.CylinderGeometry(r, r, y1 - y0, 160, 1, true), M.steel); c.position.y = (y0 + y1) / 2; g.add(c); };
     const ann = (r0, r1, y, m) => { const o = new T.Mesh(new T.RingGeometry(r0, r1, 160), m || M.steel); o.rotation.x = -Math.PI / 2; o.position.y = y; g.add(o); };
     const ring = (r, t, y, m) => { const o = new T.Mesh(new T.TorusGeometry(r, t, 8, 180), m); o.rotation.x = Math.PI / 2; o.position.y = y; g.add(o); };
@@ -341,8 +341,8 @@
     ann(Rs, Rs + 10, -Hb); ring(Rs + 10, 1.2, -Hb, M.rod); // 아래 밑깎이
     return { obj: g, tilt: 0.35, zoom: 1.45 };
   }
-  // SR 카바: 큰 관 아우트(D450)를 덮고, 아래 발판은 작은 관 아우트(D350)까지
-  function buildSRcv() { const M = mats(); const g = new T.Group(); makeCover(g, M, 228, 300, 178); return { obj: g, tilt: 0.3, zoom: 1.35 }; }
+  // SR 카바: 큰 관 아우트(D510)를 덮고, 아래 발판은 작은 관 아우트(D330)까지
+  function buildSRcv() { const M = mats(); const g = new T.Group(); makeCover(g, M, 258, 300, 168); return { obj: g, tilt: 0.3, zoom: 1.35 }; }
 
   const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 

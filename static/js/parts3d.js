@@ -522,7 +522,7 @@
 
   // ---------- 모델: DS477 응축수 배출관 ----------
   // 477 이중관 중앙에 25A 니쁠을 인너 벽까지 닿게 용접 (인너 안쪽으로는 돌출 없음)
-  function buildDS() {
+  function buildDS(vert) {
     const M = mats(); const g = new T.Group();
     const R1 = 150, R2 = 175, rn = 17;
     const P = new T.Vector3(0, 0, 0), u = new T.Vector3(1, 0, 0), uInv = { value: new T.Matrix4() };
@@ -540,8 +540,19 @@
     // 아우트와 만나는 용접선
     const pts = []; for (let i = 0; i <= 96; i++) { const f = i / 96 * Math.PI * 2, z = (rn + 1) * Math.cos(f); pts.push(new T.Vector3(Math.sqrt(R2 * R2 - z * z) + 0.8, -(rn + 1) * Math.sin(f), z)); }
     g.add(new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts, true), 128, 1.6, 6, true), M.weld));
+    if (vert) {
+      // 수직관: 벽을 타고 흐르는 물을 받는 도넛 판(니쁠 구멍 바닥 높이) + 안쪽 고임턱(니쁠 구멍보다 높게)
+      const yb = -(rn - 4), wP = 10, hL = 40, tk = 2;
+      const plate = new T.Mesh(new T.RingGeometry(R1 - wP, R1, 160), M.steel); plate.rotation.x = -Math.PI / 2; plate.position.y = yb; g.add(plate);
+      const plateU = new T.Mesh(new T.RingGeometry(R1 - wP, R1, 160), M.steel2); plateU.rotation.x = Math.PI / 2; plateU.position.y = yb - tk; g.add(plateU);
+      const lip = new T.Mesh(new T.CylinderGeometry(R1 - wP, R1 - wP, hL + tk, 160, 1, true), M.steel); lip.position.y = yb - tk + (hL + tk) / 2; g.add(lip);
+      const lipT = new T.Mesh(new T.TorusGeometry(R1 - wP + 0.4, 1, 6, 160), M.steel); lipT.rotation.x = Math.PI / 2; lipT.position.y = yb + hL; g.add(lipT);
+      const wl = new T.Mesh(new T.TorusGeometry(R1 - 0.6, 0.9, 6, 160), M.weld); wl.rotation.x = Math.PI / 2; wl.position.y = yb + 0.5; g.add(wl); // 인너와 판 알곤용접
+    }
     g.traverse((o) => { if (o.isMesh && (o.material === MM.steel || o.material === MM.outer)) o.onBeforeRender = () => { uInv.value.copy(g.matrixWorld).invert(); }; });
-    return { obj: g, tilt: 0.3, zoom: 1.1 };
+    if (vert) return { obj: g, tilt: 0.75, zoom: 1.1 };
+    const w = new T.Group(); g.rotation.z = -Math.PI / 2; w.add(g); // 수평라인: 니쁠이 아래로
+    return { obj: w, tilt: 0.3, zoom: 1.1 };
   }
 
   // ---------- 모델: BJ 발전기용 열팽창 주름관 ----------
@@ -622,11 +633,11 @@
     return { obj: g, tilt: 0.45, zoom: 1.2 };
   }
 
-  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, ds: buildDS, bj: buildBJ, sc: buildSC, vdc: () => buildCap(true), hdc: () => buildCap(false), el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
+  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, dsh: () => buildDS(false), dsv: () => buildDS(true), bj: buildBJ, sc: buildSC, vdc: () => buildCap(true), hdc: () => buildCap(false), el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
   // ---------- 뷰어 ----------
   // 전환 버튼으로 함께 보여줄 모델 묶음
-  const SETS = { mt: [['MT', 'mt'], ['NT', 'nt']], lt: [['LT', 'lt'], ['JT', 'jt']], el: [['EL90', 'el90'], ['EL45', 'el45']], ag: [['속관', 'agin'], ['카바', 'agcv']], sr: [['속관', 'srin'], ['카바', 'srcv']], tr: [['단관', 'trs'], ['이중관', 'trd']], fd: [['사각', 'fdsq'], ['호퍼', 'fdhp']], cap: [['VDC', 'vdc'], ['HDC', 'hdc']] };
+  const SETS = { ds: [['수평라인', 'dsh'], ['수직라인', 'dsv']], mt: [['MT', 'mt'], ['NT', 'nt']], lt: [['LT', 'lt'], ['JT', 'jt']], el: [['EL90', 'el90'], ['EL45', 'el45']], ag: [['속관', 'agin'], ['카바', 'agcv']], sr: [['속관', 'srin'], ['카바', 'srcv']], tr: [['단관', 'trs'], ['이중관', 'trd']], fd: [['사각', 'fdsq'], ['호퍼', 'fdhp']], cap: [['VDC', 'vdc'], ['HDC', 'hdc']] };
   function mount(el) {
     const set = SETS[el.dataset.model] || [[null, el.dataset.model]];
     if (!set.every(([, n]) => MODELS[n])) return;

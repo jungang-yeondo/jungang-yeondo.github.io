@@ -302,32 +302,53 @@
     const seam = new T.Mesh(new T.BoxGeometry(3, L - 4, 1.2), M.weld); seam.position.set(Math.sin(0.5) * (rs + 0.6), 0, Math.cos(0.5) * (rs + 0.6)); seam.rotation.y = 0.5; g.add(seam);
     return { obj: g, tilt: 0.3 };
   }
-  // 카바: 이중관일 때 아우트(D350)에 덮는 분할 카바 (체결 전, 벌어진 상태)
+  // 공용 분할 카바 (체결 전, 벌어진 상태): 스텐 판을 말아 만든 것
   // 한쪽 끝: 겹침판 + 브라켓 / 다른 쪽 끝: 브라켓. 브라켓은 위·아래 2조, 볼트 구멍 2개씩
-  function buildAGcv() {
-    const M = mats(); const g = new T.Group();
-    const rc = 178, Hc = 420, open = 0.5, ov = 60 / rc;
-    const tB = open, tA = Math.PI * 2 - open;                 // B: 브라켓만 / A: 겹침판 쪽
+  // floorR: 있으면 아래쪽에 작은 관 쪽으로 체결되는 발판(도넛 판)을 같은 각도로 벌려서 붙임
+  function makeCover(g, M, rc, Hc, floorR) {
+    const open = 0.5, ov = 60 / rc, tB = open, tA = Math.PI * 2 - open;
     g.add(new T.Mesh(new T.CylinderGeometry(rc, rc, Hc, 180, 1, true, tB, tA - tB), M.outer));
     g.add(new T.Mesh(new T.CylinderGeometry(rc - 1.6, rc - 1.6, Hc, 40, 1, true, tA - 0.01, ov), M.outer)); // 겹침판
     const step = new T.Mesh(new T.BoxGeometry(1.6, Hc, 2), M.rod); step.position.set(Math.sin(tA) * (rc - 0.8), 0, Math.cos(tA) * (rc - 0.8)); step.rotation.y = tA; g.add(step);
-    // 브라켓: 끝을 비스듬히 깎은 판, 볼트 구멍 2개
+    if (floorR) {
+      for (const dy of [0, 2]) { const f = new T.Mesh(new T.RingGeometry(floorR, rc, 120, 1, tB - Math.PI / 2, tA - tB), M.outer); f.rotation.x = -Math.PI / 2; f.position.y = -Hc / 2 + dy; g.add(f); }
+    }
     const sh = new T.Shape(); sh.moveTo(0, -55); sh.lineTo(12, -55); sh.lineTo(22, -42); sh.lineTo(22, 42); sh.lineTo(12, 55); sh.lineTo(0, 55); sh.lineTo(0, -55);
     for (const v of [25, -25]) { const h = new T.Path(); h.absarc(12, v, 4.5, 0, Math.PI * 2, true); sh.holes.push(h); }
     const pg = new T.ExtrudeGeometry(sh, { depth: 2.5, bevelEnabled: false, curveSegments: 16 }); pg.translate(0, 0, -1.25);
-    for (const th of [tB + 0.03, tA - 0.03]) for (const yc of [Hc / 2 - 80, -Hc / 2 + 80]) {
+    const yy = Math.min(80, Hc / 2 - 60);
+    for (const th of [tB + 0.03, tA - 0.03]) for (const yc of [Hc / 2 - yy, -Hc / 2 + yy]) {
       const grp = new T.Group(); grp.rotation.y = th;
       const p = new T.Mesh(pg, M.outer); p.rotation.y = -Math.PI / 2; p.position.set(0, yc, rc - 1); grp.add(p);
       g.add(grp);
     }
-    return { obj: g, tilt: 0.3 };
   }
+  // AG 카바: 이중관일 때 아우트(D350)에 덮음
+  function buildAGcv() { const M = mats(); const g = new T.Group(); makeCover(g, M, 178, 420); return { obj: g, tilt: 0.3 }; }
 
-  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
+  // ---------- 모델: SR 직각형 확대 이음관 ----------
+  // 속관: 큰 관 띠(100) + 도넛 판 + 작은 관 띠(100), 양 끝 밑깎이
+  function buildSRin() {
+    const M = mats(); const g = new T.Group();
+    const Rb = 200, Rs = 150, Hb = 100;
+    const cyl = (r, y0, y1) => { const c = new T.Mesh(new T.CylinderGeometry(r, r, y1 - y0, 160, 1, true), M.steel); c.position.y = (y0 + y1) / 2; g.add(c); };
+    const ann = (r0, r1, y, m) => { const o = new T.Mesh(new T.RingGeometry(r0, r1, 160), m || M.steel); o.rotation.x = -Math.PI / 2; o.position.y = y; g.add(o); };
+    const ring = (r, t, y, m) => { const o = new T.Mesh(new T.TorusGeometry(r, t, 8, 180), m); o.rotation.x = Math.PI / 2; o.position.y = y; g.add(o); };
+    cyl(Rb, 0, Hb); cyl(Rs, -Hb, 0);
+    ann(Rs, Rb, 0); ann(Rs, Rb, 2);                       // 도넛 판
+    ring(Rb, 1.6, 1, M.weld); ring(Rs, 1.6, 0, M.weld);  // 용접선
+    ann(Rb, Rb + 10, Hb); ring(Rb + 10, 1.2, Hb, M.rod);  // 위 밑깎이
+    ann(Rs, Rs + 10, -Hb); ring(Rs + 10, 1.2, -Hb, M.rod); // 아래 밑깎이
+    return { obj: g, tilt: 0.35 };
+  }
+  // SR 카바: 큰 관 아우트(D450)를 덮고, 아래 발판은 작은 관 아우트(D350)까지
+  function buildSRcv() { const M = mats(); const g = new T.Group(); makeCover(g, M, 228, 300, 178); return { obj: g, tilt: 0.3 }; }
+
+  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
   // ---------- 뷰어 ----------
   // 전환 버튼으로 함께 보여줄 모델 묶음
-  const SETS = { mt: [['MT', 'mt'], ['NT', 'nt']], lt: [['LT', 'lt'], ['JT', 'jt']], el: [['EL90', 'el90'], ['EL45', 'el45']], ag: [['속관', 'agin'], ['카바', 'agcv']] };
+  const SETS = { mt: [['MT', 'mt'], ['NT', 'nt']], lt: [['LT', 'lt'], ['JT', 'jt']], el: [['EL90', 'el90'], ['EL45', 'el45']], ag: [['속관', 'agin'], ['카바', 'agcv']], sr: [['속관', 'srin'], ['카바', 'srcv']] };
   function mount(el) {
     const set = SETS[el.dataset.model] || [[null, el.dataset.model]];
     if (!set.every(([, n]) => MODELS[n])) return;

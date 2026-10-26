@@ -590,7 +590,7 @@
     const sh = new T.Shape(); sh.moveTo(0, -48); sh.lineTo(10, -42); sh.lineTo(16, -36); sh.lineTo(16, 36); sh.lineTo(10, 42); sh.lineTo(0, 48); sh.lineTo(0, -48);
     for (const v of [26, -26]) { const h = new T.Path(); h.absarc(8, v, 3.5, 0, Math.PI * 2, true); sh.holes.push(h); }
     const bg = new T.ExtrudeGeometry(sh, { depth: 2, bevelEnabled: false, curveSegments: 16 }); bg.translate(0, 0, -1);
-    const bracket = (x, flip) => { const b = new T.Mesh(bg, M.rod); b.rotation.set(0, Math.PI / 2, -Math.PI / 2); b.position.set(x, 0, 0); const foot = new T.Mesh(new T.BoxGeometry(14, 1.2, 96), M.rod); foot.position.set(x + (flip ? 7 : -7), -0.8, 0); // 180° 돌려 안쪽 면에 부착 return [b, foot]; };
+    const bracket = (x, flip) => { const b = new T.Mesh(bg, M.rod); b.rotation.set(0, Math.PI / 2, -Math.PI / 2); b.position.set(x, 0, 0); const foot = new T.Mesh(new T.BoxGeometry(14, 1.2, 96), M.rod); foot.position.set(x + (flip ? 7 : -7), -0.8, 0); /* 180° 돌려 안쪽 면에 부착 */ return [b, foot]; };
     // tB 끝: 브라켓이 끝에 / tA 끝: 겹침판이 더 나와 있고 브라켓은 그 안쪽
     const rB = (Ri + Ro) / 2, offA = ov * rB;
     onLine(tB, bracket(-16, false));

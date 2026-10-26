@@ -545,7 +545,7 @@
   // 원형 띠(위 끝 밑깎이) + 하향 원뿔(꼬깔). VDC는 원뿔 끝에 25A 니쁠(반으로 잘라 용접), HDC는 뾰족하게 막힘
   function buildCap(vdc) {
     const M = mats(); const g = new T.Group();
-    const Rb = 200, Hb = 130;
+    const Rb = 200, Hb = 100; // 100 띠
     const band = new T.Mesh(new T.CylinderGeometry(Rb, Rb, Hb, 160, 1, true), M.steel); band.position.y = Hb / 2; g.add(band);
     const fl = new T.Mesh(new T.RingGeometry(Rb, Rb + 10, 160), M.steel); fl.rotation.x = -Math.PI / 2; fl.position.y = Hb; g.add(fl);
     const rim = new T.Mesh(new T.TorusGeometry(Rb + 10, 1.2, 8, 180), M.rod); rim.rotation.x = Math.PI / 2; rim.position.y = Hb; g.add(rim);

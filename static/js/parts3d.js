@@ -358,8 +358,6 @@
     ring(Rb, 1.6, 130, M.weld); ring(Rs, 1.6, -120, M.weld);
     ann(Rb, Rb + 10, 200); ring(Rb + 10, 1.2, 200, M.rod);
     ann(Rs, Rs + 10, -150); ring(Rs + 10, 1.2, -150, M.rod);
-    const seam = new T.Mesh(new T.BoxGeometry(3, 254, 1.2), M.weld); const sa = 0.5, sr = (Rb + Rs) / 2 + 0.8;
-    seam.position.set(Math.sin(sa) * sr, 5, Math.cos(sa) * sr); seam.rotation.set(0, sa, 0); seam.rotateX(-Math.atan2(Rb - Rs, 250)); g.add(seam);
     return { obj: g, tilt: 0.35, zoom: 1.35 };
   }
   function buildTRd() {

@@ -592,9 +592,8 @@
     const bracket = (x, flip) => { const b = new T.Mesh(bg, M.rod); b.rotation.set(0, Math.PI / 2, Math.PI / 2); b.position.set(x, 0, 0); const foot = new T.Mesh(new T.BoxGeometry(14, 1.2, 96), M.rod); foot.position.set(x + (flip ? 7 : -7), 0.8, 0); return [b, foot]; };
     // tB 끝: 브라켓이 끝에 / tA 끝: 겹침판이 더 나와 있고 브라켓은 그 안쪽
     const rB = (Ri + Ro) / 2, offA = ov * rB;
-    onLine(tB, bracket(-2, false));
+    onLine(tB, bracket(-16, false));
     onLine(tA, [...bracket(2, true), rivet(16, -30), rivet(16, 30)]);
-    const edge = new T.Mesh(new T.BoxGeometry(1.2, 0.8, L), M.weld); onLine(tA + ov, [edge]);
     return { obj: g, tilt: 0.45, zoom: 1.2 };
   }
 

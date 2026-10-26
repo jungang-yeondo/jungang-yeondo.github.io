@@ -407,13 +407,21 @@
     const M = mats(); const g = new T.Group();
     const Rt = 250, half = 450;
     fdBase(g, M, Rt, half);
-    // 호퍼: 띠 아래 원형에서 바닥 사각으로 바로 이어지는 변환 면
-    const N = 160, pos = [], idx = [];
-    for (let i = 0; i <= N; i++) {
-      const f = i / N * Math.PI * 2, c = Math.cos(f), s = Math.sin(f), k = half / Math.max(Math.abs(c), Math.abs(s));
-      pos.push(Rt * c, 300, Rt * s, k * c, 0, k * s);
+    // 호퍼: 띠 아래 원형에서 바닥 사각으로 둥글고 완만하게 변하는 면 (단면이 원 → 둥근 사각 → 사각으로 서서히 변함)
+    const N = 192, ROWS = 36, pos = [], idx = [];
+    for (let rI = 0; rI <= ROWS; rI++) {
+      const u = rI / ROWS, e = u * u * (3 - 2 * u);            // 완만한 변화
+      const size = Rt + (half - Rt) * e, p = 2 * Math.pow(25, u * u), y = 300 * (1 - u);
+      for (let i = 0; i <= N; i++) {
+        const f = i / N * Math.PI * 2, c = Math.cos(f), s = Math.sin(f);
+        const k = size / Math.pow(Math.pow(Math.abs(c), p) + Math.pow(Math.abs(s), p), 1 / p);
+        pos.push(k * c, y, k * s);
+      }
     }
-    for (let i = 0; i < N; i++) { const p = i * 2; idx.push(p, p + 1, p + 2, p + 1, p + 3, p + 2); }
+    for (let rI = 0; rI < ROWS; rI++) for (let i = 0; i < N; i++) {
+      const a0 = rI * (N + 1) + i, b0 = a0 + N + 1;
+      idx.push(a0, b0, a0 + 1, a0 + 1, b0, b0 + 1);
+    }
     const geo = new T.BufferGeometry(); geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3)); geo.setIndex(idx); geo.computeVertexNormals();
     g.add(new T.Mesh(geo, M.steel));
     return { obj: g, tilt: 0.45, zoom: 1.5 };

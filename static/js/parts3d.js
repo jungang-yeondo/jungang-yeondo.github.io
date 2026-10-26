@@ -479,7 +479,30 @@
     return { obj: g, tilt: 0.55, actions: [['OPEN', () => { target = Math.PI / 2; }], ['SHUT', () => { target = 0; }]], start: 1 };
   }
 
-  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
+  // ---------- 모델: CH477 점검구 ----------
+  // 이중관 477 센터에 Ø100 체크홀: 인너에서 시작해 공기단열층(25)을 지나 아우트 밖으로 75 돌출, 끝에 원형 후렌지
+  function buildCH() {
+    const M = mats(); const g = new T.Group();
+    const R1 = 150, R2 = 175, rc = 50, out = 75;
+    const P = new T.Vector3(0, 0, 0), u = new T.Vector3(1, 0, 0), uInv = { value: new T.Matrix4() };
+    const MM = Object.assign({}, M, { steel: holeMat(M.steel, P, u, rc, uInv), outer: holeMat(M.outer, P, u, rc, uInv) });
+    doublePipe(g, MM, R1, R2, -240, 240, -200, 200, true, true);
+    const xe = R2 + out;
+    saddleTube(g, M.steel, R1, P, u, rc, xe);
+    // 아우트와 만나는 용접선
+    const pts = []; for (let i = 0; i <= 96; i++) { const f = i / 96 * Math.PI * 2, y = rc * Math.sin(f) * -1, z = rc * Math.cos(f); pts.push(new T.Vector3(Math.sqrt(R2 * R2 - z * z) + 0.8, y, z)); }
+    g.add(new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts, true), 128, 1.6, 6, true), M.weld));
+    // 끝 원형 후렌지 (볼트 구멍 6개)
+    const sh = new T.Shape(); sh.absarc(0, 0, rc + 38, 0, Math.PI * 2, false);
+    const hin = new T.Path(); hin.absarc(0, 0, rc, 0, Math.PI * 2, true); sh.holes.push(hin);
+    for (let k = 0; k < 6; k++) { const a = k * Math.PI / 3, h = new T.Path(); h.absarc(Math.cos(a) * (rc + 22), Math.sin(a) * (rc + 22), 5, 0, Math.PI * 2, true); sh.holes.push(h); }
+    const fl = new T.Mesh(new T.ExtrudeGeometry(sh, { depth: 4, bevelEnabled: false, curveSegments: 48 }), M.outer);
+    fl.rotation.y = Math.PI / 2; fl.position.x = xe - 4; g.add(fl);
+    g.traverse((o) => { if (o.isMesh && (o.material === MM.steel || o.material === MM.outer)) o.onBeforeRender = () => { uInv.value.copy(g.matrixWorld).invert(); }; });
+    return { obj: g, tilt: 0.3, zoom: 1.1 };
+  }
+
+  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
   // ---------- 뷰어 ----------
   // 전환 버튼으로 함께 보여줄 모델 묶음

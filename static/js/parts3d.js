@@ -606,14 +606,9 @@
   function mount(el) {
     const set = SETS[el.dataset.model] || [[null, el.dataset.model]];
     if (!set.every(([, n]) => MODELS[n])) return;
-    const canvas = document.createElement('canvas'); el.prepend(canvas);
-    const renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.outputEncoding = T.sRGBEncoding;
-    renderer.toneMapping = T.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.05;
+    // 브라우저는 WebGL 화면을 동시에 약 16개까지만 유지 → 화면 근처에 있을 때만 만들고, 벗어나면 정리
+    let canvas = null, renderer = null;
     const scene = new T.Scene();
-    scene.environment = envMap(renderer);
     scene.add(new T.HemisphereLight(0xffffff, 0x20242c, 0.25));
     const key = new T.DirectionalLight(0xffffff, 0.6); key.position.set(700, 1200, 900); scene.add(key);
     const root = new T.Group(); scene.add(root); root.rotation.y = 0.5;
@@ -622,7 +617,7 @@
     let cur = null, halfW = 1, halfH = 1, rad = 1, fitK = 1.2, zoomK = 1;
     const size = () => {
       const w = el.clientWidth, h = el.clientHeight; if (!w || !h) return;
-      renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+      if (renderer) renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
       const d = Math.max(halfW * 1.04 / (tanH * Math.min(camera.aspect, 1.3)), halfH * 1.4 / tanH, rad * fitK) * zoomK;
       camera.position.set(0, rad * 0.05, d); camera.lookAt(0, 0, 0);
     };
@@ -677,12 +672,23 @@
     // 3D 영역을 잡고 움직일 때 페이지 스크롤 막기 (모바일). 전환 버튼은 제외
     el.addEventListener('touchstart', (e) => { if (e.touches.length === 1 && !onSw(e)) e.preventDefault(); }, { passive: false });
     el.addEventListener('touchmove', (e) => { if (e.touches.length === 1 && !onSw(e)) e.preventDefault(); }, { passive: false });
-    new IntersectionObserver((es) => { visible = es[0].isIntersecting; }, { rootMargin: '100px' }).observe(el);
+    const init = () => {
+      canvas = document.createElement('canvas'); el.prepend(canvas);
+      renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.outputEncoding = T.sRGBEncoding;
+      renderer.toneMapping = T.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.05;
+      scene.environment = envMap(renderer);
+      size();
+    };
+    const drop = () => { if (!renderer) return; renderer.dispose(); renderer.forceContextLoss(); canvas.remove(); renderer = null; canvas = null; };
+    new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (visible && !renderer) init(); else if (!visible && renderer) drop(); }, { rootMargin: '300px' }).observe(el);
     (function loop() {
       requestAnimationFrame(loop); if (!visible) return;
       if (!drag) { idle++; vx *= 0.95; vy *= 0.9; root.rotation.y += vx; root.rotation.x = Math.max(-1.45, Math.min(1.45, root.rotation.x + vy)); if (idle > 90) root.rotation.y += 0.004; }
       if (cur && cur.userData.tick) cur.userData.tick();
-      renderer.render(scene, camera);
+      if (renderer) renderer.render(scene, camera);
     })();
   }
 

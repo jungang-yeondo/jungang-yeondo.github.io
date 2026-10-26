@@ -423,7 +423,24 @@
     return { obj: g, tilt: 0.45, zoom: 1.5 };
   }
 
-  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
+  // ---------- 모델: CF 장비 연결용 원형 플랜지 ----------
+  // 원형 후렌지(볼트 구멍) 위에 띠 하나, 띠 위 끝 밑깎이
+  function buildCF() {
+    const M = mats(); const g = new T.Group();
+    const Rt = 250, Hb = 110, Ro = 340;
+    const band = new T.Mesh(new T.CylinderGeometry(Rt, Rt, Hb, 160, 1, true), M.steel); band.position.y = Hb / 2; g.add(band);
+    const fl = new T.Mesh(new T.RingGeometry(Rt, Rt + 10, 160), M.steel); fl.rotation.x = -Math.PI / 2; fl.position.y = Hb; g.add(fl);
+    const rim = new T.Mesh(new T.TorusGeometry(Rt + 10, 1.2, 8, 180), M.rod); rim.rotation.x = Math.PI / 2; rim.position.y = Hb; g.add(rim);
+    const weld = new T.Mesh(new T.TorusGeometry(Rt + 1, 1.8, 8, 180), M.weld); weld.rotation.x = Math.PI / 2; weld.position.y = 0; g.add(weld);
+    const sh = new T.Shape(); sh.absarc(0, 0, Ro, 0, Math.PI * 2, false);
+    const inner = new T.Path(); inner.absarc(0, 0, Rt, 0, Math.PI * 2, true); sh.holes.push(inner);
+    for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4 + Math.PI / 8, h = new T.Path(); h.absarc(Math.cos(a) * 300, Math.sin(a) * 300, 10, 0, Math.PI * 2, true); sh.holes.push(h); }
+    const fg = new T.ExtrudeGeometry(sh, { depth: 8, bevelEnabled: false, curveSegments: 64 });
+    const flange = new T.Mesh(fg, M.outer); flange.rotation.x = -Math.PI / 2; flange.position.y = -8; g.add(flange);
+    return { obj: g, tilt: 0.45, zoom: 1.05 };
+  }
+
+  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
   // ---------- 뷰어 ----------
   // 전환 버튼으로 함께 보여줄 모델 묶음

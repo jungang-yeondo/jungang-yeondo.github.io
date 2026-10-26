@@ -541,11 +541,37 @@
     return { obj: g, tilt: 0.35, zoom: 1.05 };
   }
 
-  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, bj: buildBJ, el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
+  // ---------- 모델: VDC / HDC 마감 및 배수용 캡 ----------
+  // 원형 띠(위 끝 밑깎이) + 하향 원뿔(꼬깔). VDC는 원뿔 끝에 25A 니쁠(반으로 잘라 용접), HDC는 뾰족하게 막힘
+  function buildCap(vdc) {
+    const M = mats(); const g = new T.Group();
+    const Rb = 200, Hb = 130;
+    const band = new T.Mesh(new T.CylinderGeometry(Rb, Rb, Hb, 160, 1, true), M.steel); band.position.y = Hb / 2; g.add(band);
+    const fl = new T.Mesh(new T.RingGeometry(Rb, Rb + 10, 160), M.steel); fl.rotation.x = -Math.PI / 2; fl.position.y = Hb; g.add(fl);
+    const rim = new T.Mesh(new T.TorusGeometry(Rb + 10, 1.2, 8, 180), M.rod); rim.rotation.x = Math.PI / 2; rim.position.y = Hb; g.add(rim);
+    const wr = new T.Mesh(new T.TorusGeometry(Rb, 1.6, 8, 180), M.weld); wr.rotation.x = Math.PI / 2; g.add(wr);
+    const rn = 17, Hc = vdc ? 170 : 120, rt = vdc ? rn : 0.01;
+    const cone = new T.Mesh(new T.CylinderGeometry(Rb, rt, Hc, 160, 1, true), M.steel); cone.position.y = -Hc / 2; g.add(cone);
+    // 꼬깔 이음 용접선
+    const seam = new T.Mesh(new T.BoxGeometry(2.5, Math.hypot(Hc, Rb - rt), 1.2), M.weld);
+    const sa = 0.6, mr = (Rb + rt) / 2 + 0.6; seam.position.set(Math.sin(sa) * mr, -Hc / 2, Math.cos(sa) * mr); seam.rotation.set(0, sa, 0); seam.rotateX(Math.atan2(Rb - rt, Hc)); g.add(seam);
+    if (vdc) {
+      // 25A 니쁠 반쪽: 민자 부분 용접 + 아래로 나사산
+      const y0 = -Hc;
+      const plain = new T.Mesh(new T.CylinderGeometry(rn, rn, 10, 32), M.rod); plain.position.y = y0 - 5; g.add(plain);
+      const thr = new T.Mesh(new T.CylinderGeometry(rn - 1.2, rn - 1.2, 30, 32), M.rod); thr.position.y = y0 - 25; g.add(thr);
+      for (let k = 0; k < 13; k++) { const tr = new T.Mesh(new T.TorusGeometry(rn - 1, 1.1, 6, 40), M.rod); tr.rotation.x = Math.PI / 2; tr.position.y = y0 - 12 - k * 2.2; g.add(tr); }
+      const wn = new T.Mesh(new T.TorusGeometry(rn + 0.5, 1.6, 8, 48), M.weld); wn.rotation.x = Math.PI / 2; wn.position.y = y0; g.add(wn);
+      const hole = new T.Mesh(new T.RingGeometry(rn - 5, rn - 1.2, 32), M.rod); hole.rotation.x = Math.PI / 2; hole.position.y = y0 - 40; g.add(hole);
+    }
+    return { obj: g, tilt: 0.4, zoom: 1.05 };
+  }
+
+  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, bj: buildBJ, vdc: () => buildCap(true), hdc: () => buildCap(false), el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR };
 
   // ---------- 뷰어 ----------
   // 전환 버튼으로 함께 보여줄 모델 묶음
-  const SETS = { mt: [['MT', 'mt'], ['NT', 'nt']], lt: [['LT', 'lt'], ['JT', 'jt']], el: [['EL90', 'el90'], ['EL45', 'el45']], ag: [['속관', 'agin'], ['카바', 'agcv']], sr: [['속관', 'srin'], ['카바', 'srcv']], tr: [['단관', 'trs'], ['이중관', 'trd']], fd: [['사각', 'fdsq'], ['호퍼', 'fdhp']] };
+  const SETS = { mt: [['MT', 'mt'], ['NT', 'nt']], lt: [['LT', 'lt'], ['JT', 'jt']], el: [['EL90', 'el90'], ['EL45', 'el45']], ag: [['속관', 'agin'], ['카바', 'agcv']], sr: [['속관', 'srin'], ['카바', 'srcv']], tr: [['단관', 'trs'], ['이중관', 'trd']], fd: [['사각', 'fdsq'], ['호퍼', 'fdhp']], cap: [['VDC', 'vdc'], ['HDC', 'hdc']] };
   function mount(el) {
     const set = SETS[el.dataset.model] || [[null, el.dataset.model]];
     if (!set.every(([, n]) => MODELS[n])) return;

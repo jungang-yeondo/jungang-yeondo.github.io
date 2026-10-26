@@ -450,7 +450,9 @@
     const MP = Object.assign({}, M, { steel: see(M.steel, 0.28), outer: see(M.outer, 0.22), rod: see(M.rod, 0.5) });
     doublePipe(g, MP, R1, R2, -240, 240, -200, 200, true, true);
     // 환봉
-    const shaft = new T.Mesh(new T.CylinderGeometry(6, 6, 2 * R2 + 40, 16), M.rod); shaft.rotation.z = Math.PI / 2; g.add(shaft);
+    // 손잡이 쪽 아우트 밖에서 시작해 반대편 인너 벽에서 멈춤
+    const sx0 = -R1, sx1 = R2 + 12;
+    const shaft = new T.Mesh(new T.CylinderGeometry(6, 6, sx1 - sx0, 16), M.rod); shaft.rotation.z = Math.PI / 2; shaft.position.x = (sx0 + sx1) / 2; g.add(shaft);
     // 댐퍼 원판 + 브라켓 (환봉과 함께 회전)
     const dmp = new T.Group(); g.add(dmp);
     const disk = new T.Mesh(new T.CylinderGeometry(R1 - 15, R1 - 15, 3, 96), M.steel); disk.renderOrder = 2; dmp.add(disk);

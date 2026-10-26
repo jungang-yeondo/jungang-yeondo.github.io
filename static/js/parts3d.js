@@ -571,7 +571,7 @@
       const sv = new T.Mesh(new T.PlaneGeometry(2.4, A), wM); sv.rotation.y = Math.PI / 4; sv.position.set(a + 0.05, -A / 2, b + 0.05); side.add(sv);
       g.add(side);
     }
-    return { obj: g, tilt: 0.5, zoom: 1.05 };
+    return { obj: g, tilt: 0.5, zoom: 1.45 };
   }
 
   // ---------- 모델: BJ 발전기용 열팽창 주름관 ----------

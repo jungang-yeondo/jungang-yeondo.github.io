@@ -492,7 +492,6 @@
     // 지시침: 허브 위쪽으로 뾰족하게, 눈금을 가리킴 (레버와 반대 방향)
     const nd = new T.Shape(); nd.moveTo(-7, 12); nd.lineTo(7, 12); nd.lineTo(0, 40); nd.lineTo(-7, 12);
     const needle = new T.Mesh(new T.ExtrudeGeometry(nd, { depth: 2.5, bevelEnabled: false }), M.weld); needle.rotation.y = Math.PI / 2; needle.position.x = 4; lev.add(needle);
-    const scr = new T.Mesh(new T.CylinderGeometry(4, 4, 3, 16), M.weld); scr.rotation.z = Math.PI / 2; scr.position.set(7.5, -40, 0); lev.add(scr);
     let a = 0, target = 0;   // 0 = SHUT(닫힘), π/2 = OPEN(완전 열림)
     const apply = () => { dmp.rotation.x = -a; lev.rotation.x = -Math.PI / 4 + a; }; // SHUT: 지시침이 SHUT 쪽, OPEN: 90° 돌아 OPEN 쪽
     apply();

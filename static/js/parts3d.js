@@ -399,6 +399,16 @@
     // 사각 옆면: 사각판 ~ 바닥 후렌지
     const side = new T.Mesh(new T.CylinderGeometry(top * Math.SQRT2, half * Math.SQRT2, 300, 4, 1, true), flat);
     side.rotation.y = Math.PI / 4; side.position.y = 150; g.add(side);
+    // 꺾인 모서리 경계선: 반사 때문에 면끼리 같은 밝기로 보이는 각도에서도 형태가 보이도록
+    const edgeM = new T.MeshStandardMaterial({ color: 0x3a3f46, metalness: 0.5, roughness: 0.55 });
+    const line = (a, b) => { const A = new T.Vector3(...a), B = new T.Vector3(...b), d = B.clone().sub(A);
+      const m = new T.Mesh(new T.CylinderGeometry(2.6, 2.6, d.length(), 8), edgeM); m.position.copy(A).add(B).multiplyScalar(0.5);
+      m.quaternion.setFromUnitVectors(new T.Vector3(0, 1, 0), d.normalize()); g.add(m); };
+    const cs = [[1, 1], [1, -1], [-1, -1], [-1, 1]];
+    cs.forEach(([x, z], i) => { const [x2, z2] = cs[(i + 1) % 4];
+      line([x * top, 300, z * top], [x * half, 0.5, z * half]);            // 옆면끼리 꺾인 모서리
+      line([x * top, 300, z * top], [x2 * top, 300, z2 * top]);             // 사각판 ~ 옆면
+      line([x * half, 0.5, z * half], [x2 * half, 0.5, z2 * half]); });     // 옆면 ~ 바닥 후렌지
     return { obj: g, tilt: 0.45, zoom: 0.8 };
   }
   function buildFDhp() {

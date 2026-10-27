@@ -427,7 +427,21 @@
       idx.push(c1, R_(q * MS), c2);                                                                                   // 변의 평면 삼각형
     }
     const geo = new T.BufferGeometry(); geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3)); geo.setIndex(idx); geo.computeVertexNormals();
-    g.add(new T.Mesh(geo, M.steel));
+    // 호퍼는 면이 넓어 반사가 너무 밝음 → 조금 어둡고 덜 반짝이게
+    const hopM = new T.MeshStandardMaterial({ color: 0xaeb1b4, metalness: 0.95, roughness: 0.3, side: T.DoubleSide });
+    g.add(new T.Mesh(geo, hopM));
+    // 경계선: 평면 삼각형 ~ 모서리 라운드, 바닥 후렌지, 위 띠 이음
+    const edgeM = new T.MeshStandardMaterial({ color: 0x3a3f46, metalness: 0.5, roughness: 0.55 });
+    const line = (a, b) => { const A = new T.Vector3(...a), B = new T.Vector3(...b), d = B.clone().sub(A);
+      const m = new T.Mesh(new T.CylinderGeometry(2.6, 2.6, d.length(), 8), edgeM); m.position.copy(A).add(B).multiplyScalar(0.5);
+      m.quaternion.setFromUnitVectors(new T.Vector3(0, 1, 0), d.normalize()); g.add(m); };
+    for (let q = 0; q < 4; q++) {
+      const C = corner(q), N = corner((q + 1) % 4), f0 = q * Math.PI / 2, f1 = (q + 1) * Math.PI / 2;
+      line([C[0], 0.5, C[2]], [Rt * Math.cos(f0), 300, Rt * Math.sin(f0)]);
+      line([C[0], 0.5, C[2]], [Rt * Math.cos(f1), 300, Rt * Math.sin(f1)]);
+      line([C[0], 0.5, C[2]], [N[0], 0.5, N[2]]);
+    }
+    const seamT = new T.Mesh(new T.TorusGeometry(Rt, 2.6, 8, 180), edgeM); seamT.rotation.x = Math.PI / 2; seamT.position.y = 300; g.add(seamT);
     return { obj: g, tilt: 0.45, zoom: 1.5 };
   }
 

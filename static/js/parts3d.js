@@ -129,7 +129,7 @@
   }
 
 
-  // ---------- FR 유동방지대: 40×3T 앵글을 말아 만든 반쪽 2개 + 엽전(40×40, Ø12) 볼트 체결 ----------
+  // ---------- FR 유동방지대: 40×3T 앵글을 말아 만든 반쪽 2개 + 엽전(40×40, Ø12 구멍) — 볼트·너트 없이 구멍만 ----------
   function makeFR(g, M, R, y0, one) { // one: 한 바퀴를 한 곳만 자른 형태 (IV용)
     const W = 50, TK = 4, gap = 12, gA = 2 * Math.asin(gap / R);
     for (const s0 of (one ? [0] : [0, Math.PI])) {
@@ -146,8 +146,6 @@
     for (const s0 of (one ? [0] : [0, Math.PI])) {
       const grp = new T.Group(); grp.rotation.y = s0;
       for (const sx of [1, -1]) { const p = new T.Mesh(tabG, M.outer); p.rotation.y = Math.PI / 2; p.position.set(sx * (gap + 1.5), y0 + W / 2, R + W / 2); grp.add(p); }
-      const bolt = new T.Mesh(new T.CylinderGeometry(5, 5, gap * 2 + 30, 12), M.rod); bolt.rotation.z = Math.PI / 2; bolt.position.set(0, y0 + W / 2, R + W / 2); grp.add(bolt);
-      for (const sx of [1, -1]) { const n = new T.Mesh(new T.CylinderGeometry(9.5, 9.5, 7, 6), M.weld); n.rotation.z = Math.PI / 2; n.position.set(sx * (gap + 3 + 3.5), y0 + W / 2, R + W / 2); grp.add(n); }
       g.add(grp);
     }
   }

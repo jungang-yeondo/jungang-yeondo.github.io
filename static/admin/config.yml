@@ -199,7 +199,8 @@ collections:
           - { name: banner, label: "상단 배경 사진", widget: image }
           - { name: note, label: "실적 안내 문구", widget: string }
           - { name: idc_title, label: "데이터센터 실적 제목", widget: string, required: false }
-          - { name: idc_credit, label: "데이터센터 실적 안내 문구", widget: string, required: false }
+          - { name: idc_partner, label: "데이터센터 설비 시공 업체명", widget: string, required: false }
+          - { name: idc_tel, label: "데이터센터 설비 시공 업체 전화번호", widget: string, required: false }
           - name: idc
             label: "데이터센터 실적 (현장 수·발전기 대수·관경은 자동 계산)"
             label_singular: "현장"

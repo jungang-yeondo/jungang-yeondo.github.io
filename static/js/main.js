@@ -52,4 +52,8 @@
   // 첨부파일 용량 확인 (Netlify Forms 한도 8MB)
   var f=document.getElementById('f-file');
   if(f) f.addEventListener('change',function(){ if(f.files[0]&&f.files[0].size>8*1024*1024){ f.setCustomValidity('8MB 이하 파일만 첨부할 수 있습니다. 큰 파일은 이메일로 보내 주세요.'); f.reportValidity(); } else f.setCustomValidity(''); });
+  // 하위 메뉴 페이지를 미리 받아두기 → 탭을 누르면 바로 뜨게 (아이폰 사파리 포함)
+  var pf={};function pre(h){if(!h||pf[h]||h.charAt(0)!=='/'||h.charAt(1)==='/'||h===location.pathname||/\.(pdf|jpg|png|webp|mp4)$/i.test(h))return;pf[h]=1;try{fetch(h,{credentials:'same-origin'}).catch(function(){});}catch(e){}}
+  (window.requestIdleCallback||function(fn){setTimeout(fn,1500)})(function(){[].forEach.call(document.querySelectorAll('.lnb a'),function(a){pre(a.getAttribute('href'))});});
+  document.addEventListener('touchstart',function(e){var a=e.target.closest&&e.target.closest('a[href^="/"]');if(a)pre(a.getAttribute('href'));},{passive:true});
 })();

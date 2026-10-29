@@ -198,6 +198,19 @@ collections:
         fields:
           - { name: banner, label: "상단 배경 사진", widget: image }
           - { name: note, label: "실적 안내 문구", widget: string }
+          - { name: idc_title, label: "데이터센터 실적 제목", widget: string, required: false }
+          - { name: idc_credit, label: "데이터센터 실적 안내 문구", widget: string, required: false }
+          - name: idc
+            label: "데이터센터 실적 (현장 수·발전기 대수·관경은 자동 계산)"
+            label_singular: "현장"
+            summary: "{{fields.name}} · {{fields.year}}"
+            widget: list
+            required: false
+            fields:
+              - { name: name, label: 현장명, widget: string }
+              - { name: scale, label: "발전기 규모 (예: 디젤 2,500kW×4대 · 터빈 4,500kW×4대)", widget: string }
+              - { name: size, label: "연도 관경 (예: 700A · 1600A)", widget: string }
+              - { name: year, label: 연도, widget: string }
           - name: items
             label: "대표 납품 현장"
             label_singular: "현장"

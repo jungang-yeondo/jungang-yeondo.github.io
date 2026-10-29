@@ -190,6 +190,7 @@ footer .c{grid-column:1/-1;font-size:13px;padding-top:22px;border-top:1px solid 
 .subvis{position:relative;height:clamp(320px,40vw,460px);background:var(--dark);color:#fff;overflow:hidden}
 .subvis img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;animation:zoom 8s ease-out both}
 @keyframes zoom{from{transform:scale(1.1)}to{transform:scale(1)}}
+@media (max-width:900px){.subvis img{animation:none}} /* 휴대폰: 상단 사진 확대 효과 끔 → 페이지 이동 시 버벅임 줄이기 */
 .subvis::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(8,14,26,.7),rgba(8,14,26,.15))}
 .subvis .wrap{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:48px}
 .subvis .en{font-size:17px;letter-spacing:.24em;opacity:.85}

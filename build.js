@@ -288,12 +288,23 @@ add('/product/lpf/', {
 // ---------- PROJECTS ----------
 {
   const items = list(proj.items);
+  // 데이터센터(IDC) 실적: 현장 수 · 발전기 대수 · 연도 관경은 표에서 자동 계산
+  const idcBlock = () => {
+    const L = list(proj.idc); if (!L.length) return '';
+    const gens = L.reduce((s, r) => s + [...String(r.scale || '').matchAll(/×\s*(\d+)\s*대/g)].reduce((a, m) => a + +m[1], 0), 0);
+    const sizes = L.flatMap((r) => [...String(r.size || '').matchAll(/(\d+)\s*A/g)].map((m) => +m[1]));
+    const lo = Math.min(...sizes), hi = Math.max(...sizes), fs = 'font-size:clamp(34px,4vw,52px)';
+    const stat = (n, u, t) => `<div><b style="${fs}">${n}<sup>${u}</sup></b><span>${t}</span></div>`;
+    const rows = L.map((r) => `<tr><td>${esc(r.name)}</td><td>${esc(r.scale)}</td><td style="white-space:nowrap">${esc(r.size)}</td><td style="color:var(--muted)">${esc(r.year)}</td></tr>`).join('');
+    return two('Data Center', esc(proj.idc_title || '데이터센터 비상발전기 연도'), `<div class="nums" style="margin-top:0;margin-bottom:36px">${stat(L.length, '곳', '데이터센터 현장')}${stat(gens, '대', '비상발전기')}${sizes.length ? stat(hi, 'A', `연도 관경 ${lo}A~${hi}A`) : ''}</div>
+<div class="tw"><table class="tbl"><thead><tr><th>현장명</th><th>발전기 규모</th><th>연도 관경</th><th>연도</th></tr></thead><tbody>${rows}</tbody></table></div>`, proj.idc_credit ? `<p class="note" style="margin-top:14px">${esc(proj.idc_credit)}</p>` : '');
+  };
   const cats = ['전체', ...Array.from(new Set(items.map((i) => i.category).filter(Boolean)))];
   const rows = items.map((r) => `<tr data-cat="${esc(r.category)}"><td>${esc(r.name)}</td><td style="color:var(--muted)">${esc(r.category)}</td><td>${esc(r.contractor) || '<span style="color:var(--muted)">—</span>'}</td></tr>`).join('');
   add('/projects/', {
     title: '납품실적', section: 'projects', image: proj.banner,
     desc: `${site.short_name} 연도 납품실적 — ${items.slice(0, 8).map((i) => i.name).join(', ')} 등 13,000곳 이상.`,
-    body: subPage({ en: 'Projects', title: '납품실적', banner: proj.banner, section: 'projects', current: '/projects/', body:
+    body: subPage({ en: 'Projects', title: '납품실적', banner: proj.banner, section: 'projects', current: '/projects/', body: idcBlock() +
       two('Reference', '대표 납품 현장', `<div class="filters" id="filters" role="group" aria-label="분야 필터">${cats.map((c, i) => `<button type="button" aria-pressed="${i === 0}">${esc(c)}</button>`).join('')}</div>
 <div class="searchrow"><span class="rcnt" id="countLine"><b>${items.length}</b> 개 현장</span><input id="q" type="search" placeholder="현장명 · 시공사 검색" aria-label="현장 검색"></div>
 <div class="tw"><table class="tbl" id="rtable"><thead><tr><th>현장명</th><th>분야</th><th>시공사</th></tr></thead><tbody>${rows}</tbody></table></div>

@@ -200,7 +200,21 @@ collections:
           - { name: note, label: "실적 안내 문구", widget: string }
           - { name: idc_title, label: "데이터센터 실적 제목", widget: string, required: false }
           - { name: idc_partner, label: "데이터센터 설비 시공 업체명", widget: string, required: false }
-          - { name: idc_tel, label: "데이터센터 설비 시공 업체 전화번호", widget: string, required: false }
+          - { name: partners_note, label: "시공 협력사 안내 문구", widget: string, required: false }
+          - name: partners
+            label: "시공 협력사 (대표 실적은 업체명으로 자동 연결)"
+            label_singular: "협력사"
+            summary: "{{fields.name}}"
+            widget: list
+            required: false
+            fields:
+              - { name: name, label: 업체명, widget: string }
+              - { name: tagline, label: "소개 한 줄", widget: string, required: false }
+              - { name: tel, label: 전화, widget: string, required: false }
+              - { name: fax, label: 팩스, widget: string, required: false }
+              - { name: email, label: 이메일, widget: string, required: false }
+              - { name: hq, label: 본사 주소, widget: string, required: false }
+              - { name: factory, label: 공장 주소, widget: string, required: false }
           - name: idc
             label: "데이터센터 실적 (현장 수·발전기 대수·관경은 자동 계산)"
             label_singular: "현장"

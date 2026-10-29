@@ -183,6 +183,7 @@ collections:
           - { name: lpf_quote, label: "[LPF] 큰 문구", widget: text }
           - { name: lpf_intro, label: "[LPF] 설명", widget: text }
           - { name: lpf_note, label: "[LPF] 상표·특허 안내", widget: string }
+          - { name: lpf_dev, label: "[LPF] 개발 표기 (비우면 안 보임)", widget: string, required: false }
           - name: packing
             label: "[LPF] 패킹 선택 표"
             widget: list
@@ -220,6 +221,10 @@ collections:
             fields:
               - { name: name, label: 업체명, widget: string }
               - { name: tagline, label: "소개 한 줄", widget: string, required: false }
+              - { name: highlight, label: "강조 배지 (예: LPF 기밀연도 공동 개발)", widget: string, required: false }
+              - { name: highlight_text, label: "강조 설명", widget: string, required: false }
+              - { name: highlight_link, label: "강조 버튼 링크 (예: /product/lpf/)", widget: string, required: false }
+              - { name: highlight_link_label, label: "강조 버튼 글자", widget: string, required: false }
               - { name: tel, label: 전화, widget: string, required: false }
               - { name: fax, label: 팩스, widget: string, required: false }
               - { name: email, label: 이메일, widget: string, required: false }

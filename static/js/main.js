@@ -27,12 +27,17 @@
   var tb=document.querySelector('#rtable tbody');
   if(tb){
     var rows=[].slice.call(tb.rows), cur='전체', q=document.getElementById('q'), fbox=document.getElementById('filters');
+    // 처음엔 data-show 개수만, 나머지는 '전체 보기'
+    var more=document.getElementById('refMore'), show=Number(document.getElementById('rtable').dataset.show)||Infinity, open=false;
     function draw(){
       var k=q.value.trim().toLowerCase(), n=0;
-      rows.forEach(function(r){var ok=(cur==='전체'||r.dataset.cat===cur)&&(!k||r.textContent.toLowerCase().indexOf(k)>-1);r.hidden=!ok;if(ok)n++});
+      rows.forEach(function(r){var ok=(cur==='전체'||r.dataset.cat===cur)&&(!k||r.textContent.toLowerCase().indexOf(k)>-1);r.hidden=!ok||(!open&&n>=show);if(ok)n++});
       document.getElementById('countLine').innerHTML='<b>'+n+'</b> 개 현장';
       document.getElementById('noResult').hidden=n>0;
+      if(more){more.hidden=n<=show;more.setAttribute('aria-expanded',open);more.textContent=open?'접기 ▴':'전체 '+n+'곳 보기 ▾';}
     }
+    if(more) more.addEventListener('click',function(){open=!open;draw()});
+    draw();
     fbox.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){cur=b.textContent;fbox.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});draw()})});
     q.addEventListener('input',draw);
   }

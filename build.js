@@ -288,6 +288,7 @@ add('/product/lpf/', {
 // ---------- PROJECTS ----------
 {
   const items = list(proj.items);
+  const moreBtn = 'font:inherit;font-size:15px;width:100%;padding:14px 0;margin-top:-1px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);cursor:pointer';
   // 데이터센터(IDC) 실적: 현장 수 · 발전기 대수 · 연도 관경은 표에서 자동 계산
   const idcBlock = () => {
     const L = list(proj.idc); if (!L.length) return '';
@@ -297,7 +298,7 @@ add('/product/lpf/', {
     const stat = (n, u, t) => `<div><b style="${fs}">${n}<sup>${u}</sup></b><span>${t}</span></div>`;
     const SHOW = 4; // 처음엔 4곳만, 나머지는 '더보기'
     const rows = L.map((r, i) => `<tr${i >= SHOW ? ' hidden data-more' : ''}><td>${esc(r.name)}</td><td>${esc(r.scale)}</td><td style="white-space:nowrap">${esc(r.size)}</td><td style="color:var(--muted)">${esc(r.year)}</td></tr>`).join('');
-    const more = L.length > SHOW ? `<button type="button" id="idcMore" aria-expanded="false" style="font:inherit;font-size:15px;width:100%;padding:14px 0;margin-top:-1px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);cursor:pointer">전체 ${L.length}곳 보기 ▾</button><script>(function(){var b=document.getElementById('idcMore');b.onclick=function(){var o=b.getAttribute('aria-expanded')!=='true';document.querySelectorAll('tr[data-more]').forEach(function(r){r.hidden=!o});b.setAttribute('aria-expanded',o);b.textContent=o?'접기 ▴':'전체 ${L.length}곳 보기 ▾';};})();</script>` : '';
+    const more = L.length > SHOW ? `<button type="button" id="idcMore" aria-expanded="false" style="${moreBtn}">전체 ${L.length}곳 보기 ▾</button><script>(function(){var b=document.getElementById('idcMore');b.onclick=function(){var o=b.getAttribute('aria-expanded')!=='true';document.querySelectorAll('tr[data-more]').forEach(function(r){r.hidden=!o});b.setAttribute('aria-expanded',o);b.textContent=o?'접기 ▴':'전체 ${L.length}곳 보기 ▾';};})();</script>` : '';
     const tel = String(proj.idc_tel || '').trim();
     const credit = proj.idc_partner ? `<div style="margin-top:22px;padding:18px 20px;border:1px solid var(--line)"><span style="display:block;font-size:13px;color:var(--muted)">설비 시공</span><b style="display:block;font-size:clamp(20px,2vw,24px);margin-top:4px">${esc(proj.idc_partner)}</b>${tel ? `<a href="tel:${esc(tel.replace(/[^0-9+]/g, ''))}" style="display:block;font-size:clamp(18px,1.8vw,21px);margin-top:6px;color:var(--red);font-weight:500">☎ ${esc(tel)}</a>` : ''}<span style="display:block;font-size:13px;color:var(--muted);margin-top:12px">연도 제작·납품 (주)중앙연도</span></div>` : '';
     return two('Data Center', esc(proj.idc_title || '데이터센터 비상발전기 연도'), `<div class="nums" style="margin-top:0;margin-bottom:36px">${stat(L.length, '곳', '데이터센터 현장')}${stat(gens, '대', '비상발전기')}${sizes.length ? stat(hi, 'A', `연도 관경 ${lo}A~${hi}A`) : ''}</div>
@@ -308,11 +309,12 @@ add('/product/lpf/', {
   add('/projects/', {
     title: '납품실적', section: 'projects', image: proj.banner,
     desc: `${site.short_name} 연도 납품실적 — ${items.slice(0, 8).map((i) => i.name).join(', ')} 등 13,000곳 이상.`,
-    body: subPage({ en: 'Projects', title: '납품실적', banner: proj.banner, section: 'projects', current: '/projects/', body: idcBlock() +
+    body: subPage({ en: 'Projects', title: '납품실적', banner: proj.banner, section: 'projects', current: '/projects/', body:
       two('Reference', '대표 납품 현장', `<div class="filters" id="filters" role="group" aria-label="분야 필터">${cats.map((c, i) => `<button type="button" aria-pressed="${i === 0}">${esc(c)}</button>`).join('')}</div>
 <div class="searchrow"><span class="rcnt" id="countLine"><b>${items.length}</b> 개 현장</span><input id="q" type="search" placeholder="현장명 · 시공사 검색" aria-label="현장 검색"></div>
-<div class="tw"><table class="tbl" id="rtable"><thead><tr><th>현장명</th><th>분야</th><th>시공사</th></tr></thead><tbody>${rows}</tbody></table></div>
-<p class="note" id="noResult" hidden>검색 결과가 없습니다. 다른 이름으로 찾아보세요.</p>`, `<p class="note" style="margin-top:14px">${esc(proj.note)}</p>`) }),
+<div class="tw"><table class="tbl" id="rtable" data-show="10"><thead><tr><th>현장명</th><th>분야</th><th>시공사</th></tr></thead><tbody>${rows}</tbody></table></div>
+<button type="button" id="refMore" aria-expanded="false" hidden style="${moreBtn}"></button>
+<p class="note" id="noResult" hidden>검색 결과가 없습니다. 다른 이름으로 찾아보세요.</p>`, `<p class="note" style="margin-top:14px">${esc(proj.note)}</p>`) + idcBlock() }),
   });
 }
 add('/projects/gallery/', {

@@ -225,6 +225,16 @@ collections:
               - { name: email, label: 이메일, widget: string, required: false }
               - { name: hq, label: 본사 주소, widget: string, required: false }
               - { name: factory, label: 공장 주소, widget: string, required: false }
+              - name: contacts
+                label: 담당자
+                label_singular: 담당자
+                summary: "{{fields.role}} {{fields.name}}"
+                widget: list
+                required: false
+                fields:
+                  - { name: role, label: "직함 (예: 사장, 부장)", widget: string }
+                  - { name: name, label: 이름, widget: string }
+                  - { name: phone, label: 휴대폰, widget: string, required: false }
           - name: idc
             label: "데이터센터 실적 (현장 수·발전기 대수·관경은 자동 계산)"
             label_singular: "현장"

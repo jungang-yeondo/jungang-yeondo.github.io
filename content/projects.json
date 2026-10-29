@@ -7,6 +7,10 @@
   "partners": [
     {
       "name": "미래스택",
+      "highlight": "LPF 기밀연도 공동 개발 · 공동 소유",
+      "highlight_text": "중앙연도와 함께 연구·개발했으며, LPF 기밀연도를 공동으로 소유하고 있습니다.",
+      "highlight_link": "/product/lpf/",
+      "highlight_link_label": "LPF 기밀연도 보기",
       "tel": "02-2135-1628",
       "fax": "02-2135-1629",
       "email": "econx77@hanmail.net",

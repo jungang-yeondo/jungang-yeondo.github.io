@@ -18,6 +18,14 @@ const paras = (s) => String(s ?? '').split(/\r?\n\s*\r?\n/).map((p) => p.trim())
 const lines = (s) => String(s ?? '').split(/\r?\n/).map((l) => `<span>${esc(l)}</span>`).join('');
 const list = (a) => (Array.isArray(a) ? a : []);
 const img = (src, alt = '', extra = '') => src ? `<img src="${esc(src)}" alt="${esc(alt || site.short_name || '(주)중앙연도')}" loading="lazy"${extra}>` : '';
+// 휴대폰용 작은 사진: static/uploads에 '이름-900w.확장자'·'이름-1200w.확장자'가 있는 것만 srcset에 넣음 (하나도 없으면 원본만)
+const setUrl = (s) => encodeURI(s).replace(/,/g, '%2C') + '?v=' + ver(s); // srcset은 공백·쉼표로 나뉘므로 인코딩
+const srcset = (src) => {
+  const m = /^(\/uploads\/.+)(\.[^./]+)$/.exec(String(src || ''));
+  if (!m) return '';
+  const small = [900, 1200].map((w) => [m[1] + `-${w}w` + m[2], w]).filter(([s]) => fs.existsSync(path.join(ROOT, 'static', s)));
+  return small.length ? ` srcset="${[...small, [src, 1920]].map(([s, w]) => `${esc(setUrl(s))} ${w}w`).join(', ')}" sizes="100vw"` : '';
+};
 const telHref = (t) => 'tel:' + String(t).replace(/[^0-9+]/g, '');
 const baseUrl = String(site.url || '').replace(/\/$/, '');
 
@@ -77,7 +85,7 @@ ${site.google_verification ? `<meta name="google-site-verification" content="${e
 ${body}
 </main>
 <section class="cta">
-  ${img(home.cta_image)}
+  ${img(home.cta_image, '', srcset(home.cta_image))}
   <div class="wrap">
     <div><div class="label" style="color:#F0656C">Contact Us</div><h2 style="margin-top:12px">${esc(home.cta_title)}</h2><p>${esc(home.cta_text)}</p></div>
     <div><a class="tel" href="${telHref(site.tel)}">${esc(site.tel)}</a><div class="mail">${esc(site.email)} · FAX ${esc(site.fax)}</div></div>
@@ -106,7 +114,7 @@ ${body}
 function subPage({ en, title, banner, section, current, body }) {
   const nav = NAV.find((n) => n.key === section);
   const lnb = nav.sub.map(([l, h]) => `<a href="${h}"${h === current ? ' aria-current="true"' : ''}>${l}</a>`).join('');
-  return `<section class="subvis">${img(banner, '', ' fetchpriority="high"').replace(' loading="lazy"', '')}<div class="wrap"><div class="en">${esc(en)}</div><h1>${esc(title)}</h1></div></section>
+  return `<section class="subvis">${img(banner, '', ' fetchpriority="high"' + srcset(banner)).replace(' loading="lazy"', '')}<div class="wrap"><div class="en">${esc(en)}</div><h1>${esc(title)}</h1></div></section>
 <nav class="lnb" aria-label="${esc(nav.label)} 하위 메뉴"><div class="wrap">${lnb}</div></nav>
 <div class="wrap">${body}</div>`;
 }
@@ -142,7 +150,7 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
 // ---------- HOME ----------
 {
   const slides = list(home.slides);
-  const sl = slides.map((s, i) => `<div class="slide${i === 0 ? ' on' : ''}" data-cap="${esc(s.caption)}">${i === 0 ? `<img src="${esc(s.image)}" alt="${esc(s.caption || site.short_name)}" fetchpriority="high">` : img(s.image, s.caption)}</div>`).join('');
+  const sl = slides.map((s, i) => `<div class="slide${i === 0 ? ' on' : ''}" data-cap="${esc(s.caption)}">${i === 0 ? `<img src="${esc(s.image)}" alt="${esc(s.caption || site.short_name)}" fetchpriority="high"${srcset(s.image)}>` : img(s.image, s.caption, srcset(s.image))}</div>`).join('');
   const pad = (n) => String(n).padStart(2, '0');
   const numItem = (n) => `<b>${esc(n.value)}${n.suffix ? `<sup>${esc(n.suffix)}</sup>` : ''}</b><span>${esc(n.label)}</span>`;
   const numGroups = [];
@@ -383,7 +391,7 @@ add('/support/contact/thanks/', {
 });
 add('/privacy/', {
   title: '개인정보처리방침', section: '', image: sup.banner,
-  body: `<section class="subvis">${img(sup.banner).replace(' loading="lazy"', '')}<div class="wrap"><div class="en">Privacy</div><h1>개인정보처리방침</h1></div></section><div class="wrap">${two('Privacy', '개인정보처리방침', `<div class="prose"><p>${esc(site.name)}(이하 "회사")는 온라인 문의 응대를 위해 아래와 같이 개인정보를 수집·이용합니다.</p>
+  body: `<section class="subvis">${img(sup.banner, '', srcset(sup.banner)).replace(' loading="lazy"', '')}<div class="wrap"><div class="en">Privacy</div><h1>개인정보처리방침</h1></div></section><div class="wrap">${two('Privacy', '개인정보처리방침', `<div class="prose"><p>${esc(site.name)}(이하 "회사")는 온라인 문의 응대를 위해 아래와 같이 개인정보를 수집·이용합니다.</p>
 <p><b>수집 항목</b><br>회사명/성함, 연락처, 이메일(선택), 현장명, 문의 내용, 첨부파일(선택)</p>
 <p><b>이용 목적</b><br>견적·기술 문의에 대한 회신 및 상담</p>
 <p><b>보유 기간</b><br>문의 처리 완료 후 1년간 보관 후 파기합니다. 관계 법령에 따라 보존이 필요한 경우 해당 기간 동안 보관합니다.</p>
@@ -393,7 +401,7 @@ add('/privacy/', {
 
 function render() {
   // 404
-  pages.push({ url: '/404.html', html: layout({ url: '/404.html', title: '페이지를 찾을 수 없습니다', section: '', body: `<section class="subvis">${img(home.cta_image).replace(' loading="lazy"', '')}<div class="wrap"><div class="en">404</div><h1>페이지를 찾을 수 없습니다</h1></div></section><div class="wrap">${two('Not found', '주소를 다시 확인해 주세요', '<p class="lead" style="margin-top:0">요청하신 페이지가 없거나 이동되었습니다.</p><a class="arrow" href="/">홈으로</a>')}</div>` }) });
+  pages.push({ url: '/404.html', html: layout({ url: '/404.html', title: '페이지를 찾을 수 없습니다', section: '', body: `<section class="subvis">${img(home.cta_image, '', srcset(home.cta_image)).replace(' loading="lazy"', '')}<div class="wrap"><div class="en">404</div><h1>페이지를 찾을 수 없습니다</h1></div></section><div class="wrap">${two('Not found', '주소를 다시 확인해 주세요', '<p class="lead" style="margin-top:0">요청하신 페이지가 없거나 이동되었습니다.</p><a class="arrow" href="/">홈으로</a>')}</div>` }) });
 
   fs.rmSync(OUT, { recursive: true, force: true });
   copyDir(path.join(ROOT, 'static'), OUT);

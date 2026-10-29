@@ -60,7 +60,7 @@ ${site.google_verification ? `<meta name="google-site-verification" content="${e
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Barlow+Condensed:wght@400;500;600&family=Cinzel:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Barlow+Condensed:wght@400;500;600&family=Cinzel:wght@700&display=swap">
 <link rel="stylesheet" href="/css/style.css">
 <script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'Organization', name: site.name, alternateName: ['중앙연도', site.short_name, site.name_en], url: baseUrl || undefined, telephone: site.tel, email: site.email, address: { '@type': 'PostalAddress', streetAddress: site.address, addressCountry: 'KR' }, foundingDate: '2013-03-13' }).replace(/</g, '\\u003c')}</script>
 </head>

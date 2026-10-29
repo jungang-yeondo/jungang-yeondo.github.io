@@ -286,9 +286,7 @@ add('/product/lpf/', {
 });
 
 // ---------- PROJECTS ----------
-{
-  const items = list(proj.items);
-  const moreBtn = 'font:inherit;font-size:15px;width:100%;padding:14px 0;margin-top:-1px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);cursor:pointer';
+const moreBtn = 'font:inherit;font-size:15px;width:100%;padding:14px 0;margin-top:-1px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);cursor:pointer';
   // 데이터센터(IDC) 실적: 현장 수 · 발전기 대수 · 연도 관경은 표에서 자동 계산
   const idcBlock = () => {
     const L = list(proj.idc); if (!L.length) return '';
@@ -299,10 +297,12 @@ add('/product/lpf/', {
     const SHOW = 4; // 처음엔 4곳만, 나머지는 '더보기'
     const rows = L.map((r, i) => `<tr${i >= SHOW ? ' hidden data-more' : ''}><td>${esc(r.name)}</td><td>${esc(r.scale)}</td><td style="white-space:nowrap">${esc(r.size)}</td><td style="color:var(--muted)">${esc(r.year)}</td></tr>`).join('');
     const more = L.length > SHOW ? `<button type="button" id="idcMore" aria-expanded="false" style="${moreBtn}">전체 ${L.length}곳 보기 ▾</button><script>(function(){var b=document.getElementById('idcMore');b.onclick=function(){var o=b.getAttribute('aria-expanded')!=='true';document.querySelectorAll('tr[data-more]').forEach(function(r){r.hidden=!o});b.setAttribute('aria-expanded',o);b.textContent=o?'접기 ▴':'전체 ${L.length}곳 보기 ▾';};})();</script>` : '';
-    const credit = proj.idc_partner ? `<p class="note">설비 시공 ${esc(proj.idc_partner)} · <a href="/projects/partners/" style="color:var(--red);white-space:nowrap">협력사 보기 →</a></p>` : '';
-    return two('Data Center', esc(proj.idc_title || '데이터센터 비상발전기 연도'), `<div class="nums" style="margin-top:0;margin-bottom:36px">${stat(L.length, '곳', '데이터센터 현장')}${stat(gens, '대', '비상발전기')}${sizes.length ? stat(hi, 'A', `연도 관경 ${lo}A~${hi}A`) : ''}</div>
-<div class="tw"><table class="tbl"><thead><tr><th>현장명</th><th>발전기 규모</th><th>연도 관경</th><th>연도</th></tr></thead><tbody>${rows}</tbody></table></div>${more}`, credit);
+    const credit = proj.idc_partner ? `<p class="note">설비 시공 ${esc(proj.idc_partner)}</p>` : '';
+    return '<div id="idc">' + two('Data Center', esc(proj.idc_title || '데이터센터 비상발전기 연도'), `<div class="nums" style="margin-top:0;margin-bottom:36px">${stat(L.length, '곳', '데이터센터 현장')}${stat(gens, '대', '비상발전기')}${sizes.length ? stat(hi, 'A', `연도 관경 ${lo}A~${hi}A`) : ''}</div>
+<div class="tw"><table class="tbl"><thead><tr><th>현장명</th><th>발전기 규모</th><th>연도 관경</th><th>연도</th></tr></thead><tbody>${rows}</tbody></table></div>${more}`, credit) + '</div>';
   };
+{
+  const items = list(proj.items);
   const cats = ['전체', ...Array.from(new Set(items.map((i) => i.category).filter(Boolean)))];
   const rows = items.map((r) => `<tr data-cat="${esc(r.category)}"><td>${esc(r.name)}</td><td style="color:var(--muted)">${esc(r.category)}</td><td>${esc(r.contractor) || '<span style="color:var(--muted)">—</span>'}</td></tr>`).join('');
   add('/projects/', {
@@ -311,9 +311,9 @@ add('/product/lpf/', {
     body: subPage({ en: 'Projects', title: '납품실적', banner: proj.banner, section: 'projects', current: '/projects/', body:
       two('Reference', '대표 납품 현장', `<div class="filters" id="filters" role="group" aria-label="분야 필터">${cats.map((c, i) => `<button type="button" aria-pressed="${i === 0}">${esc(c)}</button>`).join('')}</div>
 <div class="searchrow"><span class="rcnt" id="countLine"><b>${items.length}</b> 개 현장</span><input id="q" type="search" placeholder="현장명 · 시공사 검색" aria-label="현장 검색"></div>
-<div class="tw"><table class="tbl" id="rtable" data-show="5"><thead><tr><th>현장명</th><th>분야</th><th>시공사</th></tr></thead><tbody>${rows}</tbody></table></div>
+<div class="tw"><table class="tbl" id="rtable"><thead><tr><th>현장명</th><th>분야</th><th>시공사</th></tr></thead><tbody>${rows}</tbody></table></div>
 <button type="button" id="refMore" aria-expanded="false" hidden style="${moreBtn}"></button>
-<p class="note" id="noResult" hidden>검색 결과가 없습니다. 다른 이름으로 찾아보세요.</p>`, `<p class="note" style="margin-top:14px">${esc(proj.note)}</p>`) + idcBlock() }),
+<p class="note" id="noResult" hidden>검색 결과가 없습니다. 다른 이름으로 찾아보세요.</p>`, `<p class="note" style="margin-top:14px">${esc(proj.note)}</p>${list(proj.partners).length ? `<a href="/projects/partners/" style="display:inline-block;margin-top:22px;padding:12px 22px;border:1px solid var(--red);color:var(--red);font-weight:500;font-size:15px">시공 협력사 보기 →</a>` : ''}`) }),
   });
 }
 add('/projects/gallery/', {
@@ -329,14 +329,14 @@ add('/projects/gallery/', {
     const n = co(p.name);
     const idc = n && co(proj.idc_partner) === n ? list(proj.idc).length : 0;
     const sites = n ? list(proj.items).filter((i) => co(i.contractor).includes(n)).map((i) => i.name) : [];
-    const refs = idc || sites.length ? `<div style="margin-top:24px;padding-top:18px;border-top:1px solid var(--line)"><span style="display:block;font-size:13px;color:var(--muted)">대표 실적</span>${idc ? `<a href="/projects/" style="display:inline-block;margin-top:6px;color:var(--red);font-weight:500">데이터센터 비상발전기 연도 ${idc}곳 →</a>` : ''}${sites.length ? `<p style="margin:8px 0 0;font-size:15px">${sites.map(esc).join(' · ')}</p>` : ''}</div>` : '';
+    const refs = idc || sites.length ? `<div style="margin-top:24px;padding-top:18px;border-top:1px solid var(--line)"><span style="display:block;font-size:13px;color:var(--muted)">대표 실적</span>${idc ? `<a href="#idc" style="display:inline-block;margin-top:6px;color:var(--red);font-weight:500">데이터센터 비상발전기 연도 ${idc}곳 →</a>` : ''}${sites.length ? `<p style="margin:8px 0 0;font-size:15px">${sites.map(esc).join(' · ')}</p>` : ''}</div>` : '';
     return `<article style="border:1px solid var(--line);padding:clamp(22px,3vw,32px)"><h3 style="font-size:clamp(22px,2.4vw,28px);margin:0">${esc(p.name)}</h3>${p.tagline ? `<p style="margin:6px 0 0;color:var(--muted)">${esc(p.tagline)}</p>` : ''}
 <dl style="display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:22px 0 0;font-size:15px">${row('전화', p.tel && `<a href="${esc(telHref(p.tel))}">${esc(p.tel)}</a>`)}${row('팩스', esc(p.fax))}${row('이메일', p.email && `<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>`)}${row('본사', esc(p.hq))}${row('공장', esc(p.factory))}</dl>${refs}</article>`;
   };
   add('/projects/partners/', {
     title: '시공 협력사', section: 'projects', image: proj.banner,
     body: subPage({ en: 'Projects', title: '시공 협력사', banner: proj.banner, section: 'projects', current: '/projects/partners/', body:
-      two('Partners', '시공 협력사', `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:20px">${list(proj.partners).map(card).join('')}</div>`, proj.partners_note ? `<p class="note">${esc(proj.partners_note)}</p>` : '') }),
+      two('Partners', '시공 협력사', `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:20px">${list(proj.partners).map(card).join('')}</div>`, proj.partners_note ? `<p class="note">${esc(proj.partners_note)}</p>` : '') + idcBlock() }),
   });
 }
 add('/projects/certification/', {

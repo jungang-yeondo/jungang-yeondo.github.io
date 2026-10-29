@@ -295,9 +295,13 @@ add('/product/lpf/', {
     const sizes = L.flatMap((r) => [...String(r.size || '').matchAll(/(\d+)\s*A/g)].map((m) => +m[1]));
     const lo = Math.min(...sizes), hi = Math.max(...sizes), fs = 'font-size:clamp(34px,4vw,52px)';
     const stat = (n, u, t) => `<div><b style="${fs}">${n}<sup>${u}</sup></b><span>${t}</span></div>`;
-    const rows = L.map((r) => `<tr><td>${esc(r.name)}</td><td>${esc(r.scale)}</td><td style="white-space:nowrap">${esc(r.size)}</td><td style="color:var(--muted)">${esc(r.year)}</td></tr>`).join('');
+    const SHOW = 4; // 처음엔 4곳만, 나머지는 '더보기'
+    const rows = L.map((r, i) => `<tr${i >= SHOW ? ' hidden data-more' : ''}><td>${esc(r.name)}</td><td>${esc(r.scale)}</td><td style="white-space:nowrap">${esc(r.size)}</td><td style="color:var(--muted)">${esc(r.year)}</td></tr>`).join('');
+    const more = L.length > SHOW ? `<button type="button" id="idcMore" aria-expanded="false" style="font:inherit;font-size:15px;width:100%;padding:14px 0;margin-top:-1px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);cursor:pointer">전체 ${L.length}곳 보기 ▾</button><script>(function(){var b=document.getElementById('idcMore');b.onclick=function(){var o=b.getAttribute('aria-expanded')!=='true';document.querySelectorAll('tr[data-more]').forEach(function(r){r.hidden=!o});b.setAttribute('aria-expanded',o);b.textContent=o?'접기 ▴':'전체 ${L.length}곳 보기 ▾';};})();</script>` : '';
+    const tel = String(proj.idc_tel || '').trim();
+    const credit = proj.idc_partner ? `<div style="margin-top:22px;padding:18px 20px;border:1px solid var(--line)"><span style="display:block;font-size:13px;color:var(--muted)">설비 시공</span><b style="display:block;font-size:clamp(20px,2vw,24px);margin-top:4px">${esc(proj.idc_partner)}</b>${tel ? `<a href="tel:${esc(tel.replace(/[^0-9+]/g, ''))}" style="display:block;font-size:clamp(18px,1.8vw,21px);margin-top:6px;color:var(--red);font-weight:500">☎ ${esc(tel)}</a>` : ''}<span style="display:block;font-size:13px;color:var(--muted);margin-top:12px">연도 제작·납품 (주)중앙연도</span></div>` : '';
     return two('Data Center', esc(proj.idc_title || '데이터센터 비상발전기 연도'), `<div class="nums" style="margin-top:0;margin-bottom:36px">${stat(L.length, '곳', '데이터센터 현장')}${stat(gens, '대', '비상발전기')}${sizes.length ? stat(hi, 'A', `연도 관경 ${lo}A~${hi}A`) : ''}</div>
-<div class="tw"><table class="tbl"><thead><tr><th>현장명</th><th>발전기 규모</th><th>연도 관경</th><th>연도</th></tr></thead><tbody>${rows}</tbody></table></div>`, proj.idc_credit ? `<p class="note" style="margin-top:14px">${esc(proj.idc_credit)}</p>` : '');
+<div class="tw"><table class="tbl"><thead><tr><th>현장명</th><th>발전기 규모</th><th>연도 관경</th><th>연도</th></tr></thead><tbody>${rows}</tbody></table></div>${more}`, credit);
   };
   const cats = ['전체', ...Array.from(new Set(items.map((i) => i.category).filter(Boolean)))];
   const rows = items.map((r) => `<tr data-cat="${esc(r.category)}"><td>${esc(r.name)}</td><td style="color:var(--muted)">${esc(r.category)}</td><td>${esc(r.contractor) || '<span style="color:var(--muted)">—</span>'}</td></tr>`).join('');

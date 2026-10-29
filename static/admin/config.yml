@@ -16,6 +16,16 @@ site_url: https://jungangyeondo.co.kr
 display_url: https://jungangyeondo.co.kr
 media_folder: static/uploads
 public_folder: /uploads
+# 관리자에서 올리는 사진은 자동으로 가로 1920px 이하 WebP로 줄여서 저장 (휴대폰 사진 3~5MB → 수백 KB)
+media_libraries:
+  default:
+    config:
+      transformations:
+        raster_image:
+          format: webp
+          quality: 82
+          width: 1920
+          height: 1920
 
 collections:
   - name: pages

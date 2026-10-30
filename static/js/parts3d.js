@@ -713,6 +713,14 @@
   // ---------- 경계선: 각진 모서리·끝단에 옅은 선 (밝게 반사돼도 형태가 보이게) ----------
   const EDGE = new T.LineBasicMaterial({ color: 0x24272c, transparent: true, opacity: 0.7 });
   function outline(obj) {
+    // UV가 없는 직접 만든 면(새들관·곡관 마디 등)은 결 텍스처가 한 점만 찍혀 색이 달라짐 → 같은 평균 거칠기의 무늬 없는 재질로 맞춤
+    const flat = new Map();
+    obj.traverse((m) => {
+      if (!m.isMesh || Array.isArray(m.material) || !m.material.roughnessMap || m.geometry.attributes.uv) return;
+      let f = flat.get(m.material);
+      if (!f) { f = m.material.clone(); f.roughnessMap = null; f.roughness = m.material.roughness * 0.78; flat.set(m.material, f); }
+      m.material = f;
+    });
     const list = [];
     obj.traverse((m) => { if (m.isMesh && !m.userData.noEdge) list.push(m); });
     list.forEach((m) => {

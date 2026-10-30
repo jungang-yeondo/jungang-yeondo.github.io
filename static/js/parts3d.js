@@ -319,6 +319,14 @@
     doublePipe(sg, M, R1, R2, 0, E + 40, 0, E, false, true); g.add(sg);
     const eg = new T.Group(); eg.rotation.z = -th; eg.position.copy(arc(th));
     doublePipe(eg, M, R1, R2, 0, E + 40, 0, E, false, true); g.add(eg);
+    // 세로 용접선: 마디마다 같은 둘레 위치(옆면)를 따라 꺾이며 이어지고, 양 끝 직관까지 한 줄
+    const Zs = new T.Vector3(0, 0, R2 + 0.6);
+    for (let s = 0; s < pts.length - 1; s++) {
+      const qa = pts[s].clone().add(Zs), qb = pts[s + 1].clone().add(Zs);
+      const w = new T.Mesh(new T.BoxGeometry(3, qa.distanceTo(qb) + 1, 1.2), M.weld);
+      w.position.copy(qa).add(qb).multiplyScalar(0.5); w.quaternion.setFromUnitVectors(new T.Vector3(0, 1, 0), qb.clone().sub(qa).normalize()); g.add(w);
+    }
+    vSeam(sg, M, R2, 0, E - 4, Math.PI / 2); vSeam(eg, M, R2, 0, E - 4, Math.PI / 2);
     return { obj: g, tilt: 0.25 };
   }
 
@@ -411,6 +419,7 @@
   function fdBase(g, M, Rt, half) {
     // 띠 70 + 위 밑깎이
     const band = new T.Mesh(new T.CylinderGeometry(Rt, Rt, 70, 160, 1, true), M.steel); band.position.y = 335; g.add(band);
+    sSeam(g, M, Rt, Rt, 302, 368, 0.5); // 띠 세로 용접선
     const fl = new T.Mesh(new T.RingGeometry(Rt, Rt + 10, 160), M.steel); fl.rotation.x = -Math.PI / 2; fl.position.y = 370; g.add(fl);
     const rim = new T.Mesh(new T.TorusGeometry(Rt + 10, 1.2, 8, 180), M.rod); rim.rotation.x = Math.PI / 2; rim.position.y = 370; g.add(rim);
     // 바닥 후렌지 (현장마다 다름: 보기 쉬운 형태)
@@ -487,6 +496,7 @@
     const M = mats(); const g = new T.Group();
     const Rt = 250, Hb = 110, Ro = 340;
     const band = new T.Mesh(new T.CylinderGeometry(Rt, Rt, Hb, 160, 1, true), M.steel); band.position.y = Hb / 2; g.add(band);
+    sSeam(g, M, Rt, Rt, 2, Hb - 2, 0.5); // 띠 세로 용접선
     const fl = new T.Mesh(new T.RingGeometry(Rt, Rt + 10, 160), M.steel); fl.rotation.x = -Math.PI / 2; fl.position.y = Hb; g.add(fl);
     const rim = new T.Mesh(new T.TorusGeometry(Rt + 10, 1.2, 8, 180), M.rod); rim.rotation.x = Math.PI / 2; rim.position.y = Hb; g.add(rim);
     const weld = new T.Mesh(new T.TorusGeometry(Rt + 1, 1.8, 8, 180), M.weld); weld.rotation.x = Math.PI / 2; weld.position.y = 0; g.add(weld);
@@ -507,7 +517,8 @@
     const see = (m, o) => { const c = m.clone(); c.transparent = true; c.opacity = o; c.depthWrite = false; return c; };
     const MP = Object.assign({}, M, { steel: see(M.steel, 0.28), outer: see(M.outer, 0.22), rod: see(M.rod, 0.5) });
     doublePipe(g, MP, R1, R2, -240, 240, -200, 200, true, true);
-    vSeam(g, M, R2, -196, 196, Math.PI); // 손잡이 반대편 세로 용접선
+    // 손잡이 반대편 세로 용접선: 내부가 잘 보이도록 가늘고 반투명하게, 경계선 없이
+    const dvs = new T.Mesh(new T.BoxGeometry(1.5, 392, 0.6), see(M.weld, 0.3)); dvs.position.set(-(R2 + 0.4), 0, 0); dvs.rotation.y = Math.PI / 2; dvs.userData.noEdge = true; g.add(dvs);
     // 환봉
     // 손잡이 쪽 아우트 밖에서 시작해 반대편 인너 벽에서 멈춤
     const sx0 = -R1, sx1 = R2 + 12;
@@ -687,6 +698,7 @@
     // 꼬깔 이음 용접선
     const seam = new T.Mesh(new T.BoxGeometry(2.5, Math.hypot(Hc, Rb - rt), 1.2), M.weld);
     const sa = 0.6, mr = (Rb + rt) / 2 + 0.6; seam.position.set(Math.sin(sa) * mr, -Hc / 2, Math.cos(sa) * mr); seam.rotation.set(0, sa, 0); seam.rotateX(Math.atan2(Rb - rt, Hc)); g.add(seam);
+    sSeam(g, M, Rb, Rb, 2, Hb - 2, sa); // 띠 세로 용접선 (꼬깔 용접선과 한 줄)
     if (vdc) {
       // 25A 니쁠 반쪽: 민자 부분 용접 + 아래로 나사산
       const y0 = -Hc;

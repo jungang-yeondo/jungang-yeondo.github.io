@@ -189,6 +189,19 @@
     cyl(R2, s0, s1, M.outer);
   }
 
+  // ---------- 공용: 외부관 세로 이음 용접선 (ang: 관 둘레 각도 — 가지관·점검구 등 달린 부속의 반대편은 Math.PI) ----------
+  function vSeam(g, M, R, y0, y1, ang) {
+    const s = new T.Mesh(new T.BoxGeometry(3, y1 - y0, 1.2), M.weld);
+    s.position.set(Math.cos(ang) * (R + 0.6), (y0 + y1) / 2, Math.sin(ang) * (R + 0.6)); s.rotation.y = Math.PI / 2 - ang; g.add(s);
+  }
+
+  // 띠·호퍼 세로 용접선 (Rt: 위쪽 반지름, Rb: 아래쪽 반지름, sa: 관 둘레 각도 — 한 모델 안에서는 같은 각도로 한 줄로 맞춤)
+  function sSeam(g, M, Rt, Rb, y0, y1, sa) {
+    const H = y1 - y0, mr = (Rt + Rb) / 2 + 0.6;
+    const s = new T.Mesh(new T.BoxGeometry(3, Math.hypot(H, Rt - Rb), 1.2), M.weld);
+    s.position.set(Math.sin(sa) * mr, (y0 + y1) / 2, Math.cos(sa) * mr); s.rotation.set(0, sa, 0); s.rotateX(Math.atan2(Rt - Rb, H)); g.add(s);
+  }
+
   // ---------- 공용: 가지관 (인너는 메인 인너에, 아우트는 메인 아우트에 붙음 / 메인관은 그 자리만 뚫림) ----------
   function holeMat(base, P, u, r, uInv) {
     const m = base.clone();
@@ -226,6 +239,7 @@
     const uInv = { value: new T.Matrix4() };
     const MM = Object.assign({}, M, { steel: holeMat(M.steel, P, u, r1, uInv), outer: holeMat(M.outer, P, u, r2, uInv) });
     doublePipe(g, MM, R1, R2, -yT, yT, -yO, yO, true, true);
+    vSeam(g, M, R2, -yO + 4, yO - 4, Math.PI); // 가지관 반대편 세로 용접선
     let tUp = 0; for (let i = 0; i < 180; i++) { const f = i / 180 * Math.PI * 2; tUp = Math.max(tUp, saddleT(R2, P, u, r2, f), saddleT(R1, P, u, r1, f)); }
     const Ls = tUp + 2, Lo = tUp + extra;
     saddleTube(g, M.steel, R1, P, u, r1, Ls);
@@ -350,6 +364,7 @@
     const ann = (r0, r1, y, m) => { const o = new T.Mesh(new T.RingGeometry(r0, r1, 160), m || M.steel); o.rotation.x = -Math.PI / 2; o.position.y = y; g.add(o); };
     const ring = (r, t, y, m) => { const o = new T.Mesh(new T.TorusGeometry(r, t, 8, 180), m); o.rotation.x = Math.PI / 2; o.position.y = y; g.add(o); };
     cyl(Rb, 0, Hb); cyl(Rs, -Hb, 0);
+    sSeam(g, M, Rb, Rb, 2, Hb - 2, 0.5); sSeam(g, M, Rs, Rs, -Hb + 2, -2, 0.5); // 세로 용접선 (한 줄)
     ann(Rs, Rb, 0); ann(Rs, Rb, 2);                       // 도넛 판
     ring(Rb, 1.6, 1, M.weld); ring(Rs, 1.6, 0, M.weld);  // 용접선
     ann(Rb, Rb + 10, Hb); ring(Rb + 10, 1.2, Hb, M.rod);  // 위 밑깎이
@@ -370,6 +385,7 @@
     cyl(Rb, 130, 200);
     const cone = new T.Mesh(new T.CylinderGeometry(Rb, Rs, 190, 160, 1, true), M.steel); cone.position.y = 35; g.add(cone);
     cyl(Rs, -130, -60);   // 상부 띠와 같은 높이(70)
+    sSeam(g, M, Rb, Rb, 132, 198, 0.5); sSeam(g, M, Rb, Rs, -60, 130, 0.5); sSeam(g, M, Rs, Rs, -128, -62, 0.5); // 세로 용접선 (한 줄)
     ring(Rb, 1.6, 130, M.weld); ring(Rs, 1.6, -60, M.weld);
     ann(Rb, Rb + 10, 200); ring(Rb + 10, 1.2, 200, M.rod);
     ann(Rs, Rs + 10, -130); ring(Rs + 10, 1.2, -130, M.rod);
@@ -382,6 +398,7 @@
     doublePipe(g, M, Rs1, Rs1 + d, -210, -110, -170, -110, true, false); // 작은 쪽 끝
     const ci = new T.Mesh(new T.CylinderGeometry(Rb1, Rs1, 250, 160, 1, true), M.steel); ci.position.y = 15; g.add(ci);
     const co = new T.Mesh(new T.CylinderGeometry(Rb1 + d, Rs1 + d, 250, 160, 1, true), M.outer); co.position.y = 15; g.add(co);
+    sSeam(g, M, Rb1 + d, Rb1 + d, 144, 196, 0.5); sSeam(g, M, Rb1 + d, Rs1 + d, -110, 140, 0.5); sSeam(g, M, Rs1 + d, Rs1 + d, -166, -114, 0.5); // 세로 용접선 (한 줄)
     const ring = (r, y) => { const o = new T.Mesh(new T.TorusGeometry(r, 1.6, 8, 180), M.weld); o.rotation.x = Math.PI / 2; o.position.y = y; g.add(o); };
     ring(Rb1 + d, 140); ring(Rs1 + d, -110);
     return { obj: g, tilt: 0.35, zoom: 1.3 };
@@ -417,9 +434,9 @@
     const side = new T.Mesh(new T.CylinderGeometry(top * Math.SQRT2, half * Math.SQRT2, 300, 4, 1, true), flat);
     side.rotation.y = Math.PI / 4; side.position.y = 150; g.add(side);
     // 꺾인 모서리 경계선: 반사 때문에 면끼리 같은 밝기로 보이는 각도에서도 형태가 보이도록
-    const edgeM = new T.MeshStandardMaterial({ color: 0x3a3f46, metalness: 0.5, roughness: 0.55 });
+    const edgeM = new T.MeshStandardMaterial({ color: 0x8a857d, metalness: 0.85, roughness: 0.5 }); // 모서리 용접선: 가늘고 은은하게
     const line = (a, b) => { const A = new T.Vector3(...a), B = new T.Vector3(...b), d = B.clone().sub(A);
-      const m = new T.Mesh(new T.CylinderGeometry(2.6, 2.6, d.length(), 8), edgeM); m.position.copy(A).add(B).multiplyScalar(0.5);
+      const m = new T.Mesh(new T.CylinderGeometry(1.1, 1.1, d.length(), 8), edgeM); m.userData.noEdge = true; m.position.copy(A).add(B).multiplyScalar(0.5);
       m.quaternion.setFromUnitVectors(new T.Vector3(0, 1, 0), d.normalize()); g.add(m); };
     const cs = [[1, 1], [1, -1], [-1, -1], [-1, 1]];
     cs.forEach(([x, z], i) => { const [x2, z2] = cs[(i + 1) % 4];
@@ -448,9 +465,9 @@
     const hopM = new T.MeshStandardMaterial({ color: 0x8c8e8f, metalness: 1, roughness: 0.28, side: T.DoubleSide });
     g.add(new T.Mesh(geo, hopM));
     // 경계선: 평면 삼각형 ~ 모서리 라운드, 바닥 후렌지, 위 띠 이음
-    const edgeM = new T.MeshStandardMaterial({ color: 0x3a3f46, metalness: 0.5, roughness: 0.55 });
+    const edgeM = new T.MeshStandardMaterial({ color: 0x8a857d, metalness: 0.85, roughness: 0.5 }); // 모서리 용접선: 가늘고 은은하게
     const line = (a, b) => { const A = new T.Vector3(...a), B = new T.Vector3(...b), d = B.clone().sub(A);
-      const m = new T.Mesh(new T.CylinderGeometry(2.6, 2.6, d.length(), 8), edgeM); m.position.copy(A).add(B).multiplyScalar(0.5);
+      const m = new T.Mesh(new T.CylinderGeometry(1.1, 1.1, d.length(), 8), edgeM); m.userData.noEdge = true; m.position.copy(A).add(B).multiplyScalar(0.5);
       m.quaternion.setFromUnitVectors(new T.Vector3(0, 1, 0), d.normalize()); g.add(m); };
     for (let q = 0; q < 4; q++) {
       const C = corner(q), N = corner((q + 1) % 4), f0 = q * Math.PI / 2, f1 = (q + 1) * Math.PI / 2;
@@ -458,7 +475,7 @@
       line([C[0], 0.5, C[2]], [Rt * Math.cos(f1), 300, Rt * Math.sin(f1)]);
       line([C[0], 0.5, C[2]], [N[0], 0.5, N[2]]);
     }
-    const seamT = new T.Mesh(new T.TorusGeometry(Rt, 2.6, 8, 180), edgeM); seamT.rotation.x = Math.PI / 2; seamT.position.y = 300; g.add(seamT);
+    const seamT = new T.Mesh(new T.TorusGeometry(Rt, 1.4, 8, 180), edgeM); seamT.rotation.x = Math.PI / 2; seamT.position.y = 300; g.add(seamT);
     return { obj: g, tilt: 0.45, zoom: 1.5 };
   }
 
@@ -488,6 +505,7 @@
     const see = (m, o) => { const c = m.clone(); c.transparent = true; c.opacity = o; c.depthWrite = false; return c; };
     const MP = Object.assign({}, M, { steel: see(M.steel, 0.28), outer: see(M.outer, 0.22), rod: see(M.rod, 0.5) });
     doublePipe(g, MP, R1, R2, -240, 240, -200, 200, true, true);
+    vSeam(g, M, R2, -196, 196, Math.PI); // 손잡이 반대편 세로 용접선
     // 환봉
     // 손잡이 쪽 아우트 밖에서 시작해 반대편 인너 벽에서 멈춤
     const sx0 = -R1, sx1 = R2 + 12;
@@ -544,6 +562,7 @@
     const P = new T.Vector3(0, 0, 0), u = new T.Vector3(1, 0, 0), uInv = { value: new T.Matrix4() };
     const MM = Object.assign({}, M, { steel: holeMat(M.steel, P, u, rc, uInv), outer: holeMat(M.outer, P, u, rc, uInv) });
     doublePipe(g, MM, R1, R2, -240, 240, -200, 200, true, true);
+    vSeam(g, M, R2, -196, 196, Math.PI); // 점검구 반대편 세로 용접선
     const xe = R2 + out;
     saddleTube(g, M.steel, R1, P, u, rc, xe);
     // 아우트와 만나는 용접선
@@ -567,6 +586,7 @@
     const P = new T.Vector3(0, 0, 0), u = new T.Vector3(1, 0, 0), uInv = { value: new T.Matrix4() };
     const MM = Object.assign({}, M, { steel: holeMat(M.steel, P, u, rn, uInv), outer: holeMat(M.outer, P, u, rn, uInv) });
     doublePipe(g, MM, R1, R2, -240, 240, -200, 200, true, true);
+    vSeam(g, M, R2, -196, 196, Math.PI); // 니쁠 반대편 세로 용접선
     const xw = R2 + 10, xe = xw + 30;
     saddleTube(g, M.rod, R1, P, u, rn, xw); // 민자: 인너 벽면에서 시작 → 아우트 밖 10
     const dark = new T.MeshStandardMaterial({ color: 0x0b0d10, metalness: 0.3, roughness: 0.8, side: T.BackSide });

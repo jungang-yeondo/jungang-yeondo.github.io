@@ -252,6 +252,8 @@
       const h = o.geometry.parameters.height / 2;
       if (Math.abs(o.position.y - h - Ls) < 0.5) o.userData.edgeSkip = (x1, y1, z1, x2, y2) => y1 < -h + 0.5 && y2 < -h + 0.5;
     });
+    // 가지관 세로 용접선: 윗면(메인관 반대쪽 가장자리)을 따라 새들 끝부터 가지관 끝까지
+    vSeam(bg, M, r2, saddleT(R2, P, u, r2, Math.PI * 1.5) + 1, Lo - 4, Math.PI);
     g.add(bg);
     g.traverse((o) => { if (o.isMesh && (o.material === MM.steel || o.material === MM.outer)) o.onBeforeRender = () => { uInv.value.copy(g.matrixWorld).invert(); }; });
     return { obj: g, tilt };

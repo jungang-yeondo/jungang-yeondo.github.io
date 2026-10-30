@@ -9,7 +9,7 @@
     // 뷰어(캔버스)마다 따로 생성: 다른 WebGL 컨텍스트의 텍스처는 공유 불가
     const pm = new T.PMREMGenerator(renderer);
     const s = new T.Scene();
-    s.background = new T.Color(0x05070a);
+    s.background = new T.Color(0x333333);
     const strip = (w, h, x, y, z, rx, ry, c) => {
       const m = new T.Mesh(new T.PlaneGeometry(w, h), new T.MeshBasicMaterial({ color: c, side: T.DoubleSide }));
       m.position.set(x, y, z); m.rotation.set(rx, ry, 0); s.add(m);
@@ -18,21 +18,29 @@
     strip(14, 0.5, 0, 6, -2.5, Math.PI / 2, 0, 0xffffff);
     strip(14, 0.5, 0, 6, 0, Math.PI / 2, 0, 0xf4f4f2);
     strip(14, 0.5, 0, 6, 2.5, Math.PI / 2, 0, 0xffffff);
-    strip(4, 6, -8, 1.5, 0, 0, Math.PI / 2, 0xd9d9d6);
+    strip(4, 6, -8, 1.5, 0, 0, Math.PI / 2, 0xe6e6e6);
     strip(1.2, 6, 8, 1.5, -2, 0, -Math.PI / 2, 0xfff1dc);
     strip(1.2, 6, 8, 1.5, 2, 0, -Math.PI / 2, 0xfff1dc);
-    strip(3, 3, 0, 1, -8, 0, 0, 0x8e8e8c);
-    strip(20, 20, 0, -5, 0, Math.PI / 2, 0, 0x101216);
+    strip(10, 4, 0, 1, -8, 0, 0, 0x8e8e8e);
+    strip(10, 4, 0, 1, 8, 0, 0, 0x5e5e5e);
+    strip(20, 20, 0, -5, 0, Math.PI / 2, 0, 0x2e2e2e);
     return pm.fromScene(s, 0.02).texture;
   }
+  // 압연 결: 아주 옇은 줄무늬 거칠기 (실제 판재처럼 빛이 고르게 번지게)
+  let BR = null;
+  (function () {
+    const c = document.createElement('canvas'); c.width = 8; c.height = 256; const x = c.getContext('2d');
+    for (let y = 0; y < 256; y++) { const v = 200 + Math.round((Math.random() - 0.5) * 70); x.fillStyle = `rgb(${v},${v},${v})`; x.fillRect(0, y, 8, 1); }
+    BR = new T.CanvasTexture(c); BR.wrapS = BR.wrapT = T.RepeatWrapping; BR.repeat.set(1, 3);
+  })();
   function mats() {
     return {
-      steel: new T.MeshStandardMaterial({ color: 0xcfcfcc, metalness: 1, roughness: 0.17, side: T.DoubleSide }),
-      steel2: new T.MeshStandardMaterial({ color: 0xbdbdba, metalness: 1, roughness: 0.2, side: T.DoubleSide }),
+      steel: new T.MeshStandardMaterial({ color: 0xd4d5d6, metalness: 1, roughness: 0.22, roughnessMap: BR, side: T.DoubleSide }),
+      steel2: new T.MeshStandardMaterial({ color: 0xc5c6c7, metalness: 1, roughness: 0.26, roughnessMap: BR, side: T.DoubleSide }),
       // 외부관·FR: 내부관보다 어둡고 은은한 무광 SUS
-      outer: new T.MeshStandardMaterial({ color: 0x8c8f93, metalness: 0.9, roughness: 0.34, side: T.DoubleSide }),
-      rod: new T.MeshStandardMaterial({ color: 0xd8d8d5, metalness: 1, roughness: 0.12 }),
-      weld: new T.MeshStandardMaterial({ color: 0x8e939a, metalness: 0.85, roughness: 0.45 }),
+      outer: new T.MeshStandardMaterial({ color: 0xb7b8b9, metalness: 0.95, roughness: 0.34, roughnessMap: BR, side: T.DoubleSide }),
+      rod: new T.MeshStandardMaterial({ color: 0xdcdddd, metalness: 1, roughness: 0.18 }),
+      weld: new T.MeshStandardMaterial({ color: 0x9a9185, metalness: 0.85, roughness: 0.5 }),
     };
   }
 
@@ -428,7 +436,7 @@
     }
     const geo = new T.BufferGeometry(); geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3)); geo.setIndex(idx); geo.computeVertexNormals();
     // 호퍼는 면이 넓어 반사가 너무 밝음 → 조금 어둡고 덜 반짝이게
-    const hopM = new T.MeshStandardMaterial({ color: 0xaeb1b4, metalness: 0.95, roughness: 0.3, side: T.DoubleSide });
+    const hopM = new T.MeshStandardMaterial({ color: 0xbebfc0, metalness: 0.95, roughness: 0.32, side: T.DoubleSide });
     g.add(new T.Mesh(geo, hopM));
     // 경계선: 평면 삼각형 ~ 모서리 라운드, 바닥 후렌지, 위 띠 이음
     const edgeM = new T.MeshStandardMaterial({ color: 0x3a3f46, metalness: 0.5, roughness: 0.55 });
@@ -582,7 +590,7 @@
   function buildPA() {
     const M = mats(); const g = new T.Group();
     const W = 700, D = 640, A = 50, tk = 5;
-    const wM = new T.MeshStandardMaterial({ color: 0x7d838b, metalness: 0.8, roughness: 0.5, polygonOffset: true, polygonOffsetFactor: -2 });
+    const wM = new T.MeshStandardMaterial({ color: 0x8f877c, metalness: 0.8, roughness: 0.5, polygonOffset: true, polygonOffsetFactor: -2 });
     const prism = (pts, h, mat) => { const s = new T.Shape(); pts.forEach(([x, z], i) => (i ? s.lineTo(x, z) : s.moveTo(x, z))); const m = new T.Mesh(new T.ExtrudeGeometry(s, { depth: h, bevelEnabled: false }), mat); m.rotation.x = Math.PI / 2; return m; };
     for (let k = 0; k < 4; k++) {
       const a = (k % 2 ? D : W) / 2, b = (k % 2 ? W : D) / 2, side = new T.Group(); side.rotation.y = k * Math.PI / 2;
@@ -672,7 +680,7 @@
     g.add(new T.Mesh(new T.CylinderGeometry(Ri, Ro, Hc, 180, 1, true, tB, tA - tB + ov), M.steel));
     // 경사면 위 로컬 좌표계 (th 각도의 모선 기준): x = 둘레 방향(th 감소 쪽), y = 면의 법선, z = 모선(위→아래)
     const onLine = (th, objs) => { const grp = new T.Group(); grp.rotation.y = th; const inner = new T.Group(); inner.position.set(0, 0, (Ri + Ro) / 2); inner.rotation.x = a; grp.add(inner); objs.forEach((o) => inner.add(o)); g.add(grp); };
-    const spotM = new T.MeshStandardMaterial({ color: 0x6f747b, metalness: 0.7, roughness: 0.55, polygonOffset: true, polygonOffsetFactor: -2 });
+    const spotM = new T.MeshStandardMaterial({ color: 0x857d72, metalness: 0.7, roughness: 0.55, polygonOffset: true, polygonOffsetFactor: -2 });
     const rivet = (x, z) => { const s = new T.Mesh(new T.CircleGeometry(3, 16), spotM); s.rotation.x = -Math.PI / 2; s.position.set(x, 0.15, z); return s; }; // 용접 자국(돌출 없음)
     // 조각 이음선 + 리벳 (2곳)
     for (const th of [2.0, 4.1]) {
@@ -702,7 +710,7 @@
     // 브라우저는 WebGL 화면을 동시에 약 16개까지만 유지 → 화면 근처에 있을 때만 만들고, 벗어나면 정리
     let canvas = null, renderer = null;
     const scene = new T.Scene();
-    scene.add(new T.HemisphereLight(0xffffff, 0x20242c, 0.25));
+    scene.add(new T.HemisphereLight(0xffffff, 0x2a2a2a, 0.25));
     const key = new T.DirectionalLight(0xffffff, 0.6); key.position.set(700, 1200, 900); scene.add(key);
     const root = new T.Group(); scene.add(root); root.rotation.y = 0.5;
     const camera = new T.PerspectiveCamera(30, 4 / 3, 1, 50000);

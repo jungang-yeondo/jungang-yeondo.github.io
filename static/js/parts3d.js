@@ -214,7 +214,10 @@
     }
     for (let i = 0; i < N; i++) { const p = i * 2; idx.push(p, p + 2, p + 1, p + 1, p + 2, p + 3); }
     const geo = new T.BufferGeometry(); geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3)); geo.setIndex(idx); geo.computeVertexNormals();
-    g.add(new T.Mesh(geo, mat));
+    const sm = new T.Mesh(geo, mat); g.add(sm);
+    // 가지관 쪽 끝(tEnd)은 이어지는 관과 매끈하게 붙으므로 경계선 없음
+    const onEnd = (x, y) => Math.abs((x - P.x) * u.x + (y - P.y) * u.y - tEnd) < 0.5;
+    sm.userData.edgeSkip = (x1, y1, z1, x2, y2) => onEnd(x1, y1) && onEnd(x2, y2);
   }
   // 메인 이중관 + 가지관. ang: 메인 축과 가지관 사이 각도, c: 가지관 축이 메인 축과 만나는 높이, extra: 가지관이 메인 밖으로 나오는 길이
   function buildBranched(R1, R2, r1, r2, yT, yO, ang, c, extra, tilt) {
@@ -229,6 +232,12 @@
     saddleTube(g, M.outer, R2, P, u, r2, Ls);
     const bg = new T.Group(); bg.rotation.z = -ang; bg.position.copy(P);
     doublePipe(bg, M, r1, r2, Ls, Lo + 40, Ls, Lo, false, true);
+    // 새들관과 이어지는 가지관 시작 끝단은 경계선 없음
+    bg.children.forEach((o) => {
+      if (!o.isMesh || o.geometry.type !== 'CylinderGeometry') return;
+      const h = o.geometry.parameters.height / 2;
+      if (Math.abs(o.position.y - h - Ls) < 0.5) o.userData.edgeSkip = (x1, y1, z1, x2, y2) => y1 < -h + 0.5 && y2 < -h + 0.5;
+    });
     g.add(bg);
     g.traverse((o) => { if (o.isMesh && (o.material === MM.steel || o.material === MM.outer)) o.onBeforeRender = () => { uInv.value.copy(g.matrixWorld).invert(); }; });
     return { obj: g, tilt };
@@ -712,7 +721,14 @@
       const t = m.geometry && m.geometry.type;
       if (!t || t === 'TorusGeometry' || t === 'TubeGeometry') return; // 둥근 용접선·봉은 제외
       if (mt.color && mt.color.r + mt.color.g + mt.color.b < 0.3) return; // 어두운 틈·구멍 제외
-      const e = new T.LineSegments(new T.EdgesGeometry(m.geometry, 30), EDGE);
+      let eg = new T.EdgesGeometry(m.geometry, 30);
+      const sk = m.userData.edgeSkip;
+      if (sk) { // 매끈하게 이어지는 이음매 선은 빼기
+        const p = eg.attributes.position.array, keep = [];
+        for (let i = 0; i < p.length; i += 6) if (!sk(p[i], p[i + 1], p[i + 2], p[i + 3], p[i + 4], p[i + 5])) for (let j = 0; j < 6; j++) keep.push(p[i + j]);
+        eg = new T.BufferGeometry(); eg.setAttribute('position', new T.Float32BufferAttribute(keep, 3));
+      }
+      const e = new T.LineSegments(eg, EDGE);
       e.raycast = () => {}; m.add(e);
     });
   }

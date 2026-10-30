@@ -103,7 +103,7 @@ ${body}
       <div><dt>FAX</dt><dd>${esc(site.fax)}</dd></div>
       <div><dt>E-mail</dt><dd>${esc(site.email)}</dd></div>
     </dl>
-    <div class="c"><span>© ${new Date().getFullYear()} ${esc(site.name_en)} All rights reserved.</span><a href="/privacy/">개인정보처리방침</a></div>
+    <div class="c"><span>© ${new Date().getFullYear()} ${esc(site.name_en)} All rights reserved.<br>본 사이트의 사진·도면·카탈로그는 (주)중앙연도의 저작물로 무단 복제·사용을 금합니다.</span><a href="/privacy/">개인정보처리방침</a></div>
   </div>
 </footer>
 <script src="/js/main.js" defer></script>

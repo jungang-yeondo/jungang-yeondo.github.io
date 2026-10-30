@@ -18,7 +18,7 @@
     strip(14, 0.5, 0, 6, -2.5, Math.PI / 2, 0, 0xffffff);
     strip(14, 0.5, 0, 6, 0, Math.PI / 2, 0, 0xf4f4f2);
     strip(14, 0.5, 0, 6, 2.5, Math.PI / 2, 0, 0xffffff);
-    strip(4, 6, -8, 1.5, 0, 0, Math.PI / 2, 0xe6e6e6);
+    strip(4, 6, -8, 1.5, 0, 0, Math.PI / 2, 0xb4b4b4);
     strip(1.2, 6, 8, 1.5, -2, 0, -Math.PI / 2, 0xeef1f4);
     strip(1.2, 6, 8, 1.5, 2, 0, -Math.PI / 2, 0xeef1f4);
     strip(10, 4, 0, 1, -8, 0, 0, 0x8e8e8e);
@@ -701,6 +701,22 @@
 
   const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, dsh: () => buildDS(false), dsv: () => buildDS(true), bj: buildBJ, sc: buildSC, vdc: () => buildCap(true), hdc: () => buildCap(false), el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR, pa: buildPA, vt: buildVT };
 
+  // ---------- 경계선: 각진 모서리·끝단에 옅은 선 (밝게 반사돼도 형태가 보이게) ----------
+  const EDGE = new T.LineBasicMaterial({ color: 0x24272c, transparent: true, opacity: 0.7 });
+  function outline(obj) {
+    const list = [];
+    obj.traverse((m) => { if (m.isMesh && !m.userData.noEdge) list.push(m); });
+    list.forEach((m) => {
+      const mt = Array.isArray(m.material) ? m.material[0] : m.material;
+      if (!mt || mt.visible === false) return;
+      const t = m.geometry && m.geometry.type;
+      if (!t || t === 'TorusGeometry' || t === 'TubeGeometry') return; // 둥근 용접선·봉은 제외
+      if (mt.color && mt.color.r + mt.color.g + mt.color.b < 0.3) return; // 어두운 틈·구멍 제외
+      const e = new T.LineSegments(new T.EdgesGeometry(m.geometry, 30), EDGE);
+      e.raycast = () => {}; m.add(e);
+    });
+  }
+
   // ---------- 뷰어 ----------
   // 전환 버튼으로 함께 보여줄 모델 묶음
   const SETS = { ds: [['수평라인', 'dsh'], ['수직라인', 'dsv']], mt: [['MT', 'mt'], ['NT', 'nt']], lt: [['LT', 'lt'], ['JT', 'jt']], el: [['EL90', 'el90'], ['EL45', 'el45']], ag: [['속관', 'agin'], ['카바', 'agcv']], sr: [['속관', 'srin'], ['카바', 'srcv']], tr: [['단관', 'trs'], ['이중관', 'trd']], fd: [['사각', 'fdsq'], ['호퍼', 'fdhp']], cap: [['VDC', 'vdc'], ['HDC', 'hdc']] };
@@ -725,7 +741,7 @@
     const cache = {};
     const show = (name) => {
       if (!cache[name]) {
-        const { obj, tilt, fit, zoom, actions, start } = MODELS[name]();
+        const { obj, tilt, fit, zoom, actions, start } = MODELS[name](); outline(obj);
         const box = new T.Box3().setFromObject(obj); obj.position.sub(box.getCenter(new T.Vector3()));
         const sz = box.getSize(new T.Vector3());
         cache[name] = { obj, tilt, actions, start: start || 0, fit: fit || 1.2, zoom: zoom || 1, hw: sz.x / 2, hh: sz.y / 2, rad: box.getBoundingSphere(new T.Sphere()).radius };

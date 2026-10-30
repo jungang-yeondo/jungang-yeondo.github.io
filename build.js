@@ -254,7 +254,7 @@ add('/company/history/', {
 add('/business/', {
   title: '사업분야', section: 'business', image: biz.banner,
   body: subPage({ en: 'Business', title: '사업분야', banner: biz.banner, section: 'business', current: '/business/', body:
-    two('Field', '적용 분야', `<div class="biz3">${list(biz.fields).map((f) => `<article><div class="im">${img(f.image, f.title)}</div><span class="en">${esc(f.label)}</span><b>${esc(f.title)}</b><p>${esc(f.text)}</p></article>`).join('')}</div>`) +
+    two('Field', '적용 분야', `<div class="biz3">${list(biz.fields).map((f) => `<article><div class="im">${img(f.image, f.title)}</div><span class="en">${esc(f.label)}</span><b>${esc(f.title)}</b><p>${esc(f.text)}</p>${/발전기/.test(f.title) && list(proj.idc).length ? `<a href="/projects/#idc" style="display:inline-block;margin-top:12px;font-size:15px;color:var(--red)">데이터센터 실적 ${list(proj.idc).length}곳 보기 →</a>` : ''}</article>`).join('')}</div>`) +
     two('Process', '수주부터 납품까지', `<ol class="steps" style="grid-template-columns:repeat(${Math.min(5, list(biz.process).length) || 1},1fr)">${list(biz.process).map((p) => `<li><b style="color:var(--ink);display:block;margin-bottom:6px">${esc(p.title)}</b>${esc(p.text)}</li>`).join('')}</ol>`) +
     (list(biz.facilities).length ? two('Facility', esc(biz.facilities_title || '보유 설비 · 제작 기술'), `<div class="facil">${list(biz.facilities).map((f) => `<div class="row"><div class="ph">${img(f.image1, f.title)}${f.image2 ? img(f.image2, f.title) : ''}</div><div class="tx">${f.en ? `<span class="en">${esc(f.en)}</span>` : ''}<b>${esc(f.title)}</b><p>${br(f.text)}</p></div></div>`).join('')}</div>`) : '') }),
 });
@@ -317,7 +317,7 @@ const moreBtn = 'font:inherit;font-size:15px;width:100%;padding:14px 0;margin-to
     title: '납품실적', section: 'projects', image: proj.banner,
     desc: `${site.short_name} 연도 납품실적 — ${items.slice(0, 8).map((i) => i.name).join(', ')} 등 13,000곳 이상.`,
     body: subPage({ en: 'Projects', title: '납품실적', banner: proj.banner, section: 'projects', current: '/projects/', body:
-      two('Reference', '대표 납품 현장', `<div class="filters" id="filters" role="group" aria-label="분야 필터">${cats.map((c, i) => `<button type="button" aria-pressed="${i === 0}">${esc(c)}</button>`).join('')}</div>
+      idcBlock() + two('Reference', '대표 납품 현장', `<div class="filters" id="filters" role="group" aria-label="분야 필터">${cats.map((c, i) => `<button type="button" aria-pressed="${i === 0}">${esc(c)}</button>`).join('')}</div>
 <div class="searchrow"><span class="rcnt" id="countLine"><b>${items.length}</b> 개 현장</span><input id="q" type="search" placeholder="현장명 · 시공사 검색" aria-label="현장 검색"></div>
 <div class="tw"><table class="tbl" id="rtable"><thead><tr><th>현장명</th><th>분야</th><th>시공사</th></tr></thead><tbody>${rows}</tbody></table></div>
 <button type="button" id="refMore" aria-expanded="false" hidden style="${moreBtn}"></button>

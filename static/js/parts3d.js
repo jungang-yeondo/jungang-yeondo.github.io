@@ -9,7 +9,7 @@
     // 뷰어(캔버스)마다 따로 생성: 다른 WebGL 컨텍스트의 텍스처는 공유 불가
     const pm = new T.PMREMGenerator(renderer);
     const s = new T.Scene();
-    s.background = new T.Color(0x333333);
+    s.background = new T.Color(0x1f1f1e);
     const strip = (w, h, x, y, z, rx, ry, c) => {
       const m = new T.Mesh(new T.PlaneGeometry(w, h), new T.MeshBasicMaterial({ color: c, side: T.DoubleSide }));
       m.position.set(x, y, z); m.rotation.set(rx, ry, 0); s.add(m);
@@ -19,11 +19,11 @@
     strip(14, 0.5, 0, 6, 0, Math.PI / 2, 0, 0xf4f4f2);
     strip(14, 0.5, 0, 6, 2.5, Math.PI / 2, 0, 0xffffff);
     strip(4, 6, -8, 1.5, 0, 0, Math.PI / 2, 0xe6e6e6);
-    strip(1.2, 6, 8, 1.5, -2, 0, -Math.PI / 2, 0xfff1dc);
-    strip(1.2, 6, 8, 1.5, 2, 0, -Math.PI / 2, 0xfff1dc);
+    strip(1.2, 6, 8, 1.5, -2, 0, -Math.PI / 2, 0xeef1f4);
+    strip(1.2, 6, 8, 1.5, 2, 0, -Math.PI / 2, 0xeef1f4);
     strip(10, 4, 0, 1, -8, 0, 0, 0x8e8e8e);
     strip(10, 4, 0, 1, 8, 0, 0, 0x5e5e5e);
-    strip(20, 20, 0, -5, 0, Math.PI / 2, 0, 0x2e2e2e);
+    strip(20, 20, 0, -5, 0, Math.PI / 2, 0, 0x262625);
     return pm.fromScene(s, 0.02).texture;
   }
   // 압연 결: 아주 옇은 줄무늬 거칠기 (실제 판재처럼 빛이 고르게 번지게)
@@ -35,11 +35,11 @@
   })();
   function mats() {
     return {
-      steel: new T.MeshStandardMaterial({ color: 0xd4d5d6, metalness: 1, roughness: 0.22, roughnessMap: BR, side: T.DoubleSide }),
-      steel2: new T.MeshStandardMaterial({ color: 0xc5c6c7, metalness: 1, roughness: 0.26, roughnessMap: BR, side: T.DoubleSide }),
+      steel: new T.MeshStandardMaterial({ color: 0x9a9c9d, metalness: 1, roughness: 0.18, roughnessMap: BR, side: T.DoubleSide }),
+      steel2: new T.MeshStandardMaterial({ color: 0x909293, metalness: 1, roughness: 0.22, roughnessMap: BR, side: T.DoubleSide }),
       // 외부관·FR: 내부관보다 어둡고 은은한 무광 SUS
-      outer: new T.MeshStandardMaterial({ color: 0xb7b8b9, metalness: 0.95, roughness: 0.34, roughnessMap: BR, side: T.DoubleSide }),
-      rod: new T.MeshStandardMaterial({ color: 0xdcdddd, metalness: 1, roughness: 0.18 }),
+      outer: new T.MeshStandardMaterial({ color: 0x87898a, metalness: 1, roughness: 0.3, roughnessMap: BR, side: T.DoubleSide }),
+      rod: new T.MeshStandardMaterial({ color: 0xa0a2a3, metalness: 1, roughness: 0.15 }),
       weld: new T.MeshStandardMaterial({ color: 0x9a9185, metalness: 0.85, roughness: 0.5 }),
     };
   }
@@ -436,7 +436,7 @@
     }
     const geo = new T.BufferGeometry(); geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3)); geo.setIndex(idx); geo.computeVertexNormals();
     // 호퍼는 면이 넓어 반사가 너무 밝음 → 조금 어둡고 덜 반짝이게
-    const hopM = new T.MeshStandardMaterial({ color: 0xbebfc0, metalness: 0.95, roughness: 0.32, side: T.DoubleSide });
+    const hopM = new T.MeshStandardMaterial({ color: 0x8c8e8f, metalness: 1, roughness: 0.28, side: T.DoubleSide });
     g.add(new T.Mesh(geo, hopM));
     // 경계선: 평면 삼각형 ~ 모서리 라운드, 바닥 후렌지, 위 띠 이음
     const edgeM = new T.MeshStandardMaterial({ color: 0x3a3f46, metalness: 0.5, roughness: 0.55 });
@@ -779,7 +779,7 @@
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.outputEncoding = T.sRGBEncoding;
       renderer.toneMapping = T.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.05;
+      renderer.toneMappingExposure = 1.0;
       scene.environment = envMap(renderer);
       size();
     };

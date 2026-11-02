@@ -312,13 +312,15 @@
     const pts = [arc(0)];
     for (let i = 0; i < n - 1; i++) pts.push(meet(arc(i * u), tan(i * u), arc((i + 1) * u), tan((i + 1) * u)));
     pts.push(arc(th));
+    const E = 60, Ls = E - 32; // 양 끝 직관: 외부관은 곡관 몸통과 한 장으로 이어서(비딩홈 위까지) 이음 줄이 안 생기게
+    const d0 = pts[1].clone().sub(pts[0]).normalize(), dN = pts[pts.length - 1].clone().sub(pts[pts.length - 2]).normalize();
+    const ptsO = [pts[0].clone().addScaledVector(d0, -Ls), ...pts, pts[pts.length - 1].clone().addScaledVector(dN, Ls)];
     mitreTube(g, M.steel, pts, R1);
-    mitreTube(g, M.outer, pts, R2);
-    const E = 60;
+    mitreTube(g, M.outer, ptsO, R2);
     const sg = new T.Group(); sg.rotation.z = Math.PI; sg.position.copy(arc(0));
-    doublePipe(sg, M, R1, R2, 0, E + 40, 0, E, false, true); g.add(sg);
+    doublePipe(sg, M, R1, R2, 0, E + 40, Ls, E, false, true); g.add(sg);
     const eg = new T.Group(); eg.rotation.z = -th; eg.position.copy(arc(th));
-    doublePipe(eg, M, R1, R2, 0, E + 40, 0, E, false, true); g.add(eg);
+    doublePipe(eg, M, R1, R2, 0, E + 40, Ls, E, false, true); g.add(eg);
     // 세로 용접선: 가장 짧은 면(곡관 안쪽, 꺾이는 중심 쪽)을 따라 — 실제로도 용접 길이를 최소로 하려고 안쪽에 둠
     const Ri = R2 + 0.6, dirs = [], nrm = [];
     for (let s = 0; s < pts.length - 1; s++) { const d = pts[s + 1].clone().sub(pts[s]).normalize(); dirs.push(d); nrm.push(new T.Vector3(d.y, -d.x, 0)); }

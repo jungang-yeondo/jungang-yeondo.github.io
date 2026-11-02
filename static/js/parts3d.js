@@ -796,11 +796,15 @@
     const camera = new T.PerspectiveCamera(30, 4 / 3, 1, 50000);
     const tanH = Math.tan(T.MathUtils.degToRad(15));
     let cur = null, halfW = 1, halfH = 1, rad = 1, fitK = 1.2, zoomK = 1;
+    // 사용자 확대: uz 1 = 기본 크기, 작을수록 가까이 (모델 안으로 들어가지 않게 최소값 제한)
+    let dBase = 1, uz = 1, uzMin = 0.55;
+    const cam = () => { camera.position.set(0, rad * 0.05, dBase * uz); camera.lookAt(0, 0, 0); };
+    const setUz = (v) => { uz = Math.max(uzMin, Math.min(1, v)); cam(); };
     const size = () => {
       const w = el.clientWidth, h = el.clientHeight; if (!w || !h) return;
       if (renderer) renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
-      const d = Math.max(halfW * 1.04 / (tanH * Math.min(camera.aspect, 1.3)), halfH * 1.4 / tanH, rad * fitK) * zoomK;
-      camera.position.set(0, rad * 0.05, d); camera.lookAt(0, 0, 0);
+      dBase = Math.max(halfW * 1.04 / (tanH * Math.min(camera.aspect, 1.3)), halfH * 1.4 / tanH, rad * fitK) * zoomK;
+      uzMin = Math.min(1, Math.max(0.55, rad * 1.15 / dBase)); setUz(uz);
     };
     const cache = {};
     const show = (name) => {
@@ -825,7 +829,7 @@
         ad.addEventListener('pointerdown', (e) => e.stopPropagation());
         el.appendChild(ad);
       }
-      halfW = m.hw; halfH = m.hh; rad = m.rad; fitK = m.fit; zoomK = m.zoom; size();
+      halfW = m.hw; halfH = m.hh; rad = m.rad; fitK = m.fit; zoomK = m.zoom; uz = 1; size();
     };
     if (set.length > 1) {
       const sw = document.createElement('div'); sw.className = 'sw';
@@ -842,17 +846,37 @@
 
     let drag = false, lx = 0, ly = 0, vx = 0.004, vy = 0, idle = 999, visible = false;
     const onSw = (e) => !!(e.target && e.target.closest && e.target.closest('.sw'));
-    el.addEventListener('pointerdown', (e) => { if (onSw(e)) return; drag = true; lx = e.clientX; ly = e.clientY; idle = 0; el.setPointerCapture(e.pointerId); el.classList.add('on'); });
+    // 손가락(포인터) 여러 개 추적: 1개 = 회전, 2개 = 확대. 개수가 바뀌는 순간 기준점을 다시 잡아 튀지 않게
+    const pts = new Map(); let pinch0 = 0, uz0 = 1, armed = false, lastTap = 0, tapX = 0, tapY = 0, moved = 0;
+    const gap = () => { const [a, b] = [...pts.values()]; return Math.hypot(a.x - b.x, a.y - b.y) || 1; };
+    const rebase = () => { drag = pts.size === 1; if (drag) { const p = [...pts.values()][0]; lx = p.x; ly = p.y; } if (pts.size === 2) { pinch0 = gap(); uz0 = uz; } };
+    el.addEventListener('pointerdown', (e) => {
+      if (onSw(e)) return; pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); idle = 0; armed = true; moved = 0;
+      try { el.setPointerCapture(e.pointerId); } catch (_) {} el.classList.add('on'); rebase();
+    });
     el.addEventListener('pointermove', (e) => {
-      if (!drag) return; const dx = e.clientX - lx, dy = e.clientY - ly; lx = e.clientX; ly = e.clientY;
+      if (!pts.has(e.pointerId)) return; pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); idle = 0;
+      if (pts.size === 2) { setUz(uz0 * pinch0 / gap()); vx = 0; vy = 0; moved = 99; return; }
+      if (!drag) return; const dx = e.clientX - lx, dy = e.clientY - ly; lx = e.clientX; ly = e.clientY; moved += Math.abs(dx) + Math.abs(dy);
       vx = Math.max(-0.06, Math.min(0.06, dx * 0.009)); vy = Math.max(-0.04, Math.min(0.04, dy * 0.009));
       root.rotation.y += vx; root.rotation.x = Math.max(-1.45, Math.min(1.45, root.rotation.x + vy));
     });
-    const up = () => { drag = false; };
+    const up = (e) => {
+      const was = pts.size; pts.delete(e.pointerId);
+      // 두 번 톡 (같은 자리, 움직임 거의 없음) → 원래 크기로
+      if (was === 1 && moved < 8 && e.type === 'pointerup') { const t = performance.now(); if (t - lastTap < 320 && Math.hypot(e.clientX - tapX, e.clientY - tapY) < 30) { setUz(1); lastTap = 0; } else { lastTap = t; tapX = e.clientX; tapY = e.clientY; } }
+      rebase();
+    };
     el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
-    // 3D 영역을 잡고 움직일 때 페이지 스크롤 막기 (모바일). 전환 버튼은 제외
-    el.addEventListener('touchstart', (e) => { if (e.touches.length === 1 && !onSw(e)) e.preventDefault(); }, { passive: false });
-    el.addEventListener('touchmove', (e) => { if (e.touches.length === 1 && !onSw(e)) e.preventDefault(); }, { passive: false });
+    el.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') armed = false; });
+    // PC 휠: Ctrl+휠(노트북 터치패드 확대 포함) 또는 3D를 한 번 클릭한 뒤에만 확대 → 그냥 스크롤할 때는 페이지가 내려감
+    el.addEventListener('wheel', (e) => { if (!(e.ctrlKey || armed)) return; e.preventDefault(); idle = 0; setUz(uz * Math.exp(Math.max(-100, Math.min(100, e.deltaY)) * 0.0025)); }, { passive: false }); // 휠 한 칸 ≈ 22%
+    // 3D 영역을 잡고 움직일 때 페이지 스크롤·페이지 확대 막기 (모바일). 전환 버튼은 제외
+    el.style.touchAction = 'none';
+    el.addEventListener('touchstart', (e) => { if (!onSw(e)) e.preventDefault(); }, { passive: false });
+    el.addEventListener('touchmove', (e) => { if (!onSw(e)) e.preventDefault(); }, { passive: false });
+    el.addEventListener('gesturestart', (e) => e.preventDefault());
+    const hint = el.querySelector('.hint'); if (hint) hint.textContent = matchMedia('(pointer: coarse)').matches ? '↻ 드래그 회전 · 두 손가락 확대' : '↻ 드래그 회전 · Ctrl+휠 확대';
     const init = () => {
       canvas = document.createElement('canvas'); el.prepend(canvas);
       renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -863,11 +887,11 @@
       scene.environment = envMap(renderer);
       size();
     };
-    const drop = () => { if (!renderer) return; renderer.dispose(); renderer.forceContextLoss(); canvas.remove(); renderer = null; canvas = null; };
+    const drop = () => { uz = 1; if (!renderer) return; renderer.dispose(); renderer.forceContextLoss(); canvas.remove(); renderer = null; canvas = null; };
     new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (visible && !renderer) init(); else if (!visible && renderer) drop(); }, { rootMargin: '300px' }).observe(el);
     (function loop() {
       requestAnimationFrame(loop); if (!visible) return;
-      if (!drag) { idle++; vx *= 0.95; vy *= 0.9; root.rotation.y += vx; root.rotation.x = Math.max(-1.45, Math.min(1.45, root.rotation.x + vy)); if (idle > 90) root.rotation.y += 0.004; }
+      if (!drag && pts.size < 2) { idle++; vx *= 0.95; vy *= 0.9; root.rotation.y += vx; root.rotation.x = Math.max(-1.45, Math.min(1.45, root.rotation.x + vy)); if (idle > 90 && uz > 0.98) root.rotation.y += 0.004; if (idle > 300 && uz < 1) setUz(uz + (1 - uz) * 0.06 + 0.001); } // 손 떼고 5초 뒤 원래 크기로 천천히
       if (cur && cur.userData.tick) cur.userData.tick();
       if (renderer) renderer.render(scene, camera);
     })();

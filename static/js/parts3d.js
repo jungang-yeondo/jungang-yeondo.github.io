@@ -290,16 +290,16 @@
     for (let s = 0; s < pts.length - 1; s++) {
       const A = pts[s], B = pts[s + 1], d = B.clone().sub(A).normalize();
       const v = new T.Vector3().crossVectors(d, Z).normalize();
-      const nA = nrm(s), nB = nrm(s + 1), pos = [], idx = [];
+      const nA = nrm(s), nB = nrm(s + 1), pos = [], idx = [], nor = [];
       for (let j = 0; j <= N; j++) {
         const f = j / N * Math.PI * 2;
         const off = Z.clone().multiplyScalar(Math.cos(f) * r).add(v.clone().multiplyScalar(Math.sin(f) * r));
         for (const [P, n] of [[A, nA], [B, nB]]) {
-          const q = P.clone().add(off); const tt = -(q.clone().sub(P).dot(n)) / d.dot(n); q.add(d.clone().multiplyScalar(tt)); pos.push(q.x, q.y, q.z);
+          const q = P.clone().add(off); const tt = -(q.clone().sub(P).dot(n)) / d.dot(n); q.add(d.clone().multiplyScalar(tt)); pos.push(q.x, q.y, q.z); nor.push(off.x / r, off.y / r, off.z / r);
         }
       }
       for (let j = 0; j < N; j++) { const p = j * 2; idx.push(p, p + 2, p + 1, p + 1, p + 2, p + 3); }
-      const geo = new T.BufferGeometry(); geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3)); geo.setIndex(idx); geo.computeVertexNormals();
+      const geo = new T.BufferGeometry(); geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3)); geo.setIndex(idx); geo.setAttribute('normal', new T.Float32BufferAttribute(nor, 3)); // 원통면 그대로의 법선 → 마디 이음 외에 가짜 줄 안 생기게
       g.add(new T.Mesh(geo, mat));
     }
   }
@@ -314,7 +314,7 @@
     pts.push(arc(th));
     const E = 60, Ls = E - 32; // 양 끝 직관: 외부관은 곡관 몸통과 한 장으로 이어서(비딩홈 위까지) 이음 줄이 안 생기게
     const d0 = pts[1].clone().sub(pts[0]).normalize(), dN = pts[pts.length - 1].clone().sub(pts[pts.length - 2]).normalize();
-    const ptsO = [pts[0].clone().addScaledVector(d0, -Ls), ...pts, pts[pts.length - 1].clone().addScaledVector(dN, Ls)];
+    const ptsO = [pts[0].clone().addScaledVector(d0, -Ls), ...pts.slice(1, -1), pts[pts.length - 1].clone().addScaledVector(dN, Ls)];
     mitreTube(g, M.steel, pts, R1);
     mitreTube(g, M.outer, ptsO, R2);
     const sg = new T.Group(); sg.rotation.z = Math.PI; sg.position.copy(arc(0));

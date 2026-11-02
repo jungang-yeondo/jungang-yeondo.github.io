@@ -319,14 +319,18 @@
     doublePipe(sg, M, R1, R2, 0, E + 40, 0, E, false, true); g.add(sg);
     const eg = new T.Group(); eg.rotation.z = -th; eg.position.copy(arc(th));
     doublePipe(eg, M, R1, R2, 0, E + 40, 0, E, false, true); g.add(eg);
-    // 세로 용접선: 마디마다 같은 둘레 위치(옆면)를 따라 꺾이며 이어지고, 양 끝 직관까지 한 줄
-    const Zs = new T.Vector3(0, 0, R2 + 0.6);
-    for (let s = 0; s < pts.length - 1; s++) {
-      const qa = pts[s].clone().add(Zs), qb = pts[s + 1].clone().add(Zs);
-      const w = new T.Mesh(new T.BoxGeometry(3, qa.distanceTo(qb) + 1, 1.2), M.weld);
+    // 세로 용접선: 가장 짧은 면(곡관 안쪽, 꺾이는 중심 쪽)을 따라 — 실제로도 용접 길이를 최소로 하려고 안쪽에 둠
+    const Ri = R2 + 0.6, dirs = [], nrm = [];
+    for (let s = 0; s < pts.length - 1; s++) { const d = pts[s + 1].clone().sub(pts[s]).normalize(); dirs.push(d); nrm.push(new T.Vector3(d.y, -d.x, 0)); }
+    const inn = [pts[0].clone().addScaledVector(nrm[0], Ri)];
+    for (let k = 1; k < pts.length - 1; k++) inn.push(meet(pts[k - 1].clone().addScaledVector(nrm[k - 1], Ri), dirs[k - 1], pts[k].clone().addScaledVector(nrm[k], Ri), dirs[k]));
+    inn.push(pts[pts.length - 1].clone().addScaledVector(nrm[nrm.length - 1], Ri));
+    for (let s = 0; s < inn.length - 1; s++) {
+      const qa = inn[s], qb = inn[s + 1];
+      const w = new T.Mesh(new T.BoxGeometry(1.2, qa.distanceTo(qb) + 1, 3), M.weld);
       w.position.copy(qa).add(qb).multiplyScalar(0.5); w.quaternion.setFromUnitVectors(new T.Vector3(0, 1, 0), qb.clone().sub(qa).normalize()); g.add(w);
     }
-    vSeam(sg, M, R2, 0, E - 4, Math.PI / 2); vSeam(eg, M, R2, 0, E - 4, Math.PI / 2);
+    vSeam(sg, M, R2, 0, E - 4, Math.PI); vSeam(eg, M, R2, 0, E - 4, 0); // 양 끝 직관도 안쪽 한 줄로 이어지게
     return { obj: g, tilt: 0.25 };
   }
 

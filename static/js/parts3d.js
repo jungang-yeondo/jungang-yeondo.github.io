@@ -694,17 +694,17 @@
     const angM = new T.MeshStandardMaterial({ color: 0xa4a7a9, metalness: 0.85, roughness: 0.42 });
     const holeM = new T.MeshStandardMaterial({ color: 0x0a0c10, metalness: 0, roughness: 1 });
     const box = (sx, sy, sz, x, y, z, m) => { const o = new T.Mesh(new T.BoxGeometry(sx, sy, sz), m || angM); o.position.set(x, y, z); g.add(o); return o; };
-    // 벽 앵글: 세운 날개(앙카 구멍)는 벽 쪽, 위 날개는 팔 쪽으로 누움 (ㄱ자)
-    box(W, A, tk, 0, -A / 2, tk / 2);
-    box(W, tk, A, 0, -tk / 2, A / 2);
-    for (const x of [-W * 0.36, W * 0.36]) { const h = new T.Mesh(new T.CylinderGeometry(8, 8, tk + 1, 20), holeM); h.rotation.x = Math.PI / 2; h.position.set(x, -A * 0.5, tk / 2); g.add(h); }
+    // 벽 앵글: 세운 날개(앙카 구멍)는 위로, 아래 날개는 팔 쪽으로 누움 (ㄴ자) — 팔은 이 누운 날개 위에 얹어 용접
+    box(W, A, tk, 0, A / 2, tk / 2);
+    box(W, tk, A, 0, tk / 2, A / 2);
+    for (const x of [-W * 0.36, W * 0.36]) { const h = new T.Mesh(new T.CylinderGeometry(8, 8, tk + 1, 20), holeM); h.rotation.x = Math.PI / 2; h.position.set(x, A * 0.55, tk / 2); g.add(h); }
     // 팔 앵글 2개: 윗면 날개는 벽 앵글 위에 얹어 평평하게(IV 받침), 세운 날개는 안쪽에서 아래로 (ㄱ자)
     for (const s of [-1, 1]) {
       const xo = s * (W / 2 - A / 2), L2 = tk + La - A;
-      box(A, tk, La, xo, tk / 2, tk + La / 2);
-      box(tk, A, L2, s * (W / 2 - A + tk / 2), tk - A / 2, A + L2 / 2);
-      const w = box(A + 2, 4, 4, xo, tk + 1, A + 1, M.weld); w.userData.noEdge = true;                         // 벽 앵글 끝선 따라 용접
-      const w2 = box(4, 4, A, s * (W / 2 - A - 1), tk + 1, tk + A / 2, M.weld); w2.userData.noEdge = true;
+      box(A, tk, La, xo, tk + tk / 2, tk + La / 2);
+      box(tk, A, L2, s * (W / 2 - A + tk / 2), tk * 2 - A / 2, A + L2 / 2);
+      const w = box(A + 2, 4, 4, xo, tk * 2 + 1, A + 1, M.weld); w.userData.noEdge = true;                         // 벽 앵글 끝선 따라 용접
+      const w2 = box(4, 4, A, s * (W / 2 - A - 1), tk * 2 + 1, tk + A / 2, M.weld); w2.userData.noEdge = true;
     }
     g.position.z = -La / 2;
     return { obj: g, tilt: 0.55, zoom: 1.2 };

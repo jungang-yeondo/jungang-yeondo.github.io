@@ -833,7 +833,7 @@
     // 사용자 확대: uz 1 = 기본 크기, 작을수록 가까이 (모델 안으로 들어가지 않게 최소값 제한)
     let dBase = 1, uz = 1, uzMin = 0.55;
     const cam = () => { camera.position.set(0, rad * 0.05, dBase * uz); camera.lookAt(0, 0, 0); };
-    const setUz = (v) => { uz = Math.max(uzMin, Math.min(1, v)); cam(); };
+    const setUz = (v) => { uz = Math.max(uzMin, Math.min(1.7, v)); cam(); }; // 축소도 가능 (기본 크기의 약 1.7배 거리까지)
     const size = () => {
       const w = el.clientWidth, h = el.clientHeight; if (!w || !h) return;
       if (renderer) renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
@@ -925,7 +925,7 @@
     new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (visible && !renderer) init(); else if (!visible && renderer) drop(); }, { rootMargin: '300px' }).observe(el);
     (function loop() {
       requestAnimationFrame(loop); if (!visible) return;
-      if (!drag && pts.size < 2) { idle++; vx *= 0.95; vy *= 0.9; root.rotation.y += vx; root.rotation.x = Math.max(-1.45, Math.min(1.45, root.rotation.x + vy)); if (idle > 90 && uz > 0.98) root.rotation.y += 0.004; if (idle > 300 && uz < 1) setUz(uz + (1 - uz) * 0.06 + 0.001); } // 손 떼고 5초 뒤 원래 크기로 천천히
+      if (!drag && pts.size < 2) { idle++; vx *= 0.95; vy *= 0.9; root.rotation.y += vx; root.rotation.x = Math.max(-1.45, Math.min(1.45, root.rotation.x + vy)); if (idle > 90 && Math.abs(uz - 1) < 0.02) root.rotation.y += 0.004; if (idle > 300 && uz !== 1) setUz(Math.abs(1 - uz) < 0.003 ? 1 : uz + (1 - uz) * 0.06); } // 손 떼고 5초 뒤 원래 크기로 천천히
       if (cur && cur.userData.tick) cur.userData.tick();
       if (renderer) renderer.render(scene, camera);
     })();

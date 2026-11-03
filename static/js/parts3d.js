@@ -653,6 +653,34 @@
     return { obj: g, tilt: 0.5, zoom: 1.45 };
   }
 
+  // ---------- 모델: WA 까치발 (외벽 고정 지지대) ----------
+  // 앵글(50×50×5)로 만든 삼각 까치발 2개가 마주보는 1조: 벽에 붙는 세로 앵글(앵카 구멍 2개) + 위쪽 수평 앵글(연도 받침) + 사선 보강 앵글
+  function buildWA() {
+    const M = mats(); const g = new T.Group();
+    const A = 50, tk = 5, H = 420, L = 560, gapZ = 420;
+    const box = (sx, sy, sz, x, y, z, m) => { const o = new T.Mesh(new T.BoxGeometry(sx, sy, sz), m || M.steel2); o.position.set(x, y, z); return o; };
+    const holeM = new T.MeshStandardMaterial({ color: 0x0a0c10, metalness: 0, roughness: 1 });
+    const one = (side) => { // side: +1 / -1 → 세운 날개가 서로 마주보는 쪽(안쪽)으로
+      const b = new T.Group(), zi = -side * (A / 2 - tk / 2);
+      // 세로 앵글: 벽에 붙는 날개(앵카 구멍) + 바깥으로 선 날개
+      b.add(box(tk, H, A, tk / 2, -H / 2, 0));
+      b.add(box(A, H, tk, A / 2, -H / 2, zi));
+      for (const y of [-H * 0.3, -H * 0.72]) { const h = new T.Mesh(new T.CylinderGeometry(7, 7, tk + 1, 20), holeM); h.rotation.z = Math.PI / 2; h.position.set(tk / 2, y, side * 8); b.add(h); }
+      // 수평 앵글 (윗면 평평 → 연도 받침, 날개는 아래로)
+      b.add(box(L, tk, A, L / 2, -tk / 2, 0));
+      b.add(box(L, A, tk, L / 2, -A / 2, zi));
+      // 사선 보강 앵글: 세로 앵글 아래쪽 → 수평 앵글 밑면
+      const p0 = new T.Vector3(A, -H + 40, 0), p1 = new T.Vector3(L * 0.62, -A - 4, 0), d = p1.clone().sub(p0), len = d.length() - 34, ang = Math.atan2(d.y, d.x); // 양 끝이 세로·수평 앵글 밖으로 삐져나오지 않게 조금 짧게
+      const br = new T.Group(); br.position.copy(p0).add(p1).multiplyScalar(0.5); br.rotation.z = ang;
+      br.add(box(len, A * 0.8, tk, 0, 0, zi));
+      br.add(box(len, tk, A * 0.6, 0, -A * 0.4 + tk / 2, zi + side * (A * 0.3 - tk / 2)));
+      b.add(br);
+      b.position.z = side * gapZ / 2; return b;
+    };
+    g.add(one(1)); g.add(one(-1));
+    return { obj: g, tilt: 0.35, zoom: 1.25 };
+  }
+
   // ---------- 모델: VT 카운터 플래싱 ----------
   // SUS 0.8T 사각판, 사방으로 턱(접어 내림), 윗면 가운데 원형 구멍
   function buildVT() {
@@ -749,7 +777,7 @@
     return { obj: g, tilt: 0.45, zoom: 1.2 };
   }
 
-  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, dsh: () => buildDS(false), dsv: () => buildDS(true), bj: buildBJ, sc: buildSC, vdc: () => buildCap(true), hdc: () => buildCap(false), el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR, pa: buildPA, vt: buildVT };
+  const MODELS = { sk: buildSK, agin: buildAGin, agcv: buildAGcv, srin: buildSRin, srcv: buildSRcv, trs: buildTRs, trd: buildTRd, fdsq: buildFDsq, fdhp: buildFDhp, cf: buildCF, dv: buildDV, ch: buildCH, dsh: () => buildDS(false), dsv: () => buildDS(true), bj: buildBJ, sc: buildSC, vdc: () => buildCap(true), hdc: () => buildCap(false), el90: () => buildElbow(90), el45: () => buildElbow(45), lt: () => buildY(false), jt: () => buildY(true), mt: () => buildTee(false), nt: () => buildTee(true), pipe977: () => buildPipe(false), iv: () => buildPipe(true), fr: buildFR, pa: buildPA, vt: buildVT, wa: buildWA };
 
   // ---------- 경계선: 각진 모서리·끝단에 옅은 선 (밝게 반사돼도 형태가 보이게) ----------
   const EDGE = new T.LineBasicMaterial({ color: 0x24272c, transparent: true, opacity: 0.7 });

@@ -181,8 +181,8 @@
       const P = Math.abs(a - b);
       for (let k = 0; k < 4; k++) {
         const grp = new T.Group(); grp.rotation.y = k * Math.PI / 2 + Math.PI / 4;
-        const v = new T.Mesh(new T.BoxGeometry(22, P + 18, 2), M.rod); v.position.set(0, b + s * (P - 22) / 2, R1 + 1.2); grp.add(v);
-        const h = new T.Mesh(new T.BoxGeometry(22, 2, R2 - R1 - 1.2), M.rod); h.position.set(0, b + s, (R1 + R2) / 2); grp.add(h); // 내부관·외부관 사이에만 (관 안쪽·바깥으로 안 비침)
+        const v = new T.Mesh(new T.BoxGeometry(22, P + 18, 2), M.rod); v.position.set(0, b + s * (P - 22) / 2, R1 + 2.5); grp.add(v);
+        const h = new T.Mesh(new T.BoxGeometry(22, 2, R2 - R1 - 3), M.rod); h.position.set(0, b + s, (R1 + R2) / 2); grp.add(h); // 내부관·외부관 사이에만 (관 안쪽·바깥으로 안 비침)
         gg.add(grp);
       }
     }
@@ -850,7 +850,7 @@
     scene.add(new T.HemisphereLight(0xffffff, 0x2a2a2a, 0.25));
     const key = new T.DirectionalLight(0xffffff, 0.6); key.position.set(700, 1200, 900); scene.add(key);
     const root = new T.Group(); scene.add(root); root.rotation.y = 0.5;
-    const camera = new T.PerspectiveCamera(30, 4 / 3, 1, 50000);
+    const camera = new T.PerspectiveCamera(30, 4 / 3, 20, 20000);
     const tanH = Math.tan(T.MathUtils.degToRad(15));
     let cur = null, halfW = 1, halfH = 1, rad = 1, fitK = 1.2, zoomK = 1;
     // 사용자 확대: uz 1 = 기본 크기, 작을수록 가까이 (모델 안으로 들어가지 않게 최소값 제한)

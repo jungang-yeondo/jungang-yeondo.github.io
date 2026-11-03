@@ -670,11 +670,13 @@
       // 수평 앵글 (윗면 평평 → 연도 받침, 날개는 아래로)
       b.add(box(L, tk, A, L / 2, -tk / 2, 0));
       b.add(box(L, A, tk, L / 2, -A / 2, zi));
-      // 사선 보강 앵글: 세로 앵글 아래쪽 → 수평 앵글 밑면
-      const p0 = new T.Vector3(A, -H + 40, 0), p1 = new T.Vector3(L * 0.86, -A - 4, 0), d = p1.clone().sub(p0), len = d.length() - 34, ang = Math.atan2(d.y, d.x); // 양 끝이 세로·수평 앵글 밖으로 삐져나오지 않게 조금 짧게
+      // 사선 보강 앵글: 세로·수평 앵글의 판(삼각형 면) 위에 겹쳐 얹고, 양 끝을 용접 (실물과 같은 방식)
+      const p0 = new T.Vector3(A * 0.55, -H + 32, 0), p1 = new T.Vector3(L * 0.86, -A * 0.55, 0), d = p1.clone().sub(p0), len = d.length(), ang = Math.atan2(d.y, d.x);
+      const zb = zi + side * tk; // 판 바로 위 (날개 쪽)
       const br = new T.Group(); br.position.copy(p0).add(p1).multiplyScalar(0.5); br.rotation.z = ang;
-      br.add(box(len, A * 0.8, tk, 0, 0, zi));
-      br.add(box(len, tk, A * 0.6, 0, -A * 0.4 + tk / 2, zi + side * (A * 0.3 - tk / 2)));
+      br.add(box(len, A * 0.8, tk, 0, 0, zb));
+      br.add(box(len, tk, A * 0.6, 0, -A * 0.4 + tk / 2, zb + side * (A * 0.3 - tk / 2)));
+      for (const e of [-1, 1]) br.add(box(5, A * 0.8 + 4, 5, e * (len / 2 - 1), 0, zi + side * (tk / 2 + 2.5), M.weld)); // 양 끝 용접 비드
       b.add(br);
       b.position.z = side * gapZ / 2; return b;
     };

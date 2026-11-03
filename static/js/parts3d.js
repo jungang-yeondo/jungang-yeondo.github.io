@@ -661,22 +661,28 @@
     const angM = new T.MeshStandardMaterial({ color: 0xa4a7a9, metalness: 0.85, roughness: 0.42 }); // 은분 도장 앵글: 무광에 가까운 은색
     const box = (sx, sy, sz, x, y, z, m) => { const o = new T.Mesh(new T.BoxGeometry(sx, sy, sz), m || angM); o.position.set(x, y, z); return o; };
     const holeM = new T.MeshStandardMaterial({ color: 0x0a0c10, metalness: 0, roughness: 1 });
-    const one = (side) => { // side: +1 / -1 → 세운 날개가 서로 마주보는 쪽(안쪽)으로
-      const b = new T.Group(), zi = -side * (A / 2 - tk / 2);
-      // 세로 앵글: 벽에 붙는 날개(앵카 구멍) + 바깥으로 선 날개
+    const one = (side) => { // side: +1 / -1 → 삼각형 판(세운 날개)은 바깥쪽, 벽·윗면 날개는 안쪽(연도 쪽)으로 마주봄
+      const b = new T.Group(), zi = side * (A / 2 - tk / 2), zo = zi + side * (tk / 2 + 2); // zo: 판 바깥면 (용접 비드 위치)
+      const bead = (sx, sy, x, y, rz, z) => { const w = box(sx, sy, 4, x, y, z === undefined ? zo : z, M.weld); w.rotation.z = rz || 0; b.add(w); };
+      // 세로 앵글: 벽에 붙는 날개(앵카 구멍) + 삼각형 판
       b.add(box(tk, H, A, tk / 2, -H / 2, 0));
       b.add(box(A, H, tk, A / 2, -H / 2, zi));
-      for (const y of [-H * 0.13, -H * 0.88]) { const h = new T.Mesh(new T.CylinderGeometry(7, 7, tk + 1, 20), holeM); h.rotation.z = Math.PI / 2; h.position.set(tk / 2, y, side * 8); b.add(h); }
-      // 수평 앵글 (윗면 평평 → 연도 받침, 날개는 아래로)
+      for (const y of [-H * 0.13, -H * 0.88]) { const h = new T.Mesh(new T.CylinderGeometry(7, 7, tk + 1, 20), holeM); h.rotation.z = Math.PI / 2; h.position.set(tk / 2, y, -side * 8); b.add(h); }
+      // 수평 앵글 (윗면 평평 → 연도 받침)
       b.add(box(L, tk, A, L / 2, -tk / 2, 0));
       b.add(box(L, A, tk, L / 2, -A / 2, zi));
-      // 사선 보강 앵글: 세로·수평 앵글의 판(삼각형 면) 위에 겹쳐 얹고, 양 끝을 용접 (실물과 같은 방식)
+      // ㄱ자 모서리 45° 맞대기 풀용접 (판 양면)
+      bead(4, A * 1.35, A / 2, -A / 2, Math.PI / 4); bead(4, A * 1.35, A / 2, -A / 2, Math.PI / 4, zi - side * (tk / 2 + 2));
+      // 사선 보강 앵글: ㄱ자 판 바깥면에 딱 붙여 겹치고, 겹친 끝 둘레를 풀용접
       const p0 = new T.Vector3(A * 0.55, -H + 32, 0), p1 = new T.Vector3(L * 0.86, -A * 0.55, 0), d = p1.clone().sub(p0), len = d.length(), ang = Math.atan2(d.y, d.x);
-      const zb = zi + side * tk; // 판 바로 위 (날개 쪽)
+      const zb = zi + side * tk, wB = A * 0.8; // 판 바로 바깥 (빈틈 없이 맞닿음)
       const br = new T.Group(); br.position.copy(p0).add(p1).multiplyScalar(0.5); br.rotation.z = ang;
-      br.add(box(len, A * 0.8, tk, 0, 0, zb));
-      br.add(box(len, tk, A * 0.6, 0, -A * 0.4 + tk / 2, zb + side * (A * 0.3 - tk / 2)));
-      for (const e of [-1, 1]) br.add(box(5, A * 0.8 + 4, 5, e * (len / 2 - 1), 0, zi + side * (tk / 2 + 2.5), M.weld)); // 양 끝 용접 비드
+      br.add(box(len, wB, tk, 0, 0, zb));
+      br.add(box(len, tk, A * 0.6, 0, -wB / 2 + tk / 2, zb + side * (A * 0.3 - tk / 2)));
+      for (const e of [-1, 1]) {
+        br.add(box(4, wB + 4, 4, e * (len / 2 + 1), 0, zo, M.weld));                          // 끝면
+        for (const sy of [-1, 1]) br.add(box(38, 4, 4, e * (len / 2 - 18), sy * (wB / 2 + 1.5), zo, M.weld)); // 양 옆
+      }
       b.add(br);
       b.position.z = side * gapZ / 2; return b;
     };

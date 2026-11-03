@@ -122,13 +122,13 @@
       const grp = new T.Group(); grp.rotation.y = k * Math.PI / 2 + Math.PI / 4;
       const W = iv ? 25 : 22;
       const box = (w, h, d, x, y, z, rx) => { const m = new T.Mesh(new T.BoxGeometry(w, h, d), M.rod); m.position.set(x, y, z); if (rx) m.rotation.x = rx; grp.add(m); };
-      box(W, 58, 2, 0, s * (yO + 9), R1 + 1.2);                       // 내부관에 붙는 세로판
-      box(W, 2, R2 - R1 + 4, 0, s * (yO + 1), (R1 + R2) / 2 + 1);     // 외부관 끝에 걸치는 가로판
-      if (iv) {
-        box(W, 40, 2, 0, s * (yO - 20), R2 - 1.5);                    // 외부관 안쪽 세로판
-        const y0 = s * (yO + 20), y1 = s * (yO - 30), z0 = R1 + 1.2, z1 = R2 - 1.5;
+      // 용접 위치는 일반·IV 모두 같음: 내부관 세로판 + 외부관 끝 가로판. 두 관 사이 공간 안에만 있게 (안·밖으로 안 비침)
+      box(W, 58, 2, 0, s * (yO + 9), R1 + 2.5);                       // 내부관에 붙는 세로판
+      box(W, 2, R2 - R1 - 3, 0, s * (yO + 1), (R1 + R2) / 2);         // 외부관 끝 가로판
+      if (iv) { // IV 전용: 세로판과 가로판 사이 중간다리 보강 (외부관 안쪽 면에는 닿지 않음)
+        const y0 = s * (yO - 14), y1 = s * (yO - 1), z0 = R1 + 3.5, z1 = R2 - 5;
         const len = Math.hypot(y1 - y0, z1 - z0);
-        box(W, len, 2, 0, (y0 + y1) / 2, (z0 + z1) / 2, Math.atan2(z1 - z0, y1 - y0)); // 중간다리 보강
+        box(W, len, 2, 0, (y0 + y1) / 2, (z0 + z1) / 2, Math.atan2(z1 - z0, y1 - y0));
       }
       g.add(grp);
     }

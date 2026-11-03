@@ -695,9 +695,9 @@
     const holeM = new T.MeshStandardMaterial({ color: 0x0a0c10, metalness: 0, roughness: 1 });
     const box = (sx, sy, sz, x, y, z, m) => { const o = new T.Mesh(new T.BoxGeometry(sx, sy, sz), m || angM); o.position.set(x, y, z); g.add(o); return o; };
     // 벽 앵글: 위 날개가 팔 끝을 위에서 덮고, 앙카 구멍 난 세운 날개는 아래로 (ㄱ자)
-    box(W, A, tk, 0, tk - A / 2, tk / 2);
+    box(W, A, tk, 0, A / 2, tk / 2); // 앙카 구멍 면은 위로 솟음
     box(W, tk, A, 0, tk / 2, A / 2);
-    for (const x of [-W * 0.36, W * 0.36]) { const h = new T.Mesh(new T.CylinderGeometry(8, 8, tk + 1, 20), holeM); h.rotation.x = Math.PI / 2; h.position.set(x, tk - A * 0.5, tk / 2); g.add(h); }
+    for (const x of [-W * 0.36, W * 0.36]) { const h = new T.Mesh(new T.CylinderGeometry(8, 8, tk + 1, 20), holeM); h.rotation.x = Math.PI / 2; h.position.set(x, A * 0.55, tk / 2); g.add(h); }
     // 팔 앵글 2개: 벽 앵글 위 날개 바로 밑으로 끼워 넣고, 윗면은 평평(IV 받침), 세운 날개는 안쪽에서 아래로
     for (const s of [-1, 1]) {
       const xo = s * (W / 2 - A / 2);

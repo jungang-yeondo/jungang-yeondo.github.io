@@ -182,7 +182,7 @@
       for (let k = 0; k < 4; k++) {
         const grp = new T.Group(); grp.rotation.y = k * Math.PI / 2 + Math.PI / 4;
         const v = new T.Mesh(new T.BoxGeometry(22, P + 18, 2), M.rod); v.position.set(0, b + s * (P - 22) / 2, R1 + 1.2); grp.add(v);
-        const h = new T.Mesh(new T.BoxGeometry(22, 2, R2 - R1 + 4), M.rod); h.position.set(0, b + s, (R1 + R2) / 2 + 1); grp.add(h);
+        const h = new T.Mesh(new T.BoxGeometry(22, 2, R2 - R1 - 1.2), M.rod); h.position.set(0, b + s, (R1 + R2) / 2); grp.add(h); // 내부관·외부관 사이에만 (관 안쪽·바깥으로 안 비침)
         gg.add(grp);
       }
     }

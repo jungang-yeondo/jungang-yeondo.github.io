@@ -467,7 +467,7 @@ footer .blog:hover{border-color:#03C75A}
 .org2{--o-ln:var(--line)}
 .o-ceo{position:relative;width:min(340px,100%);margin:0 auto;padding:30px 24px 28px;text-align:center;background:var(--bg-2);border:1px solid var(--o-ln);border-radius:4px}
 .o-ceo::before{content:'';position:absolute;left:50%;top:-1px;width:40px;height:2px;margin-left:-20px;background:var(--red)}
-.o-ceo .en{display:block;font-size:13px;letter-spacing:.28em;color:var(--red)}
+.o-ceo .en{display:block;font-size:12.5px;letter-spacing:.22em;color:var(--muted);opacity:.45}
 .o-ceo b{display:block;margin-top:8px;font-size:clamp(28px,3vw,36px);font-weight:700;letter-spacing:.02em}
 .o-ceo small{display:block;margin-top:4px;font-size:14px;letter-spacing:.3em;color:var(--muted)}
 .o-stem{position:relative;width:1px;height:48px;margin:0 auto;background:var(--o-ln)}

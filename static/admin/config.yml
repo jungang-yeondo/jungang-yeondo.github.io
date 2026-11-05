@@ -118,7 +118,7 @@ collections:
             label_singular: "부서"
             widget: list
             required: false
-            fields: [{ name: en, label: "영문 이름", widget: string, required: false }, { name: name, label: 부서명, widget: string }, { name: desc, label: "한 줄 설명", widget: string, required: false }, { name: items, label: "담당 업무 (한 줄에 하나씩)", widget: list }]
+            fields: [{ name: en, label: "영문 이름", widget: string, required: false }, { name: name, label: 부서명, widget: string }, { name: desc, label: "한 줄 설명", widget: string, required: false }, { name: items, label: "담당 업무 (한 줄에 하나씩)", widget: list }, { name: members, label: "구성원", widget: list, required: false, fields: [{ name: name, label: 이름, widget: string }, { name: title, label: 직책, widget: string }] }]
           - { name: visit_note, label: "오시는 길 방문 안내", widget: text }
 
       # ── 사업분야 ──────────────────────────────

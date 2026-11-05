@@ -325,5 +325,6 @@ collections:
           - { name: url, label: "홈페이지 주소 (https://www.…)", widget: string }
           - { name: seo_title, label: "검색 결과 제목", widget: string, hint: "네이버·구글 검색 결과에 표시되는 제목 (60자 이내)" }
           - { name: seo_description, label: "검색 결과 설명", widget: text, hint: "검색 결과 제목 아래 설명 (80~120자)" }
+          - { name: blog, label: "네이버 블로그 주소 (비우면 안 보임)", widget: string, required: false }
           - { name: naver_verification, label: "네이버 서치어드바이저 인증 코드", widget: string, required: false }
           - { name: google_verification, label: "구글 서치콘솔 인증 코드", widget: string, required: false }

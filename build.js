@@ -71,7 +71,7 @@ ${site.google_verification ? `<meta name="google-site-verification" content="${e
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Barlow+Condensed:wght@400;500;600&family=Cinzel:wght@700&display=swap">
 <link rel="stylesheet" href="/css/style.css">
-<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'Organization', name: site.name, alternateName: ['중앙연도', site.short_name, site.name_en], url: baseUrl || undefined, telephone: site.tel, email: site.email, address: { '@type': 'PostalAddress', streetAddress: site.address, addressCountry: 'KR' }, foundingDate: '2013-03-13' }).replace(/</g, '\\u003c')}</script>
+<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'Organization', name: site.name, alternateName: ['중앙연도', site.short_name, site.name_en], url: baseUrl || undefined, telephone: site.tel, email: site.email, address: { '@type': 'PostalAddress', streetAddress: site.address, addressCountry: 'KR' }, foundingDate: '2013-03-13', sameAs: site.blog ? [site.blog] : undefined }).replace(/</g, '\\u003c')}</script>
 </head>
 <body class="over">
 <header class="top" id="top">
@@ -104,7 +104,7 @@ ${body}
       <div><dt>FAX</dt><dd>${esc(site.fax)}</dd></div>
       <div><dt>E-mail</dt><dd>${esc(site.email)}</dd></div>
     </dl>
-    <div class="c"><span>© ${new Date().getFullYear()} ${esc(site.name_en)} All rights reserved.<br>본 사이트의 사진·도면·카탈로그는 (주)중앙연도의 저작물로 무단 복제·사용을 금합니다.</span><a href="/privacy/">개인정보처리방침</a></div>
+    <div class="c"><span>© ${new Date().getFullYear()} ${esc(site.name_en)} All rights reserved.<br>본 사이트의 사진·도면·카탈로그는 (주)중앙연도의 저작물로 무단 복제·사용을 금합니다.</span><span class="fl">${site.blog ? `<a class="blog" href="${esc(site.blog)}" target="_blank" rel="noopener"><i>N</i>블로그</a>` : ''}<a href="/privacy/">개인정보처리방침</a></span></div>
   </div>
 </footer>
 <script src="/js/main.js" defer></script>
@@ -246,7 +246,7 @@ add('/company/history/', {
     title: '오시는 길', section: 'company', image: company.banner,
     body: subPage({ en: 'Company', title: '회사소개', banner: company.banner, section: 'company', current: '/company/location/', body:
       two('Location', '오시는 길', `<p style="font-size:clamp(20px,2vw,26px);font-weight:700">${esc(site.address)}<button class="copy" data-copy="${esc(site.address)}">주소 복사</button></p>
-<div class="maplinks"><a href="https://map.naver.com/p/search/${q}" target="_blank" rel="noopener">네이버 지도 ↗</a><a href="https://map.kakao.com/?q=${q}" target="_blank" rel="noopener">카카오맵 ↗</a></div>
+<div class="maplinks"><a href="https://map.naver.com/p/search/${q}" target="_blank" rel="noopener">네이버 지도 ↗</a><a href="https://map.kakao.com/?q=${q}" target="_blank" rel="noopener">카카오맵 ↗</a>${site.blog ? `<a href="${esc(site.blog)}" target="_blank" rel="noopener">네이버 블로그 ↗</a>` : ''}</div>
 <table class="info" style="margin-top:44px"><tr><th>대표전화</th><td class="num"><a href="${telHref(site.tel)}">${esc(site.tel)}</a></td></tr><tr><th>팩스</th><td class="num">${esc(site.fax)}</td></tr><tr><th>이메일</th><td><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></td></tr><tr><th>방문 안내</th><td>${esc(company.visit_note)}</td></tr></table>`) }),
   });
 }

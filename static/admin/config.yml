@@ -144,7 +144,7 @@ collections:
           - name: process
             label: "진행 절차"
             widget: list
-            fields: [{ name: title, label: 단계명, widget: string }, { name: text, label: 설명, widget: string }, { name: phase, label: "구분 (예: 설계·제작·납품)", widget: string, required: false }]
+            fields: [{ name: title, label: 단계명, widget: string }, { name: text, label: 설명, widget: string }, { name: phase, label: "담당 부서 (예: 관리부·생산부)", widget: string, required: false }]
 
       # ── 제품 ──────────────────────────────
       - name: products

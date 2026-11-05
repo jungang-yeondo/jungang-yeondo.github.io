@@ -484,8 +484,13 @@ footer .blog:hover{border-color:#03C75A}
 .o-no.en{font-size:12.5px;letter-spacing:.22em;color:var(--muted);opacity:.45}
 .o-dept b{display:block;margin:0 0 8px;font-size:clamp(22px,2.1vw,26px);font-weight:700}
 .o-dept p{color:var(--muted);font-size:14.5px;line-height:1.6}
-.o-tags{list-style:none;margin:22px 0 0;padding:18px 0 0;border-top:1px solid var(--o-ln);display:flex;flex-wrap:wrap;gap:8px}
+.o-tags{list-style:none;margin:22px 0 24px;padding:18px 0 0;border-top:1px solid var(--o-ln);display:flex;flex-wrap:wrap;gap:8px}
 .o-tags li{font-size:14px;line-height:1.4;padding:6px 12px;border:1px solid var(--o-ln);border-radius:3px}
+.o-dept>li{display:flex;flex-direction:column}
+.o-mem{list-style:none;margin:auto 0 0;padding:16px 0 0;border-top:1px solid var(--o-ln);display:grid;gap:10px}
+.o-mem li{display:flex;align-items:baseline;justify-content:space-between;gap:12px;font-size:15.5px}
+.o-mem strong{font-weight:600}
+.o-mem span{font-size:13.5px;color:var(--muted)}
 @supports (animation-timeline:view()){@media (prefers-reduced-motion:no-preference){
   .o-dept>li{animation:orise linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
 }}

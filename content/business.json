@@ -27,14 +27,26 @@
       "image2": "/uploads/facility-laser-cut-02.jpg",
       "en": "CNC Fiber Laser Cutting",
       "title": "CNC 파이버 레이저 커팅",
-      "text": "핸드 커팅기나 플라즈마 대신 CAD 전개도를 그대로 레이저로 절단하기 때문에 곡선 이형관 부품도 치수가 일정하고, 절단면이 깨끗해 추가 손질이 거의 필요 없습니다."
+      "text": "핸드 커팅기나 플라즈마 대신 CAD 전개도를 그대로 레이저로 절단하기 때문에 곡선 이형관 부품도 치수가 일정하고, 절단면이 깨끗해 추가 손질이 거의 필요 없습니다.",
+      "video": "/uploads/facility-laser-cut.mp4",
+      "poster": "/uploads/facility-laser-cut-poster.jpg"
     },
     {
       "image1": "/uploads/facility-seam-weld-01.jpg",
       "image2": "/uploads/facility-seam-weld-02.jpg",
       "en": "Automatic Seam Welding",
       "title": "자동 심 용접",
-      "text": "판재를 원통으로 말아 맞댄 몸통 이음부를 자동 용접기로 한 번에 용접합니다.\n여러 차례 시험을 거쳐 최적의 용접 조건을 맞춰 두어, 이음부 전체가 같은 품질로 접합됩니다.\n사람 손에 따라 달라지지 않아 제품마다 용접 품질이 일정하고, 기밀이 중요한 몸통 이음부를 안정적으로 만듭니다."
+      "text": "판재를 원통으로 말아 맞댄 몸통 이음부를 자동 용접기로 한 번에 용접합니다.\n여러 차례 시험을 거쳐 최적의 용접 조건을 맞춰 두어, 이음부 전체가 같은 품질로 접합됩니다.\n사람 손에 따라 달라지지 않아 제품마다 용접 품질이 일정하고, 기밀이 중요한 몸통 이음부를 안정적으로 만듭니다.",
+      "video": "/uploads/facility-seam-weld.mp4",
+      "poster": "/uploads/facility-seam-weld-poster.jpg"
+    },
+    {
+      "image1": "/uploads/facility-flange-poster.jpg",
+      "video": "/uploads/facility-flange.mp4",
+      "poster": "/uploads/facility-flange-poster.jpg",
+      "en": "Flange Forming",
+      "title": "밑깎이 성형",
+      "text": "내부관 양 끝을 바깥으로 꺾어 V밴드 조립용 밑깎이를 만듭니다.\n전용 장비로 관을 돌려가며 성형하기 때문에 둘레 전체의 폭과 각도가 고르게 나와, 현장에서 관과 관을 이을 때 틈 없이 맞물립니다."
     },
     {
       "image1": "/uploads/facility-laser-weld-01.jpg",

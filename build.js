@@ -31,7 +31,7 @@ const telHref = (t) => 'tel:' + String(t).replace(/[^0-9+]/g, '');
 const baseUrl = String(site.url || '').replace(/\/$/, '');
 
 const NAV = [
-  { key: 'company', label: '회사소개', href: '/company/greeting/', sub: [['인사말', '/company/greeting/'], ['회사개요', '/company/overview/'], ['연혁', '/company/history/'], ['오시는 길', '/company/location/']] },
+  { key: 'company', label: '회사소개', href: '/company/greeting/', sub: [['인사말', '/company/greeting/'], ['회사개요', '/company/overview/'], ['연혁', '/company/history/'], ['조직도', '/company/organization/'], ['오시는 길', '/company/location/']] },
   { key: 'business', label: '사업분야', href: '/business/', sub: [['사업분야', '/business/'], ['보유 설비 · 제작 기술', '/business/facility/']] },
   { key: 'product', label: '제품소개', href: '/product/stack/', sub: [['스테인리스 연도', '/product/stack/'], ['LPF 기밀연도', '/product/lpf/'], ['주요 부품', '/product/parts/']] },
   { key: 'projects', label: '납품실적', href: '/projects/', sub: [['납품실적', '/projects/'], ['현장 사진', '/projects/gallery/'], ['시공 협력사', '/projects/partners/'], ['인증·특허', '/projects/certification/']] },
@@ -239,6 +239,11 @@ add('/company/history/', {
   title: '연혁', section: 'company', image: company.banner,
   body: subPage({ en: 'Company', title: '회사소개', banner: company.banner, section: 'company', current: '/company/history/', body:
     two('History', '연혁', `<ul class="tl">${list(company.history).map((h) => `<li${h.highlight ? ' class="big"' : ''}><time>${esc(h.date)}</time><div><b>${esc(h.title)}</b>${h.note ? `<small>${esc(h.note)}</small>` : ''}</div></li>`).join('')}</ul>`) }),
+});
+add('/company/organization/', {
+  title: '조직도', section: 'company', image: company.banner,
+  body: subPage({ en: 'Company', title: '회사소개', banner: company.banner, section: 'company', current: '/company/organization/', body:
+    two('Organization', '조직도', `${company.org_intro ? `<p class="lead org-lead">${br(company.org_intro)}</p>` : ''}<div class="org"><div class="org-ceo"><span class="en">CEO</span><b>대표이사</b><small>${esc(site.ceo)}</small></div><div class="org-bus" aria-hidden="true"></div><ol class="org-dept" style="--n:${list(company.org).length || 1}">${list(company.org).map((o, i) => `<li><div class="hd"><span class="no en">${String(i + 1).padStart(2, '0')}</span><span class="en">${esc(o.en)}</span><b>${esc(o.name)}</b>${o.desc ? `<p>${esc(o.desc)}</p>` : ''}</div><ul>${list(o.items).map((t) => `<li>${esc(t)}</li>`).join('')}</ul></li>`).join('')}</ol></div>`) }),
 });
 {
   const q = encodeURIComponent(site.address);

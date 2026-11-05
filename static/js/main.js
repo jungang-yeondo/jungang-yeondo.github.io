@@ -53,7 +53,8 @@
   var f=document.getElementById('f-file');
   if(f) f.addEventListener('change',function(){ if(f.files[0]&&f.files[0].size>8*1024*1024){ f.setCustomValidity('8MB 이하 파일만 첨부할 수 있습니다. 큰 파일은 이메일로 보내 주세요.'); f.reportValidity(); } else f.setCustomValidity(''); });
   // 작업 영상: 화면에 보일 때만 재생, 벗어나면 멈춤 (소리 없음·반복)
-  var vids=document.querySelectorAll('video[data-auto]');if(vids.length&&'IntersectionObserver' in window){var vo=new IntersectionObserver(function(es){es.forEach(function(e){var v=e.target;if(e.isIntersecting){v.muted=true;var p=v.play();if(p&&p.catch)p.catch(function(){});}else v.pause();});},{threshold:.25});[].forEach.call(vids,function(v){vo.observe(v)});}
+  // 아이폰 저전력 모드 등 자동재생이 막히면 재생 버튼 표시 → 화면을 한 번 터치하거나 영상을 누르면 재생
+  var vids=document.querySelectorAll('video[data-auto]');if(vids.length&&'IntersectionObserver' in window){var tryPlay=function(v){v.muted=true;var ph=v.parentNode,p=v.play();if(p&&p.then)p.then(function(){ph.classList.remove('vpause')},function(){ph.classList.add('vpause')});};var vo=new IntersectionObserver(function(es){es.forEach(function(e){var v=e.target;v._in=e.isIntersecting;if(e.isIntersecting)tryPlay(v);else v.pause();});},{threshold:.25});[].forEach.call(vids,function(v){vo.observe(v);v.parentNode.addEventListener('click',function(){tryPlay(v)});});var wake=function(){[].forEach.call(vids,function(v){if(v._in&&v.paused)tryPlay(v)});};document.addEventListener('touchend',wake,{passive:true});document.addEventListener('click',wake);}
   // 하위 메뉴 페이지를 미리 받아두기 → 탭을 누르면 바로 뜨게 (아이폰 사파리 포함)
   var pf={};function pre(h){if(!h||pf[h]||h.charAt(0)!=='/'||h.charAt(1)==='/'||h===location.pathname||/\.(pdf|jpg|png|webp|mp4)$/i.test(h))return;pf[h]=1;try{fetch(h,{credentials:'same-origin'}).catch(function(){});}catch(e){}}
   (window.requestIdleCallback||function(fn){setTimeout(fn,1500)})(function(){[].forEach.call(document.querySelectorAll('.lnb a'),function(a){pre(a.getAttribute('href'))});});

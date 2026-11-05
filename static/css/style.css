@@ -502,3 +502,27 @@ footer .blog:hover{border-color:#03C75A}
   .o-bus{display:none}
   .o-dept{grid-template-columns:1fr;gap:14px;margin-left:24px;padding:4px 0 0 18px;border-left:1px solid var(--o-ln)}
 }
+
+/* 수주부터 납품까지 — 공정 카드 */
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.flow li{position:relative;padding:22px 22px 24px;background:var(--bg-2);border:1px solid var(--line);border-top:2px solid color-mix(in srgb,var(--ink) 28%,transparent);border-radius:4px;transition:transform .3s ease,border-color .3s ease}
+.flow li.ph2{border-top-color:var(--ink)}
+.flow li.ph3{border-top-color:var(--red)}
+.flow li:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--ink) 35%,transparent)}
+.flow li:hover,.flow li.ph3:hover{border-top-color:var(--red)}
+.flow li::after{content:'';position:absolute;right:-12px;top:36px;width:7px;height:7px;border-top:1px solid var(--muted);border-right:1px solid var(--muted);transform:rotate(45deg);opacity:.55}
+.flow li:nth-child(4n)::after,.flow li:last-child::after{display:none}
+.f-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:20px}
+.f-no.en{font-size:34px;line-height:1;font-weight:500;color:var(--ink);letter-spacing:.02em}
+.f-ph{font-size:12px;letter-spacing:.1em;color:var(--muted);padding:3px 9px;border:1px solid var(--line);border-radius:3px}
+.flow li.ph3 .f-ph{color:var(--red);border-color:color-mix(in srgb,var(--red) 45%,transparent)}
+.flow b{display:block;margin-bottom:8px;font-size:17px;color:var(--ink)}
+.flow p{font-size:14.5px;line-height:1.65;color:var(--muted)}
+@supports (animation-timeline:view()){@media (prefers-reduced-motion:no-preference){.flow li{animation:orise linear both;animation-timeline:view();animation-range:entry 0% entry 55%}}}
+@media (max-width:1000px){.flow{grid-template-columns:1fr 1fr}.flow li:nth-child(4n)::after{display:block}.flow li:nth-child(2n)::after,.flow li:last-child::after{display:none}}
+@media (max-width:600px){
+  .flow{grid-template-columns:1fr;gap:12px;margin-left:6px;padding-left:20px;border-left:1px solid var(--line)}
+  .flow li::after{display:none!important}
+  .flow li::before{content:'';position:absolute;left:-25px;top:32px;width:9px;height:9px;background:var(--bg);border:1px solid var(--muted)}
+  .flow li.ph3::before{background:var(--red);border-color:var(--red)}
+}

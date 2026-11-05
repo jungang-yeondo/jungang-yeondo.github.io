@@ -402,7 +402,7 @@ footer .blog:hover{border-color:#03C75A}
 @media (max-width:900px){.eng-motion{width:125%;margin:0 -12.5%}}
 
 /* 주요 부품 페이지 */
-.parts-more{margin-top:24px}.parts-more a{color:var(--accent,#e0444d);font-weight:600}
+.parts-more{margin-top:24px}.parts-more a{font-weight:600}
 .pcards{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
 .pcard{border-top:1px solid rgba(255,255,255,.12);padding-top:18px}
 .pcard .ph{aspect-ratio:4/3;overflow:hidden;border-radius:6px;background:rgba(255,255,255,.04);margin-bottom:16px}
@@ -520,8 +520,10 @@ a.f-ph{transition:color .2s,border-color .2s}
 a.f-ph:hover{color:var(--red);border-color:var(--red)}
 .flow b{display:block;margin-bottom:8px;font-size:17px;color:var(--ink)}
 .flow p{font-size:14.5px;line-height:1.65;color:var(--muted)}
-.f-link{display:inline-block;margin-top:14px;font-size:13.5px;color:var(--ink);padding-bottom:2px;border-bottom:1px solid var(--line);transition:color .2s,border-color .2s}
-.f-link:hover{color:var(--red);border-color:var(--red)}
+.f-link{margin-top:14px;font-size:13.5px}
+/* 바로가기 링크 공통 — SUS(스테인리스) 은색 */
+.mlink,.f-link,.parts-more a{display:inline-block;color:color-mix(in srgb,var(--ink) 72%,#8fa3b8);padding-bottom:2px;border-bottom:1px solid color-mix(in srgb,var(--ink) 28%,transparent);transition:color .2s,border-color .2s}
+.mlink:hover,.f-link:hover,.parts-more a:hover{color:var(--ink);border-color:var(--ink)}
 @supports (animation-timeline:view()){@media (prefers-reduced-motion:no-preference){.flow li{animation:orise linear both;animation-timeline:view();animation-range:entry 0% entry 55%}}}
 @media (max-width:1000px){.flow{grid-template-columns:1fr 1fr}.flow li:nth-child(4n)::after{display:block}.flow li:nth-child(2n)::after,.flow li:last-child::after{display:none}}
 @media (max-width:600px){

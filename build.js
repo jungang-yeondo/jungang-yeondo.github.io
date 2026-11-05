@@ -19,6 +19,7 @@ const lines = (s) => String(s ?? '').split(/\r?\n/).map((l) => `<span>${esc(l)}<
 const list = (a) => (Array.isArray(a) ? a : []);
 const img = (src, alt = '', extra = '') => src ? `<img src="${esc(src)}" alt="${esc(alt || site.short_name || '(주)중앙연도')}" loading="lazy"${extra}>` : '';
 // 휴대폰용 작은 사진: static/uploads에 '이름-900w.확장자'·'이름-1200w.확장자'가 있는 것만 srcset에 넣음 (하나도 없으면 원본만)
+const hasFile = (s) => !!s && fs.existsSync(path.join(ROOT, 'static', String(s).split('?')[0]));
 const setUrl = (s) => encodeURI(s).replace(/,/g, '%2C') + '?v=' + ver(s); // srcset은 공백·쉼표로 나뉘므로 인코딩
 const srcset = (src) => {
   const m = /^(\/uploads\/.+)(\.[^./]+)$/.exec(String(src || ''));
@@ -260,7 +261,7 @@ add('/business/', {
 add('/business/facility/', {
   title: '보유 설비 · 제작 기술', section: 'business', image: biz.banner,
   body: subPage({ en: 'Business', title: '사업분야', banner: biz.banner, section: 'business', current: '/business/facility/', body:
-    two('Facility', esc(biz.facilities_title || '보유 설비 · 제작 기술'), `<div class="facil">${list(biz.facilities).map((f) => `<div class="row"><div class="ph">${img(f.image1, f.title)}${f.image2 ? img(f.image2, f.title) : ''}</div><div class="tx">${f.en ? `<span class="en">${esc(f.en)}</span>` : ''}<b>${esc(f.title)}</b><p>${br(f.text)}</p></div></div>`).join('')}</div>`) }),
+    two('Facility', esc(biz.facilities_title || '보유 설비 · 제작 기술'), `<div class="facil">${list(biz.facilities).filter((f) => hasFile(f.video) || hasFile(f.image1)).map((f) => { const tx = `<div class="tx">${f.en ? `<span class="en">${esc(f.en)}</span>` : ''}<b>${esc(f.title)}</b><p>${br(f.text)}</p></div>`; return hasFile(f.video) ? `<div class="row vid"><div class="ph"><video src="${esc(f.video)}"${f.poster ? ` poster="${esc(f.poster)}"` : ''} muted loop playsinline preload="none" disablepictureinpicture controlslist="nodownload" oncontextmenu="return false" data-auto aria-label="${esc(f.title)} 작업 영상"></video></div>${tx}</div>` : `<div class="row"><div class="ph">${img(f.image1, f.title)}${f.image2 ? img(f.image2, f.title) : ''}</div>${tx}</div>`; }).join('')}</div>`) }),
 });
 
 // ---------- PRODUCTS ----------

@@ -240,10 +240,15 @@ add('/company/history/', {
   body: subPage({ en: 'Company', title: '회사소개', banner: company.banner, section: 'company', current: '/company/history/', body:
     two('History', '연혁', `<ul class="tl">${list(company.history).map((h) => `<li${h.highlight ? ' class="big"' : ''}><time>${esc(h.date)}</time><div><b>${esc(h.title)}</b>${h.note ? `<small>${esc(h.note)}</small>` : ''}</div></li>`).join('')}</ul>`) }),
 });
+const ORG_ICONS = {
+  management: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="2.5"/><path d="M9 3.5h6v3H9zM8.5 11h7M8.5 14.5h7M8.5 18h4"/></svg>',
+  production: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20.5V11l5 3v-3l5 3v-3l5 3V3.5h3v17z"/><path d="M3 20.5h18M7 17.5h2M12 17.5h2"/></svg>',
+  rnd: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3.5h5M10.5 3.5v5.2L5.2 18a1.8 1.8 0 0 0 1.6 2.6h10.4a1.8 1.8 0 0 0 1.6-2.6l-5.3-9.3V3.5"/><path d="M7.6 14.5h8.8"/></svg>',
+};
 add('/company/organization/', {
   title: '조직도', section: 'company', image: company.banner,
   body: subPage({ en: 'Company', title: '회사소개', banner: company.banner, section: 'company', current: '/company/organization/', body:
-    two('Organization', '조직도', `${company.org_intro ? `<p class="lead org-lead">${br(company.org_intro)}</p>` : ''}<div class="org"><div class="org-ceo"><span class="en">CEO</span><b>대표이사</b><small>${esc(site.ceo)}</small></div><div class="org-bus" aria-hidden="true"></div><ol class="org-dept" style="--n:${list(company.org).length || 1}">${list(company.org).map((o, i) => `<li><div class="hd"><span class="no en">${String(i + 1).padStart(2, '0')}</span><span class="en">${esc(o.en)}</span><b>${esc(o.name)}</b>${o.desc ? `<p>${esc(o.desc)}</p>` : ''}</div><ul>${list(o.items).map((t) => `<li>${esc(t)}</li>`).join('')}</ul></li>`).join('')}</ol></div>`) }),
+    two('Organization', '조직도', `${company.org_intro ? `<p class="lead org-lead">${br(company.org_intro)}</p>` : ''}<div class="org2"><div class="o-ceo"><span class="en">CEO</span><b>대표이사</b><small>${esc(site.ceo)}</small></div><div class="o-stem" aria-hidden="true"></div><div class="o-bus" aria-hidden="true"></div><ol class="o-dept" style="--n:${list(company.org).length || 1}">${list(company.org).map((o, i) => `<li><div class="o-top"><span class="o-ic" aria-hidden="true">${ORG_ICONS[o.icon] || ORG_ICONS.production}</span><span class="o-no en">${String(i + 1).padStart(2, '0')} / ${esc(o.en)}</span></div><b>${esc(o.name)}</b>${o.desc ? `<p>${esc(o.desc)}</p>` : ''}<ul class="o-tags">${list(o.items).map((t) => `<li>${esc(t)}</li>`).join('')}</ul></li>`).join('')}</ol></div>`) }),
 });
 {
   const q = encodeURIComponent(site.address);

@@ -53,7 +53,9 @@
       "image2": "/uploads/facility-laser-weld-02.jpg",
       "en": "Laser Welding",
       "title": "레이저 용접",
-      "text": "열이 좁은 범위에만 들어가 얇은 스테인리스 판의 휨과 변색이 적고, 용접선이 가늘고 고릅니다. 부위와 두께에 따라 TIG 용접을 함께 사용합니다."
+      "text": "열이 좁은 범위에만 들어가 얇은 스테인리스 판의 휨과 변색이 적고, 용접선이 가늘고 고릅니다. 부위와 두께에 따라 TIG 용접을 함께 사용합니다.",
+      "video": "/uploads/facility-laser-weld.mp4",
+      "poster": "/uploads/facility-laser-weld-poster.jpg"
     }
   ],
   "process": [

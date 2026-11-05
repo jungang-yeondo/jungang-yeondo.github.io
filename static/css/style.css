@@ -515,7 +515,9 @@ footer .blog:hover{border-color:#03C75A}
 .f-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:20px}
 .f-no.en{font-size:34px;line-height:1;font-weight:500;color:var(--ink);letter-spacing:.02em}
 .f-ph{font-size:12px;letter-spacing:.1em;color:var(--muted);padding:3px 9px;border:1px solid var(--line);border-radius:3px}
-.flow li.ph3 .f-ph{color:var(--red);border-color:color-mix(in srgb,var(--red) 45%,transparent)}
+.flow li.ph2 .f-ph{color:var(--ink);border-color:color-mix(in srgb,var(--ink) 40%,transparent)}
+a.f-ph{transition:color .2s,border-color .2s}
+a.f-ph:hover{color:var(--red);border-color:var(--red)}
 .flow b{display:block;margin-bottom:8px;font-size:17px;color:var(--ink)}
 .flow p{font-size:14.5px;line-height:1.65;color:var(--muted)}
 @supports (animation-timeline:view()){@media (prefers-reduced-motion:no-preference){.flow li{animation:orise linear both;animation-timeline:view();animation-range:entry 0% entry 55%}}}
@@ -524,5 +526,5 @@ footer .blog:hover{border-color:#03C75A}
   .flow{grid-template-columns:1fr;gap:12px;margin-left:6px;padding-left:20px;border-left:1px solid var(--line)}
   .flow li::after{display:none!important}
   .flow li::before{content:'';position:absolute;left:-25px;top:32px;width:9px;height:9px;background:var(--bg);border:1px solid var(--muted)}
-  .flow li.ph3::before{background:var(--red);border-color:var(--red)}
+  .flow li.ph2::before{background:var(--ink);border-color:var(--ink)}
 }

@@ -31,7 +31,7 @@ const baseUrl = String(site.url || '').replace(/\/$/, '');
 
 const NAV = [
   { key: 'company', label: '회사소개', href: '/company/greeting/', sub: [['인사말', '/company/greeting/'], ['회사개요', '/company/overview/'], ['연혁', '/company/history/'], ['오시는 길', '/company/location/']] },
-  { key: 'business', label: '사업분야', href: '/business/', sub: [['사업분야', '/business/']] },
+  { key: 'business', label: '사업분야', href: '/business/', sub: [['사업분야', '/business/'], ['보유 설비 · 제작 기술', '/business/facility/']] },
   { key: 'product', label: '제품소개', href: '/product/stack/', sub: [['스테인리스 연도', '/product/stack/'], ['LPF 기밀연도', '/product/lpf/'], ['주요 부품', '/product/parts/']] },
   { key: 'projects', label: '납품실적', href: '/projects/', sub: [['납품실적', '/projects/'], ['현장 사진', '/projects/gallery/'], ['시공 협력사', '/projects/partners/'], ['인증·특허', '/projects/certification/']] },
   { key: 'support', label: '고객지원', href: '/support/downloads/', sub: [['자료실', '/support/downloads/'], ['온라인 문의', '/support/contact/']] },
@@ -255,8 +255,12 @@ add('/business/', {
   title: '사업분야', section: 'business', image: biz.banner,
   body: subPage({ en: 'Business', title: '사업분야', banner: biz.banner, section: 'business', current: '/business/', body:
     two('Field', '적용 분야', `<div class="biz3">${list(biz.fields).map((f) => `<article><div class="im">${img(f.image, f.title)}</div><span class="en">${esc(f.label)}</span><b>${esc(f.title)}</b><p>${esc(f.text)}</p>${/발전기/.test(f.title) && list(proj.idc).length ? `<a href="/projects/#idc" style="display:inline-block;margin-top:12px;font-size:15px;color:var(--red)">데이터센터 실적 ${list(proj.idc).length}곳 보기 →</a>` : ''}</article>`).join('')}</div>`) +
-    two('Process', '수주부터 납품까지', `<ol class="steps" style="grid-template-columns:repeat(${Math.min(5, list(biz.process).length) || 1},1fr)">${list(biz.process).map((p) => `<li><b style="color:var(--ink);display:block;margin-bottom:6px">${esc(p.title)}</b>${esc(p.text)}</li>`).join('')}</ol>`) +
-    (list(biz.facilities).length ? two('Facility', esc(biz.facilities_title || '보유 설비 · 제작 기술'), `<div class="facil">${list(biz.facilities).map((f) => `<div class="row"><div class="ph">${img(f.image1, f.title)}${f.image2 ? img(f.image2, f.title) : ''}</div><div class="tx">${f.en ? `<span class="en">${esc(f.en)}</span>` : ''}<b>${esc(f.title)}</b><p>${br(f.text)}</p></div></div>`).join('')}</div>`) : '') }),
+    two('Process', '수주부터 납품까지', `<ol class="steps" style="grid-template-columns:repeat(${Math.min(5, list(biz.process).length) || 1},1fr)">${list(biz.process).map((p) => `<li><b style="color:var(--ink);display:block;margin-bottom:6px">${esc(p.title)}</b>${esc(p.text)}</li>`).join('')}</ol>`) }),
+});
+add('/business/facility/', {
+  title: '보유 설비 · 제작 기술', section: 'business', image: biz.banner,
+  body: subPage({ en: 'Business', title: '사업분야', banner: biz.banner, section: 'business', current: '/business/facility/', body:
+    two('Facility', esc(biz.facilities_title || '보유 설비 · 제작 기술'), `<div class="facil">${list(biz.facilities).map((f) => `<div class="row"><div class="ph">${img(f.image1, f.title)}${f.image2 ? img(f.image2, f.title) : ''}</div><div class="tx">${f.en ? `<span class="en">${esc(f.en)}</span>` : ''}<b>${esc(f.title)}</b><p>${br(f.text)}</p></div></div>`).join('')}</div>`) }),
 });
 
 // ---------- PRODUCTS ----------

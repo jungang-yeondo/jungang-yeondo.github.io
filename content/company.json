@@ -132,7 +132,17 @@
         "자재 구매 · 재고 관리",
         "인사 · 직원 관리"
       ],
-      "icon": "management"
+      "icon": "management",
+      "members": [
+        {
+          "name": "이태연",
+          "title": "과장"
+        },
+        {
+          "name": "이주현",
+          "title": "주임"
+        }
+      ]
     },
     {
       "en": "Production",
@@ -142,7 +152,17 @@
         "제품 생산",
         "품질 관리"
       ],
-      "icon": "production"
+      "icon": "production",
+      "members": [
+        {
+          "name": "또진 웨이",
+          "title": "공장장"
+        },
+        {
+          "name": "옐린 나잉",
+          "title": "출고장"
+        }
+      ]
     },
     {
       "en": "R&D",
@@ -152,7 +172,13 @@
         "특허 개발",
         "디자인 개발"
       ],
-      "icon": "rnd"
+      "icon": "rnd",
+      "members": [
+        {
+          "name": "오은영",
+          "title": "부장"
+        }
+      ]
     }
   ]
 }

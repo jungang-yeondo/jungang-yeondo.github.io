@@ -269,8 +269,8 @@ add('/business/', {
     two('Process', '발주 접수부터 납품까지', `<ol class="flow">${list(biz.process).map((p, i, a) => { const ph = p.phase || ''; const pi = [...new Set(a.map((x) => x.phase || ''))].indexOf(ph); return `<li class="ph${pi + 1}"><div class="f-hd"><span class="f-no en">${String(i + 1).padStart(2, '0')}</span>${ph ? `<a class="f-ph" href="/company/organization/">${esc(ph)}</a>` : ''}</div><b>${esc(p.title)}</b><p>${esc(p.text)}</p>${p.link ? `<a class="f-link" href="${esc(p.link)}">${esc(p.link_text || '바로가기')} →</a>` : ''}</li>`; }).join('')}</ol>`) }),
 });
 add('/business/facility/', {
-  title: '보유 설비 · 제작 기술', section: 'business', image: biz.banner,
-  body: subPage({ en: 'Business', title: '사업분야', banner: biz.banner, section: 'business', current: '/business/facility/', body:
+  title: '보유 설비 · 제작 기술', section: 'business', image: hasFile(biz.facility_banner) ? biz.facility_banner : biz.banner,
+  body: subPage({ en: 'Business', title: '사업분야', banner: hasFile(biz.facility_banner) ? biz.facility_banner : biz.banner, section: 'business', current: '/business/facility/', body:
     two('Facility', esc(biz.facilities_title || '보유 설비 · 제작 기술'), `<div class="facil">${list(biz.facilities).filter((f) => hasFile(f.video) || hasFile(f.image1)).map((f) => { const tx = `<div class="tx">${f.en ? `<span class="en">${esc(f.en)}</span>` : ''}<b>${esc(f.title)}</b><p>${br(f.text)}</p></div>`; return hasFile(f.video) ? `<div class="row vid"><div class="ph"><video src="${esc(f.video)}"${f.poster ? ` poster="${esc(f.poster)}"` : ''} muted loop playsinline preload="none" disablepictureinpicture controlslist="nodownload" oncontextmenu="return false" data-auto${hasFile(String(f.video).replace(/\.mp4$/, '.webp')) ? ` data-anim="${esc(String(f.video).replace(/\.mp4$/, '.webp'))}"` : ''} aria-label="${esc(f.title)} 작업 영상"></video></div>${tx}</div>` : `<div class="row"><div class="ph">${img(f.image1, f.title)}${f.image2 ? img(f.image2, f.title) : ''}</div>${tx}</div>`; }).join('')}</div>`) }),
 });
 

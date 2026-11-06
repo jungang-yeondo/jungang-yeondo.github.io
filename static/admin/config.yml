@@ -337,3 +337,4 @@ collections:
           - { name: blog, label: "네이버 블로그 주소 (비우면 안 보임)", widget: string, required: false }
           - { name: naver_verification, label: "네이버 서치어드바이저 인증 코드", widget: string, required: false }
           - { name: google_verification, label: "구글 서치콘솔 인증 코드", widget: string, required: false }
+          - { name: naver_analytics, label: "네이버 애널리틱스 발급ID (비우면 통계 꺼짐)", widget: string, required: false }

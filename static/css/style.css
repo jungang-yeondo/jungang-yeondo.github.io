@@ -539,4 +539,4 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
 .facil.asm video,.facil.asm .ph img,.facil.asm .ph img.vanim{width:100%;aspect-ratio:5/4;object-fit:cover;display:block;border-radius:6px;background:#e4e7ea}
 .facil.asm .tx .en{letter-spacing:.2em}
 .facil.asm .tx b{font-size:24px}
-@media (max-width:760px){.facil.asm .row{grid-template-columns:1fr;gap:16px;padding:24px 0}}
+@media (max-width:760px){.facil.asm .row{grid-template-columns:1fr;gap:16px;padding:24px 0}.facil.asm .ph.mob video,.facil.asm .ph.mob img,.facil.asm .ph.mob img.vanim{aspect-ratio:4/5}.facil.asm .tx b{font-size:21px}}

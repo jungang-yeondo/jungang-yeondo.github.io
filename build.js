@@ -108,6 +108,7 @@ ${body}
   </div>
 </footer>
 <script src="/js/main.js" defer></script>
+${site.naver_analytics ? `<script src="https://wcs.pstatic.net/wcslog.js"></script><script>if(!window.wcs_add)window.wcs_add={};wcs_add["wa"]=${JSON.stringify(String(site.naver_analytics))};if(window.wcs){wcs_do();}</script>` : ''}
 </body>
 </html>`;
 }

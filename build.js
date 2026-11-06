@@ -27,6 +27,9 @@ const srcset = (src) => {
   const small = [900, 1200].map((w) => [m[1] + `-${w}w` + m[2], w]).filter(([s]) => fs.existsSync(path.join(ROOT, 'static', s)));
   return small.length ? ` srcset="${[...small, [src, 1920]].map(([s, w]) => `${esc(setUrl(s))} ${w}w`).join(', ')}" sizes="100vw"` : '';
 };
+// 연도 단면 모션: 평소엔 가벼운 영상, 자동재생이 막히면(아이폰 절전·데이터 절약 모드) 움짤로 자동 교체
+const ductMotion = (cls) => hasFile('/uploads/duct-motion.mp4') ? `<video class="${cls}" src="/uploads/duct-motion.mp4" poster="/uploads/duct-motion.jpg" data-anim="/uploads/duct-motion.webp" data-dm muted loop playsinline preload="none" disablepictureinpicture aria-label="이중연도 단면: 외부 커버, 스페이서, 25mm 공기단열층, 내부관"></video>
+  <script>(function(){var v=document.currentScript.previousElementSibling;if(!v||v.tagName!=='VIDEO')return;var d=0;function sw(){if(d)return;d=1;var i=new Image();i.className=v.className;i.alt=v.getAttribute('aria-label')||'';i.decoding='async';i.src=v.getAttribute('data-anim');v.parentNode.replaceChild(i,v);}function go(){try{var p=v.play();if(p&&p.catch)p.catch(sw);}catch(e){sw();}setTimeout(function(){if(!d&&v.paused)sw();},3000);}if('IntersectionObserver' in window){var o=new IntersectionObserver(function(es){if(es[0].isIntersecting){o.disconnect();go();}},{rootMargin:'200px'});o.observe(v);}else go();})();</script>` : `<img class="${cls}" src="/uploads/duct-motion.webp" alt="이중연도 단면: 외부 커버, 스페이서, 25mm 공기단열층, 내부관" loading="lazy" decoding="async">`;
 const telHref = (t) => 'tel:' + String(t).replace(/[^0-9+]/g, '');
 const baseUrl = String(site.url || '').replace(/\/$/, '');
 
@@ -208,8 +211,7 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
     <p>${esc(home.eng_text)}</p>
     <ul>${specs}</ul>
   </div>
-  ${hasFile('/uploads/duct-motion.mp4') ? `<video class="eng-motion" src="/uploads/duct-motion.mp4" poster="/uploads/duct-motion.jpg" data-anim="/uploads/duct-motion-lite.webp" muted loop playsinline preload="none" disablepictureinpicture aria-label="이중연도 단면: 외부 커버, 스페이서, 25mm 공기단열층, 내부관"></video>
-  <script>(function(){var v=document.querySelector('video.eng-motion');if(!v)return;var d=0;function sw(){if(d)return;d=1;var i=new Image();i.className='eng-motion';i.alt=v.getAttribute('aria-label')||'';i.decoding='async';i.src=v.getAttribute('data-anim');v.parentNode.replaceChild(i,v);}function go(){try{var p=v.play();if(p&&p.catch)p.catch(sw);}catch(e){sw();}setTimeout(function(){if(!d&&v.paused)sw();},3000);}if('IntersectionObserver' in window){var o=new IntersectionObserver(function(es){if(es[0].isIntersecting){o.disconnect();go();}},{rootMargin:'200px'});o.observe(v);}else go();})();</script>` : '<img class="eng-motion" src="/uploads/duct-motion.webp?v=3" alt="이중연도 단면: 외부 커버, 스페이서, 25mm 공기단열층, 내부관" loading="lazy" decoding="async">'}
+  ${ductMotion('eng-motion')}
 </div></section>
 
 <section class="sec"><div class="wrap">
@@ -286,7 +288,7 @@ add('/product/stack/', {
   title: '스테인리스 연도', section: 'product', image: prod.stack_image,
   desc: '스테인리스 조립식 이중연도 — STS304 내부관, 25mm 공기단열층, 단관·이중관·보온 삼중관, 재질·두께 규격과 주요 부품.',
   body: subPage({ en: 'Products', title: '스테인리스 연도', banner: prod.stack_banner || prod.banner, section: 'product', current: '/product/stack/', body:
-    two('Double-wall Stack', br(prod.stack_title), `<p class="quote" style="margin-bottom:20px">${br(prod.stack_quote)}</p><p class="lead" style="margin-top:0">${esc(prod.stack_intro)}</p>${prod.stack_image ? `<div class="wideimg">${img(prod.stack_image, '스테인리스 이중연도 납품 현장')}</div>` : ''}`) +
+    two('Double-wall Stack', br(prod.stack_title), `<p class="quote" style="margin-bottom:20px">${br(prod.stack_quote)}</p><p class="lead" style="margin-top:0">${esc(prod.stack_intro)}</p><div class="duct-wide">${ductMotion('duct-motion')}</div>`) +
     two('Feature', '특징', `<div class="feat4">${list(prod.features).map((f) => `<div><span class="en">${esc(f.en)}</span><b>${esc(f.title)}</b><p>${esc(f.text)}</p></div>`).join('')}</div>`) +
     two('Line-up', '구성 · 관경 산정', `<div class="lineup2">${list(prod.lineup).map((l, i) => `<div class="row">${l.image ? `<div class="ph">${img(l.image, l.title)}</div>` : `<div class="ph ic">${ICONS[Math.min(i, 2)]}</div>`}<div class="tx">${l.en ? `<span class="en">${esc(l.en)}</span>` : ''}<b>${esc(l.title)}</b><p>${esc(l.text)}</p><span class="f">${esc(l.formula)}</span></div></div>`).join('')}</div><p class="note">${esc(prod.lineup_note)}</p>`) +
     (list(prod.assembly).some((a) => hasFile(a.video) || hasFile(a.image)) ? two('Assembly', esc(prod.assembly_title || '조립 과정'), `<div class="facil asm">${list(prod.assembly).filter((a) => hasFile(a.video) || hasFile(a.image)).map((a, i) => { const w = String(a.video || '').replace(/\.mp4$/, '.webp'); return `<div class="row"><div class="ph">${hasFile(a.video) ? `<video src="${esc(a.video)}"${a.poster ? ` poster="${esc(a.poster)}"` : ''} muted playsinline preload="none" disablepictureinpicture controlslist="nodownload" oncontextmenu="return false" data-auto data-th=".55"${hasFile(w) ? ` data-anim="${esc(w)}"` : ''}${(() => { const m = String(a.video).replace(/\.mp4$/, 'm.mp4'); return hasFile(m) ? ` data-m="${esc(m)}"${hasFile(m.replace(/\.mp4$/, '.jpg')) ? ` data-pm="${esc(m.replace(/\.mp4$/, '.jpg'))}"` : ''}${hasFile(m.replace(/\.mp4$/, '.webp')) ? ` data-am="${esc(m.replace(/\.mp4$/, '.webp'))}"` : ''}` : ''; })()} aria-label="${esc(a.title)} 조립 영상"></video>` : img(a.image, a.title)}</div><div class="tx"><span class="en">STEP ${String(i + 1).padStart(2, '0')}</span><b>${esc(a.title)}</b><p>${br(a.text)}</p></div></div>`; }).join('')}</div>`) : '') +

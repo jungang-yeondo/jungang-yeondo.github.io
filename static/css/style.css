@@ -398,7 +398,7 @@ footer .blog:hover{border-color:#03C75A}
 
 /* 메인 단면 모션 */
 .eng{overflow:hidden}
-.eng-motion{display:block;width:135%;max-width:none;height:auto;aspect-ratio:1364/1184;margin:0 -17.5%;mix-blend-mode:lighten;object-fit:contain}
+.eng-motion{background:transparent;display:block;width:135%;max-width:none;height:auto;aspect-ratio:1364/1184;margin:0 -17.5%;mix-blend-mode:lighten;object-fit:contain}
 @media (max-width:900px){.eng-motion{width:125%;margin:0 -12.5%}}
 
 /* 주요 부품 페이지 */
@@ -540,3 +540,9 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
 .facil.asm .tx .en{letter-spacing:.2em}
 .facil.asm .tx b{font-size:24px}
 @media (max-width:760px){.facil.asm .row{grid-template-columns:1fr;gap:16px;padding:24px 0}.facil.asm .ph.mob video,.facil.asm .ph.mob img,.facil.asm .ph.mob img.vanim{aspect-ratio:4/5}.facil.asm .tx b{font-size:21px}}
+
+/* 휴대폰: 작은 링크·버튼의 누르는 영역만 넓힘 (모양·배치는 그대로) */
+@media (pointer:coarse){
+  .ptn dl a,.ptn .hl a,.ptn .rf a,.info a,footer .fl a,.arrow,.copy{position:relative}
+  .ptn dl a::before,.ptn .hl a::before,.ptn .rf a::before,.info a::before,footer .fl a::before,.arrow::before,.copy::before{content:'';position:absolute;left:-4px;right:-4px;top:-11px;bottom:-11px}
+}

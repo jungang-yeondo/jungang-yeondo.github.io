@@ -200,10 +200,11 @@ footer .blog:hover{border-color:#03C75A}
 .subvis .en{font-size:17px;letter-spacing:.24em;opacity:.85}
 .subvis h1{font-size:clamp(32px,4.4vw,56px);margin-top:8px;letter-spacing:-.02em}
 .lnb{border-bottom:1px solid var(--line);background:var(--bg);position:sticky;top:calc(84px + env(safe-area-inset-top,0px));z-index:30}
-.lnb .wrap{display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.lnb .wrap{display:flex;gap:0;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.lnb .wrap::-webkit-scrollbar{display:none}
 .lnb a{padding:20px 26px;font-size:15.5px;color:var(--muted);white-space:nowrap;position:relative}
 .lnb a[aria-current="true"]{color:var(--ink);font-weight:700}
-.lnb a[aria-current="true"]::after{content:"";position:absolute;left:26px;right:26px;bottom:-1px;height:2px;background:var(--red)}
+.lnb a[aria-current="true"]::after{content:"";position:absolute;left:26px;right:26px;bottom:0;height:2px;background:var(--red)}
 .crumb{font-size:13px;opacity:.75;margin-bottom:auto;padding-top:140px}
 
 .two{display:grid;grid-template-columns:260px minmax(0,1fr);gap:clamp(32px,5vw,80px);padding-block:clamp(56px,7vw,96px);border-top:1px solid var(--line)}
@@ -546,3 +547,8 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
   .ptn dl a,.ptn .hl a,.ptn .rf a,.info a,footer .fl a,.arrow,.copy{position:relative}
   .ptn dl a::before,.ptn .hl a::before,.ptn .rf a::before,.info a::before,footer .fl a::before,.arrow::before,.copy::before{content:'';position:absolute;left:-4px;right:-4px;top:-11px;bottom:-11px}
 }
+
+/* 스테인리스 연도: 소개 아래 연도 단면 모션 */
+.duct-wide{margin-top:40px;display:flex;justify-content:center}
+.duct-motion{display:block;width:100%;max-width:720px;height:auto;aspect-ratio:1364/1184;object-fit:contain;mix-blend-mode:lighten;background:transparent;-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 91%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 91%,transparent);mask-composite:intersect}
+@media (max-width:760px){.duct-wide{margin:24px -20px 0;overflow:hidden;display:block}.duct-motion{width:118%;max-width:none;margin:0 -9%}}

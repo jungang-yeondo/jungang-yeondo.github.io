@@ -532,3 +532,11 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
   .flow li::before{content:'';position:absolute;left:-25px;top:32px;width:9px;height:9px;background:var(--bg);border:1px solid var(--muted)}
   .flow li.ph2::before{background:var(--ink);border-color:var(--ink)}
 }
+
+/* 조립 과정: 단계별 영상(보이기 시작할 때 한 번 재생) */
+.facil.asm .row{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:36px;padding:30px 0}
+.facil.asm .ph{display:block;position:relative;cursor:pointer}
+.facil.asm video,.facil.asm .ph img,.facil.asm .ph img.vanim{width:100%;aspect-ratio:5/4;object-fit:cover;display:block;border-radius:6px;background:#e4e7ea}
+.facil.asm .tx .en{letter-spacing:.2em}
+.facil.asm .tx b{font-size:24px}
+@media (max-width:760px){.facil.asm .row{grid-template-columns:1fr;gap:16px;padding:24px 0}}

@@ -93,8 +93,9 @@
     },
     {
       "title": "조립 완료",
-      "text": "이음부가 깔끔하게 마감된\n이중연도가 완성됩니다.",
-      "image": "/uploads/assembly-06.jpg"
+      "text": "이음부가 C카바로 깔끔하게 마감된\n이중연도가 완성됩니다.",
+      "video": "/uploads/assembly-06.mp4",
+      "poster": "/uploads/assembly-06.jpg"
     }
   ],
   "spec_rows": [

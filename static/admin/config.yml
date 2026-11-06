@@ -127,6 +127,7 @@ collections:
         file: content/business.json
         fields:
           - { name: banner, label: "상단 배경 사진", widget: image }
+          - { name: facility_banner, label: "보유 설비·제작 기술 페이지 상단 사진", widget: image, required: false }
           - name: fields
             label: "적용 분야"
             widget: list

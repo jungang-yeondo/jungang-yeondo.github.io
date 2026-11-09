@@ -74,7 +74,7 @@ ${site.google_verification ? `<meta name="google-site-verification" content="${e
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Barlow+Condensed:wght@400;500;600&family=Cinzel:wght@700&display=swap">
 <link rel="stylesheet" href="/css/style.css">
-<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'Organization', name: site.name, alternateName: ['중앙연도', site.short_name, site.name_en], url: baseUrl || undefined, telephone: site.tel, email: site.email, address: { '@type': 'PostalAddress', streetAddress: site.address, addressCountry: 'KR' }, foundingDate: '2013-03-13', sameAs: site.blog ? [site.blog] : undefined }).replace(/</g, '\\u003c')}</script>
+<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'Organization', name: site.name, alternateName: ['중앙연도', site.short_name, site.name_en], url: baseUrl || undefined, logo: baseUrl ? baseUrl + '/icon-192.png' : undefined, image: baseUrl && home.about_image ? baseUrl + home.about_image : undefined, description: site.seo_description, telephone: site.tel, faxNumber: site.fax, email: site.email, address: { '@type': 'PostalAddress', streetAddress: site.address, addressRegion: '경기도', addressLocality: '포천시', addressCountry: 'KR' }, foundingDate: '2013-03-13', sameAs: site.blog ? [site.blog] : undefined }).replace(/</g, '\\u003c')}</script>
 </head>
 <body class="over">
 <header class="top" id="top">
@@ -169,7 +169,7 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
   const ip = list(proj.patents).filter((p) => p.home).slice(0, 4).map((p) => `<div class="r"><span class="k">${esc(p.type)}</span><b>${esc(p.title)}</b><span class="n">${esc(p.number)}</span><span class="y">${esc(p.year)}</span></div>`).join('');
 
   add('/', {
-    section: 'home', image: slides[0]?.image,
+    section: 'home', image: home.about_image || slides[0]?.image,
     body: `
 <section class="hero" id="hero" data-interval="${Math.max(3, Number(home.slide_seconds) || 6)}">
   ${sl}
@@ -177,6 +177,7 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
     <div class="en rise">${esc(home.hero_eyebrow)}</div>
     <h1 class="rise">${lines(home.hero_title)}</h1>
     <p class="rise">${br(home.hero_text)}</p>
+    <div class="hero-cta rise"><a class="hbtn" href="/support/contact/">견적 문의 →</a><a class="hbtn ghost" href="/support/downloads/">카탈로그 받기</a></div>
   </div></div>
   <div class="hero-bar"><div class="wrap">
     <div class="cnt"><b id="sIdx">01</b> / ${pad(slides.length)}</div>
@@ -229,19 +230,22 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
 
 // ---------- COMPANY ----------
 add('/company/greeting/', {
+  desc: '(주)중앙연도 대표이사 인사말 — 2000년부터 연도 시공 현장에서 쌓은 경험으로 스테인리스 이중연도를 만드는 전문 제조사입니다.',
   title: '인사말', section: 'company', image: company.banner,
-  body: subPage({ en: 'Company', title: '회사소개', banner: company.banner, section: 'company', current: '/company/greeting/', body:
+  body: subPage({ en: 'Company', title: '인사말', banner: company.banner, section: 'company', current: '/company/greeting/', body:
     two('Greeting', '인사말', `<p class="quote">${br(company.greeting_quote)}</p><div class="prose">${paras(company.greeting_body)}</div><div class="sign"><span>${esc(company.greeting_sign_title)}</span><b>${esc(site.ceo)}</b></div>`) +
     (company.greeting_image ? `<div class="greet-img">${img(company.greeting_image)}</div><div style="height:clamp(56px,7vw,96px)"></div>` : '') }),
 });
 add('/company/overview/', {
+  desc: '(주)중앙연도 회사개요 — 대표이사, 설립일, 사업자등록번호, 주요 사업, 본사·공장 주소와 연락처, 지식재산권 현황.',
   title: '회사개요', section: 'company', image: company.banner,
-  body: subPage({ en: 'Company', title: '회사소개', banner: company.banner, section: 'company', current: '/company/overview/', body:
+  body: subPage({ en: 'Company', title: '회사개요', banner: company.banner, section: 'company', current: '/company/overview/', body:
     two('Overview', '회사개요', `<table class="info">${list(company.overview_rows).map((r) => `<tr><th>${esc(r.label)}</th><td>${br(r.value)}</td></tr>`).join('')}</table>`) }),
 });
 add('/company/history/', {
+  desc: '(주)중앙연도 연혁 — 2008년 중앙스택 개업, 2013년 법인 전환, 연도 관련 특허·디자인·상표 등록 이력.',
   title: '연혁', section: 'company', image: company.banner,
-  body: subPage({ en: 'Company', title: '회사소개', banner: company.banner, section: 'company', current: '/company/history/', body:
+  body: subPage({ en: 'Company', title: '연혁', banner: company.banner, section: 'company', current: '/company/history/', body:
     two('History', '연혁', `<ul class="tl">${list(company.history).map((h) => `<li${h.highlight ? ' class="big"' : ''}><time>${esc(h.date)}</time><div><b>${esc(h.title)}</b>${h.note ? `<small>${esc(h.note)}</small>` : ''}</div></li>`).join('')}</ul>`) }),
 });
 const ORG_ICONS = {
@@ -250,15 +254,17 @@ const ORG_ICONS = {
   rnd: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3.5h5M10.5 3.5v5.2L5.2 18a1.8 1.8 0 0 0 1.6 2.6h10.4a1.8 1.8 0 0 0 1.6-2.6l-5.3-9.3V3.5"/><path d="M7.6 14.5h8.8"/></svg>',
 };
 add('/company/organization/', {
+  desc: '(주)중앙연도 조직도 — 관리부·생산부·연구개발팀의 담당 업무와 구성.',
   title: '조직도', section: 'company', image: company.banner,
-  body: subPage({ en: 'Company', title: '회사소개', banner: company.banner, section: 'company', current: '/company/organization/', body:
+  body: subPage({ en: 'Company', title: '조직도', banner: company.banner, section: 'company', current: '/company/organization/', body:
     two('Organization', '조직도', `${company.org_intro ? `<p class="lead org-lead">${br(company.org_intro)}</p>` : ''}<div class="org2"><div class="o-ceo"><span class="en">CEO</span><b>대표이사</b><small>${esc(site.ceo)}</small></div><div class="o-stem" aria-hidden="true"></div><div class="o-bus" aria-hidden="true"></div><ol class="o-dept" style="--n:${list(company.org).length || 1}">${list(company.org).map((o, i) => `<li><div class="o-top"><span class="o-ic" aria-hidden="true">${ORG_ICONS[o.icon] || ORG_ICONS.production}</span><span class="o-no en">${esc(o.en)}</span></div><b>${esc(o.name)}</b>${o.desc ? `<p>${esc(o.desc)}</p>` : ''}<ul class="o-tags">${list(o.items).map((t) => `<li>${esc(t)}</li>`).join('')}</ul>${list(o.members).length ? `<ul class="o-mem">${list(o.members).map((m) => `<li><strong>${esc(m.name)}</strong><span>${esc(m.title)}</span></li>`).join('')}</ul>` : ''}</li>`).join('')}</ol></div>`) }),
 });
 {
   const q = encodeURIComponent(site.address);
   add('/company/location/', {
+    desc: `(주)중앙연도 오시는 길 — ${site.address}. 전화 ${site.tel}, 팩스 ${site.fax}.`,
     title: '오시는 길', section: 'company', image: company.banner,
-    body: subPage({ en: 'Company', title: '회사소개', banner: company.banner, section: 'company', current: '/company/location/', body:
+    body: subPage({ en: 'Company', title: '오시는 길', banner: company.banner, section: 'company', current: '/company/location/', body:
       two('Location', '오시는 길', `<p style="font-size:clamp(20px,2vw,26px);font-weight:700">${esc(site.address)}<button class="copy" data-copy="${esc(site.address)}">주소 복사</button></p>
 <div class="maplinks"><a href="https://map.naver.com/p/search/${q}" target="_blank" rel="noopener">네이버 지도 ↗</a><a href="https://map.kakao.com/?q=${q}" target="_blank" rel="noopener">카카오맵 ↗</a>${site.blog ? `<a href="${esc(site.blog)}" target="_blank" rel="noopener">네이버 블로그 ↗</a>` : ''}</div>
 <table class="info" style="margin-top:44px"><tr><th>대표전화</th><td class="num"><a href="${telHref(site.tel)}">${esc(site.tel)}</a></td></tr><tr><th>팩스</th><td class="num">${esc(site.fax)}</td></tr><tr><th>이메일</th><td><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></td></tr><tr><th>방문 안내</th><td>${esc(company.visit_note)}</td></tr></table>`) }),
@@ -267,14 +273,16 @@ add('/company/organization/', {
 
 // ---------- BUSINESS ----------
 add('/business/', {
+  desc: '중앙연도 사업분야 — 보일러·발전기·냉온수기 연도 제작과 발주 접수부터 현장 납품까지의 제작 과정.',
   title: '사업분야', section: 'business', image: biz.banner,
   body: subPage({ en: 'Business', title: '사업분야', banner: biz.banner, section: 'business', current: '/business/', body:
     two('Field', '적용 분야', `<div class="biz3">${list(biz.fields).map((f) => `<article><div class="im">${img(f.image, f.title)}</div><span class="en">${esc(f.label)}</span><b>${esc(f.title)}</b><p>${esc(f.text)}</p>${/발전기/.test(f.title) && list(proj.idc).length ? `<a class="mlink" href="/projects/#idc" style="margin-top:12px;font-size:15px">데이터센터 실적 ${list(proj.idc).length}곳 보기 →</a>` : ''}</article>`).join('')}</div>`) +
     two('Process', '발주 접수부터 납품까지', `<ol class="flow">${list(biz.process).map((p, i, a) => { const ph = p.phase || ''; const pi = [...new Set(a.map((x) => x.phase || ''))].indexOf(ph); return `<li class="ph${pi + 1}"><div class="f-hd"><span class="f-no en">${String(i + 1).padStart(2, '0')}</span>${ph ? `<a class="f-ph" href="/company/organization/">${esc(ph)}</a>` : ''}</div><b>${esc(p.title)}</b><p>${esc(p.text)}</p>${p.link ? `<a class="f-link" href="${esc(p.link)}">${esc(p.link_text || '바로가기')} →</a>` : ''}</li>`; }).join('')}</ol>`) }),
 });
 add('/business/facility/', {
+  desc: '중앙연도 보유 설비 — CNC 파이버 레이저 커팅, 자동 심 용접, 밑깎이 성형, 레이저 용접으로 스테인리스 연도를 제작합니다.',
   title: '보유 설비 · 제작 기술', section: 'business', image: hasFile(biz.facility_banner) ? biz.facility_banner : biz.banner,
-  body: subPage({ en: 'Business', title: '사업분야', banner: hasFile(biz.facility_banner) ? biz.facility_banner : biz.banner, section: 'business', current: '/business/facility/', body:
+  body: subPage({ en: 'Business', title: '보유 설비 · 제작 기술', banner: hasFile(biz.facility_banner) ? biz.facility_banner : biz.banner, section: 'business', current: '/business/facility/', body:
     two('Facility', esc(biz.facilities_title || '보유 설비 · 제작 기술'), `<div class="facil">${list(biz.facilities).filter((f) => hasFile(f.video) || hasFile(f.image1)).map((f) => { const tx = `<div class="tx">${f.en ? `<span class="en">${esc(f.en)}</span>` : ''}<b>${esc(f.title)}</b><p>${br(f.text)}</p></div>`; return hasFile(f.video) ? `<div class="row vid"><div class="ph"><video src="${esc(f.video)}"${f.poster ? ` poster="${esc(f.poster)}"` : ''} muted loop playsinline preload="none" disablepictureinpicture controlslist="nodownload" oncontextmenu="return false" data-auto${hasFile(String(f.video).replace(/\.mp4$/, '.webp')) ? ` data-anim="${esc(String(f.video).replace(/\.mp4$/, '.webp'))}"` : ''} aria-label="${esc(f.title)} 작업 영상"></video></div>${tx}</div>` : `<div class="row"><div class="ph">${img(f.image1, f.title)}${f.image2 ? img(f.image2, f.title) : ''}</div>${tx}</div>`; }).join('')}</div>`) }),
 });
 
@@ -351,6 +359,7 @@ const moreBtn = 'font:inherit;font-size:15px;width:100%;padding:14px 0;margin-to
   });
 }
 add('/projects/gallery/', {
+  desc: '중앙연도 연도 납품 현장 사진 — 병원·공장·체육관 등 실제 설치 현장.',
   title: '현장 사진', section: 'projects', image: proj.banner,
   body: subPage({ en: 'Projects', title: '현장 사진', banner: proj.banner, section: 'projects', current: '/projects/gallery/', body:
     `<div style="padding-block:clamp(56px,7vw,96px)"><div class="gal">${list(proj.gallery).map((g) => `<figure>${img(g.image, g.caption)}<figcaption>${esc(g.caption)}<span>${esc(g.year)}</span></figcaption></figure>`).join('')}</div></div>` }),
@@ -371,6 +380,7 @@ add('/projects/gallery/', {
   // 협력사 카드: PC는 넓이에 맞춰, 휴대폰은 2장 나란히
   const ptnCss = '<style>.ptn{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:14px}.ptn article{border:1px solid var(--line);padding:20px;min-width:0}.ptn h3{font-size:20px;margin:0;line-height:1.35}.ptn .tg{margin:4px 0 0;color:var(--muted);font-size:13.5px;line-height:1.5}.ptn dl{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;margin:14px 0 0;font-size:13.5px;line-height:1.6}.ptn dt{color:var(--muted);font-size:12.5px}.ptn dd{margin:0}.ptn .ph{margin-left:6px;white-space:nowrap}.ptn .rf{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}.ptn .rf span{display:block;font-size:12px;color:var(--muted)}.ptn .rf a{display:inline-block;margin-top:4px;color:color-mix(in srgb,var(--ink) 72%,#8fa3b8);font-weight:500;font-size:13.5px;padding-bottom:1px;border-bottom:1px solid color-mix(in srgb,var(--ink) 28%,transparent)}.ptn .rf p{margin:6px 0 0;font-size:13px;line-height:1.6}.ptn .hl{margin-top:12px;padding:10px 12px;border:1px solid var(--red)}.ptn .bd{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--red);padding:2px 7px}.ptn .hl p{margin:6px 0 0;font-size:13px;line-height:1.55}.ptn .hl a{display:inline-block;margin-top:4px;color:color-mix(in srgb,var(--ink) 72%,#8fa3b8);font-weight:500;font-size:13px;padding-bottom:1px;border-bottom:1px solid color-mix(in srgb,var(--ink) 28%,transparent)}@media (max-width:700px){.ptn{grid-template-columns:1fr 1fr;gap:8px}.ptn article{padding:14px 11px}.ptn h3{font-size:17px}.ptn .tg{font-size:12px}.ptn dl{display:block;margin-top:10px;font-size:12.5px;line-height:1.5}.ptn dt{font-size:11px;margin-top:8px}.ptn .rf{margin-top:12px;padding-top:10px}.ptn .rf span{font-size:12px}.ptn .rf a,.ptn .rf p{font-size:12px;line-height:1.5}.ptn .hl{margin-top:10px;padding:9px}.ptn .bd{font-size:12px;padding:2px 7px}.ptn .hl p,.ptn .hl a{font-size:12px;line-height:1.5}}</style>';
   add('/projects/partners/', {
+    desc: '중앙연도 제품으로 현장을 시공하는 설비 협력사 안내 — 연락처와 대표 실적.',
     title: '시공 협력사', section: 'projects', image: hasFile(proj.partners_banner) ? proj.partners_banner : proj.banner,
     body: subPage({ en: 'Projects', title: '시공 협력사', banner: hasFile(proj.partners_banner) ? proj.partners_banner : proj.banner, section: 'projects', current: '/projects/partners/', body:
       two('Partners', '시공 협력사', `${ptnCss}<div class="ptn">${list(proj.partners).map(card).join('')}</div>`, proj.partners_note ? `<p class="note">${esc(proj.partners_note)}</p>` : '') + (list(proj.idc).length ? `<dialog id="idcDlg" aria-label="데이터센터 실적" style="width:min(1100px,94vw);max-height:88vh;padding:0 clamp(18px,3vw,40px);border:1px solid var(--line);background:var(--bg);color:var(--ink)"><button type="button" data-close aria-label="닫기" style="position:sticky;top:0;float:right;margin:14px -12px 0 0;width:44px;height:44px;font-size:26px;line-height:1;border:0;background:none;color:var(--ink);cursor:pointer;z-index:1">×</button>${idcBlock()}</dialog><style>#idcDlg::backdrop{background:rgba(5,9,16,.72)}#idcDlg .two{border-top:0;grid-template-columns:1fr;gap:28px;padding-block:40px 32px}</style><script>(function(){var d=document.getElementById('idcDlg');if(!d||!d.showModal)return;function open(e){e&&e.preventDefault();d.showModal();d.scrollTop=0;}document.querySelectorAll('[data-idc]').forEach(function(a){a.addEventListener('click',open)});d.querySelector('[data-close]').onclick=function(){d.close()};d.addEventListener('click',function(e){if(e.target===d)d.close()});if(location.hash==='#idc')open();})();</script>` : '') }),
@@ -384,6 +394,7 @@ const certGrid = () => {
   return lpfIp('<h3 style="margin:12px 0 0;font-size:20px;font-weight:600">LPF 기밀연도 핵심 특허 · 등록상표</h3>') + `<style>.certs{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2vw,24px);margin-bottom:48px}.certs a{display:block;color:inherit}.certs img{display:block;width:100%;height:auto;aspect-ratio:1/1.414;object-fit:cover;background:#fff;border:1px solid var(--line);transition:transform .3s}.certs a:hover img{transform:translateY(-4px)}.certs span{display:block;margin-top:10px;font-size:12px;color:var(--red)}.certs b{display:block;font-size:15px;font-weight:500;line-height:1.45}.certs small{display:block;font-size:13px;color:var(--muted)}@media (max-width:860px){.certs{grid-template-columns:repeat(2,1fr)}}</style><div class="certs">${L.map((p) => `<a href="/uploads/cert/cert-${esc(p.number)}.jpg" target="_blank" rel="noopener"><img src="/uploads/cert/cert-${esc(p.number)}-s.jpg" alt="${esc(p.type)} ${esc(p.title)} 증서" width="480" height="679" loading="lazy" decoding="async"><span>${esc(p.type)}</span><b>${esc(p.title)}</b><small>제 ${esc(p.number)} 호</small></a>`).join('')}</div>`;
 };
 add('/projects/certification/', {
+  desc: '중앙연도 특허·디자인·상표 등록 현황과 증서, 포스코 스테인리스 강판 등 원자재 인증.',
   title: '인증·특허', section: 'projects', image: proj.banner,
   body: subPage({ en: 'Projects', title: '인증·특허', banner: proj.banner, section: 'projects', current: '/projects/certification/', body:
     two('Patents', '특허 · 디자인 · 상표', certGrid() + `<div class="iprows" style="margin-top:0">${list(proj.patents).map((p) => `<div class="r"><span class="k">${esc(p.type)}</span><b>${esc(p.title)}</b><span class="n">${esc(p.number)}</span><span class="y">${esc(p.year)}</span></div>`).join('')}</div>`) +
@@ -392,6 +403,7 @@ add('/projects/certification/', {
 
 // ---------- SUPPORT ----------
 add('/support/downloads/', {
+  desc: '중앙연도 자료실 — 일반연도 카탈로그, LPF 기밀연도 카탈로그, LPF 패킹 시험성적서 PDF 내려받기.',
   title: '자료실', section: 'support', image: sup.banner,
   body: subPage({ en: 'Customer', title: '자료실', banner: sup.banner, section: 'support', current: '/support/downloads/', body:
     two('Download', '자료실', `<div class="dl">${list(sup.downloads).map((d) => {
@@ -401,6 +413,7 @@ add('/support/downloads/', {
     }).join('')}</div>`) }),
 });
 add('/support/contact/', {
+  desc: `연도 견적·기술 문의 — 온라인 문의 양식과 전화 ${site.tel}.`,
   title: '온라인 문의', section: 'support', image: sup.banner,
   body: subPage({ en: 'Customer', title: '온라인 문의', banner: sup.banner, section: 'support', current: '/support/contact/', body:
     two('Contact', '견적 · 기술 문의', `<form class="form" name="contact" method="POST" action="https://api.web3forms.com/submit">
@@ -426,11 +439,15 @@ add('/support/contact/thanks/', {
     two('Thank you', '문의가 접수되었습니다', `<p class="lead" style="margin-top:0">${esc(sup.thanks_text)}</p><a class="arrow" href="/">홈으로</a>`) }),
 });
 add('/privacy/', {
+  desc: '(주)중앙연도 개인정보처리방침 — 온라인 문의 시 수집 항목, 이용 목적, 보유 기간.',
   title: '개인정보처리방침', section: '', image: sup.banner,
   body: `<section class="subvis">${img(sup.banner, '', srcset(sup.banner)).replace(' loading="lazy"', '')}<div class="wrap"><div class="en">Privacy</div><h1>개인정보처리방침</h1></div></section><div class="wrap">${two('Privacy', '개인정보처리방침', `<div class="prose"><p>${esc(site.name)}(이하 "회사")는 온라인 문의 응대를 위해 아래와 같이 개인정보를 수집·이용합니다.</p>
-<p><b>수집 항목</b><br>회사명/성함, 연락처, 이메일(선택), 현장명, 문의 내용, 첨부파일(선택)</p>
+<p><b>수집 항목</b><br>회사명/성함, 연락처, 이메일(선택), 현장명, 문의 내용</p>
 <p><b>이용 목적</b><br>견적·기술 문의에 대한 회신 및 상담</p>
 <p><b>보유 기간</b><br>문의 처리 완료 후 1년간 보관 후 파기합니다. 관계 법령에 따라 보존이 필요한 경우 해당 기간 동안 보관합니다.</p>
+<p><b>파기 방법</b><br>보유 기간이 지나면 문의 메일과 관련 기록을 복구할 수 없도록 삭제합니다.</p>
+<p><b>처리 위탁 및 국외 이전</b><br>온라인 문의 양식에 입력한 내용은 폼 전송 서비스 Web3Forms(web3forms.com)를 거쳐 회사 이메일로 전달됩니다. 이 과정에서 입력 내용이 국외에 있는 해당 서비스의 서버를 경유할 수 있습니다. 원하지 않으시면 전화·이메일로 문의해 주세요.</p>
+${site.naver_analytics ? '<p><b>방문 기록 분석</b><br>방문 통계 확인을 위해 네이버 애널리틱스를 사용하며, 이 과정에서 쿠키가 사용될 수 있습니다. 브라우저 설정에서 쿠키 저장을 거부할 수 있습니다.</p>' : ''}
 <p><b>문의처</b><br>${esc(site.name)} · ${esc(site.tel)} · ${esc(site.email)}</p>
 <p>위 내용에 동의하지 않을 수 있으며, 동의하지 않을 경우 온라인 문의 이용이 제한될 수 있습니다. 전화·이메일 문의는 동의 없이 가능합니다.</p></div>`)}</div>`,
 });

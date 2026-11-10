@@ -263,7 +263,7 @@ collections:
             fields:
               - { name: name, label: 현장명, widget: string }
               - { name: scale, label: "발전기 규모 (예: 디젤 2,500kW×4대 · 터빈 4,500kW×4대)", widget: string }
-              - { name: size, label: "연도 관경 (예: 700A · 1600A)", widget: string }
+              - { name: size, label: "연도 관경 (예: Ø700 · Ø1600)", widget: string }
               - { name: year, label: 연도, widget: string }
           - name: items
             label: "대표 납품 현장"

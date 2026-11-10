@@ -36,6 +36,7 @@ body.over .top{background:transparent;color:#fff;border-bottom-color:rgba(255,25
 .top .wrap{display:flex;align-items:center;height:84px;gap:24px}
 .brand{display:flex;align-items:center;gap:12px;flex-shrink:0}
 .brand svg{width:116px;height:44px}
+.brand .logo-img{display:block;height:44px;width:auto}
 .brand .ell{stroke:var(--navy)}
 body.over .brand .ell{stroke:#fff}
 .brand b{font-size:18px;font-weight:700;letter-spacing:.02em}

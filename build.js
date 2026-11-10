@@ -47,7 +47,7 @@ const NAV = [
   { key: 'support', label: '고객지원', href: '/support/downloads/', sub: [['자료실', '/support/downloads/'], ['온라인 문의', '/support/contact/']] },
 ];
 
-const logo = `<svg viewBox="0 0 240 92" aria-hidden="true"><ellipse class="ell" cx="132" cy="52" rx="104" ry="30" transform="rotate(-11 132 52)" fill="none" stroke-width="7"/><path d="M6 13 H56 V62 q0 10 -9 10" fill="none" stroke="#C8303A" stroke-width="6"/><text x="62" y="70" font-family="Cinzel, Times New Roman, serif" font-weight="700" font-size="30" fill="#C8303A" textLength="150" lengthAdjust="spacingAndGlyphs">UNGANG</text></svg>`;
+const logo = `<img class="logo-img" src="/uploads/jungang-logo.png" alt="" width="328" height="150" decoding="async">`;
 
 function layout({ title, desc, url, section, body, image, en }) {
   const fullTitle = en ? title : title ? `${title} | 중앙연도` : site.seo_title;

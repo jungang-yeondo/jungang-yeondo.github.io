@@ -19,19 +19,25 @@ const lines = (s) => String(s ?? '').split(/\r?\n/).map((l) => `<span>${esc(l)}<
 const list = (a) => (Array.isArray(a) ? a : []);
 const img = (src, alt = '', extra = '') => src ? `<img src="${esc(src)}" alt="${esc(alt || site.short_name || '(주)중앙연도')}" loading="lazy"${extra}>` : '';
 // 휴대폰용 작은 사진: static/uploads에 '이름-900w.확장자'·'이름-1200w.확장자'가 있는 것만 srcset에 넣음 (하나도 없으면 원본만)
+// 사진 크기 목록: 배포 때 variants.js가 만든 .dims.json (없으면 빈 목록 — 사이트는 그대로 빌드됨)
+let DIMS = {};
+try { DIMS = JSON.parse(fs.readFileSync(path.join(ROOT, '.dims.json'), 'utf8')); } catch (e) {}
 const hasFile = (s) => !!s && fs.existsSync(path.join(ROOT, 'static', String(s).split('?')[0]));
 const setUrl = (s) => encodeURI(s).replace(/,/g, '%2C') + '?v=' + ver(s); // srcset은 공백·쉼표로 나뉘므로 인코딩
 const srcset = (src) => {
   const m = /^(\/uploads\/.+)(\.[^./]+)$/.exec(String(src || ''));
   if (!m) return '';
   const small = [900, 1200].map((w) => [m[1] + `-${w}w` + m[2], w]).filter(([s]) => fs.existsSync(path.join(ROOT, 'static', s)));
-  return small.length ? ` srcset="${[...small, [src, 1920]].map(([s, w]) => `${esc(setUrl(s))} ${w}w`).join(', ')}" sizes="100vw"` : '';
+  return small.length ? ` srcset="${[...small, [src, (DIMS[src] || [1920])[0]]].map(([s, w]) => `${esc(setUrl(s))} ${w}w`).join(', ')}" sizes="100vw"` : '';
 };
 // 연도 단면 모션: 평소엔 가벼운 영상, 자동재생이 막히면(아이폰 절전·데이터 절약 모드) 움짤로 자동 교체
 const ductMotion = (cls) => hasFile('/uploads/duct-motion.mp4') ? `<video class="${cls}" src="/uploads/duct-motion.mp4" poster="/uploads/duct-motion.jpg" data-anim="/uploads/duct-motion.webp" data-dm muted loop playsinline preload="none" disablepictureinpicture aria-label="이중연도 단면: 외부 커버, 스페이서, 25mm 공기단열층, 내부관"></video>
   <script>(function(){var v=document.currentScript.previousElementSibling;if(!v||v.tagName!=='VIDEO')return;var d=0;function sw(){if(d)return;d=1;var i=new Image();i.className=v.className;i.alt=v.getAttribute('aria-label')||'';i.decoding='async';i.src=v.getAttribute('data-anim');v.parentNode.replaceChild(i,v);}function go(){try{var p=v.play();if(p&&p.catch)p.catch(sw);}catch(e){sw();}setTimeout(function(){if(!d&&v.paused)sw();},3000);}if('IntersectionObserver' in window){var o=new IntersectionObserver(function(es){if(es[0].isIntersecting){o.disconnect();go();}},{rootMargin:'200px'});o.observe(v);}else go();})();</script>` : `<img class="${cls}" src="/uploads/duct-motion.webp" alt="이중연도 단면: 외부 커버, 스페이서, 25mm 공기단열층, 내부관" loading="lazy" decoding="async">`;
 const telHref = (t) => 'tel:' + String(t).replace(/[^0-9+]/g, '');
 const baseUrl = String(site.url || '').replace(/\/$/, '');
+// 영문 페이지용: 국제전화 표기와 영문 주소 (주소가 바뀌면 여기도 함께 고칩니다)
+const intl = (t) => '+82-' + String(t).replace(/^0/, '');
+const ADDR_EN = '65, Jeonggeum-ro 238beon-gil, Gasan-myeon, Pocheon-si, Gyeonggi-do, Republic of Korea';
 
 const NAV = [
   { key: 'company', label: '회사소개', href: '/company/greeting/', sub: [['인사말', '/company/greeting/'], ['회사개요', '/company/overview/'], ['연혁', '/company/history/'], ['조직도', '/company/organization/'], ['오시는 길', '/company/location/']] },
@@ -43,21 +49,26 @@ const NAV = [
 
 const logo = `<svg viewBox="0 0 240 92" aria-hidden="true"><ellipse class="ell" cx="132" cy="52" rx="104" ry="30" transform="rotate(-11 132 52)" fill="none" stroke-width="7"/><path d="M6 13 H56 V62 q0 10 -9 10" fill="none" stroke="#C8303A" stroke-width="6"/><text x="62" y="70" font-family="Cinzel, Times New Roman, serif" font-weight="700" font-size="30" fill="#C8303A" textLength="150" lengthAdjust="spacingAndGlyphs">UNGANG</text></svg>`;
 
-function layout({ title, desc, url, section, body, image }) {
-  const fullTitle = title ? `${title} | 중앙연도` : site.seo_title;
+function layout({ title, desc, url, section, body, image, en }) {
+  const fullTitle = en ? title : title ? `${title} | 중앙연도` : site.seo_title;
   const d = desc || site.seo_description;
   const canonical = baseUrl + url;
   const ogImg = baseUrl + (image || home.about_image || '');
+  const langLink = en ? '<a class="lang" href="/" lang="ko">한국어</a>' : '<a class="lang" href="/en/" lang="en">EN</a>';
+  const EN_NAV = [['About', '#about'], ['Products', '#products'], ['Manufacturing', '#manufacturing'], ['References', '#references'], ['Contact', '#contact']];
+  const gnbEn = EN_NAV.map(([l, h]) => `<div class="item"><a href="${h}">${l}</a></div>`).join('');
+  const mnavEn = EN_NAV.map(([l, h]) => `<a href="${h}">${l}</a>`).join('') + '<a href="/" lang="ko">한국어</a>';
   const gnb = NAV.map((n) => `<div class="item"><a href="${n.href}"${n.key === section ? ' aria-current="true"' : ''}>${n.label}</a><div class="sub">${n.sub.map(([l, h]) => `<a href="${h}">${l}</a>`).join('')}</div></div>`).join('');
   const mnav = NAV.map((n) => `<b>${n.label}</b>${n.sub.map(([l, h]) => `<a href="${h}">${l}</a>`).join('')}`).join('');
   return `<!doctype html>
-<html lang="ko">
+<html lang="${en ? 'en' : 'ko'}">
 <head>
 <meta charset="utf-8">
 ${PRIVATE ? '<meta name="robots" content="noindex, nofollow">\n' : ''}<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(d)}">
 <link rel="canonical" href="${esc(canonical)}">
+${url === '/' || url === '/en/' ? `<link rel="alternate" hreflang="ko" href="${esc(baseUrl)}/">\n<link rel="alternate" hreflang="en" href="${esc(baseUrl)}/en/">` : ''}
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="${esc(site.short_name)}">
 <meta property="og:title" content="${esc(fullTitle)}">
@@ -79,11 +90,11 @@ ${site.google_verification ? `<meta name="google-site-verification" content="${e
 <body class="over">
 <header class="top" id="top">
   <div class="wrap">
-    <a class="brand" href="/" aria-label="${esc(site.short_name)} 홈">${logo}<b>${esc(site.short_name)}</b></a>
-    <nav class="gnb" aria-label="주 메뉴">${gnb}</nav>
+    <a class="brand" href="/" aria-label="${en ? 'JUNGANG YEONDO home' : esc(site.short_name) + ' 홈'}">${logo}<b>${en ? 'JUNGANG YEONDO' : esc(site.short_name)}</b></a>
+    <nav class="gnb" aria-label="${en ? 'Main menu' : '주 메뉴'}">${en ? gnbEn : gnb}${langLink}</nav>
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mnav" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
   </div>
-  <div class="mnav" id="mnav"><div class="wrap">${mnav}</div></div>
+  <div class="mnav" id="mnav"><div class="wrap">${en ? mnavEn : mnav + '<b>Language</b><a href="/en/" lang="en">English</a>'}</div></div>
 </header>
 <main>
 ${body}
@@ -91,14 +102,21 @@ ${body}
 <section class="cta">
   ${img(home.cta_image, '', srcset(home.cta_image))}
   <div class="wrap">
-    <div><div class="label" style="color:#F0656C">Contact Us</div><h2 style="margin-top:12px">${esc(home.cta_title)}</h2><p>${esc(home.cta_text)}</p></div>
-    <div><a class="tel" href="${telHref(site.tel)}">${esc(site.tel)}</a><div class="mail">${esc(site.email)} · FAX ${esc(site.fax)}</div></div>
+    <div><div class="label" style="color:#F0656C">Contact Us</div><h2 style="margin-top:12px">${en ? 'Need a quotation?' : esc(home.cta_title)}</h2><p>${en ? 'Send us your drawings and equipment specifications. We will review them and reply with a proposal and quotation.' : esc(home.cta_text)}</p></div>
+    <div>${en ? `<a class="tel" href="mailto:${esc(site.email)}" style="font-size:clamp(22px,2.6vw,34px)">${esc(site.email)}</a><div class="mail">TEL ${esc(intl(site.tel))} · FAX ${esc(intl(site.fax))}</div>` : `<a class="tel" href="${telHref(site.tel)}">${esc(site.tel)}</a><div class="mail">${esc(site.email)} · FAX ${esc(site.fax)}</div>`}</div>
   </div>
 </section>
 <footer>
   <div class="wrap">
     <a class="brand" href="/" aria-label="${esc(site.short_name)} 홈">${logo}</a>
-    <dl>
+    ${en ? `<dl>
+      <div><dt>Company</dt><dd>${esc(site.name_en)}</dd></div>
+      <div><dt>Business Reg. No.</dt><dd>${esc(site.bizno)}</dd></div>
+      <div><dt>Address</dt><dd>${esc(ADDR_EN)}</dd></div>
+      <div><dt>TEL</dt><dd>${esc(intl(site.tel))}</dd></div>
+      <div><dt>FAX</dt><dd>${esc(intl(site.fax))}</dd></div>
+      <div><dt>E-mail</dt><dd>${esc(site.email)}</dd></div>
+    </dl>` : `<dl>
       <div><dt>상호</dt><dd>${esc(site.name)}</dd></div>
       <div><dt>대표</dt><dd>${esc(site.ceo)}</dd></div>
       <div><dt>사업자등록번호</dt><dd>${esc(site.bizno)}</dd></div>
@@ -106,8 +124,8 @@ ${body}
       <div><dt>TEL</dt><dd>${esc(site.tel)}</dd></div>
       <div><dt>FAX</dt><dd>${esc(site.fax)}</dd></div>
       <div><dt>E-mail</dt><dd>${esc(site.email)}</dd></div>
-    </dl>
-    <div class="c"><span>© ${new Date().getFullYear()} ${esc(site.name_en)} All rights reserved.<br>본 사이트의 사진·도면·카탈로그는 (주)중앙연도의 저작물로 무단 복제·사용을 금합니다.</span><span class="fl">${site.blog ? `<a class="blog" href="${esc(site.blog)}" target="_blank" rel="noopener"><i>N</i>블로그</a>` : ''}<a href="/privacy/">개인정보처리방침</a></span></div>
+    </dl>`}
+    <div class="c"><span>© ${new Date().getFullYear()} ${esc(site.name_en)} All rights reserved.${en ? '' : '<br>본 사이트의 사진·도면·카탈로그는 (주)중앙연도의 저작물로 무단 복제·사용을 금합니다.'}</span><span class="fl">${site.blog ? `<a class="blog" href="${esc(site.blog)}" target="_blank" rel="noopener"><i>N</i>블로그</a>` : ''}${en ? '<a href="/" lang="ko">한국어</a>' : '<a href="/privacy/">개인정보처리방침</a>'}</span></div>
   </div>
 </footer>
 <script src="/js/main.js" defer></script>
@@ -267,6 +285,7 @@ add('/company/organization/', {
     body: subPage({ en: 'Company', title: '오시는 길', banner: company.banner, section: 'company', current: '/company/location/', body:
       two('Location', '오시는 길', `<p style="font-size:clamp(20px,2vw,26px);font-weight:700">${esc(site.address)}<button class="copy" data-copy="${esc(site.address)}">주소 복사</button></p>
 <div class="maplinks"><a href="https://map.naver.com/p/search/${q}" target="_blank" rel="noopener">네이버 지도 ↗</a><a href="https://map.kakao.com/?q=${q}" target="_blank" rel="noopener">카카오맵 ↗</a>${site.blog ? `<a href="${esc(site.blog)}" target="_blank" rel="noopener">네이버 블로그 ↗</a>` : ''}</div>
+<div class="mapbox"><iframe src="https://www.google.com/maps?q=${q}&z=15&hl=ko&output=embed" title="${esc(site.short_name)} 위치 지도" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
 <table class="info" style="margin-top:44px"><tr><th>대표전화</th><td class="num"><a href="${telHref(site.tel)}">${esc(site.tel)}</a></td></tr><tr><th>팩스</th><td class="num">${esc(site.fax)}</td></tr><tr><th>이메일</th><td><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></td></tr><tr><th>방문 안내</th><td>${esc(company.visit_note)}</td></tr></table>`) }),
   });
 }
@@ -452,6 +471,36 @@ ${site.naver_analytics ? '<p><b>방문 기록 분석</b><br>방문 통계 확인
 <p>위 내용에 동의하지 않을 수 있으며, 동의하지 않을 경우 온라인 문의 이용이 제한될 수 있습니다. 전화·이메일 문의는 동의 없이 가능합니다.</p></div>`)}</div>`,
 });
 
+
+// ---------- ENGLISH (한 장짜리 영문 요약 · 문구는 여기서 직접 고칩니다) ----------
+{
+  const L = list(proj.idc);
+  const gens = L.reduce((s, r) => s + [...String(r.scale || '').matchAll(/×\s*(\d+)\s*대/g)].reduce((a, m) => a + +m[1], 0), 0);
+  const sizes = L.flatMap((r) => [...String(r.size || '').matchAll(/Ø\s*(\d+)|(\d+)\s*A/g)].map((m) => +(m[1] || m[2])));
+  const ipCount = list(proj.patents).length;
+  const refs = ['Bank of Korea', 'Embassy of France in Korea', 'Asan Medical Center', 'Korea University Ansan Hospital', 'Inha University', 'Jamsil Indoor Stadium', 'SK hynix', 'Samsung Electronics Onyang Campus', 'Hyundai Motor Jeonju Plant', 'LG Energy Solution Ochang', 'NAVER Data Center GAK Sejong', 'Lotte World Busan'];
+  const card = (im, alt, t, p) => `<article>${im && hasFile(im) ? `<div class="im">${img(im, alt)}</div>` : ''}<h3>${t}</h3>${p}</article>`;
+  const banner = hasFile(prod.stack_banner) ? prod.stack_banner : prod.banner;
+  add('/en/', {
+    en: true, section: 'en', image: home.about_image,
+    title: 'Stainless Steel Chimney & Flue Systems | JUNGANG YEONDO',
+    desc: 'JUNGANG YEONDO is a Korean manufacturer of prefabricated stainless steel double-wall chimney systems and LPF gas-tight flues for boilers, generators and absorption chiller-heaters.',
+    body: `<section class="subvis">${img(banner, 'Stainless steel chimney sections ready for shipment', ' fetchpriority="high"' + srcset(banner)).replace(' loading="lazy"', '')}<div class="wrap"><div class="en">Stainless Steel Chimney · Since 2008</div><h1>Stainless steel chimney systems, built to order in Korea</h1></div></section>
+<div class="wrap enpage">
+<div id="about">${two('About', 'A manufacturer focused on one product', `<div class="prose"><p>${esc(site.name_en)} manufactures prefabricated stainless steel chimney and flue systems for boilers, emergency generators and absorption chiller-heaters.</p><p>Our founder worked on chimney installation sites from 2000 before opening the workshop in 2008, and the company was incorporated in 2013. That hands-on experience still guides how we build: sections that go together quickly on site, with joints designed to stay gas-tight.</p><p>We fabricate to order from the contractor's drawings and have supplied more than 13,000 sites across Korea, as well as projects overseas.</p></div>
+<div class="nums" style="margin-top:36px"><div><b>2008</b><span>Founded</span></div><div><b>13,000<sup>+</sup></b><span>Sites supplied</span></div><div><b>${ipCount}</b><span>Patents, design &amp; trademark registrations</span></div></div>`)}</div>
+<div id="products">${two('Products', 'Product range', `<div class="encards">
+${card(home.product1_image, 'Prefabricated stainless steel double-wall chimney', 'Prefabricated double-wall chimney', `<p>A Type 304 stainless steel (STS304) inner pipe, a 25&nbsp;mm air gap for insulation, and an outer casing in stainless steel or aluminum-coated steel. Available as single-wall, double-wall and insulated triple-wall (50&nbsp;mm or 100&nbsp;mm insulation).</p><ul><li>Standard section lengths: 977&nbsp;mm and 477&nbsp;mm</li><li>Inner pipe thickness: 0.8&nbsp;mm up to Ø900, 1.2&nbsp;mm for Ø1000–1500, 1.5&nbsp;mm from Ø1600</li><li>Other lengths, materials and thicknesses on request</li></ul>`)}
+${card(home.product2_image, 'LPF gas-tight flue', 'LPF gas-tight flue', `<p>LPF (Leakage Prevention Flange) is a patented joint design. A groove formed in the flange holds the gasket in place, and a V-band clamp compresses it evenly around the joint. Gaskets are fitted at the factory, so on site the sections are simply aligned and clamped.</p><ul><li>Ceramic gaskets for high-temperature generator exhaust, heat-tested at over 800&nbsp;°C for 24 hours</li><li>Heat-resistant silicone gaskets for condensing boilers, where condensate is a concern</li><li>Korean Patent No. 10-1648312 and registered trademark No. 40-2227790, with rights held jointly with Mirae Stack</li></ul>`)}
+${card('', '', 'Fittings and supports', `<p>Everything needed to complete a chimney line: 45° and 90° elbows, tees and Y-junctions, reducers, adjustable-length sections, expansion bellows for generator lines, dampers, drain sections, inspection ports, rain caps, and wall and floor supports.</p><p><a class="mlink" href="/product/parts/">View the parts in 3D →</a></p>`)}
+</div>`)}</div>
+<div id="manufacturing">${two('Manufacturing', 'Made in our own plant', `<div class="prose"><p>All fabrication is done at our plant in Pocheon, Gyeonggi-do.</p></div><ul class="enlist"><li><b>CNC fiber laser cutting</b><span>Parts are cut directly from CAD flat patterns, so even curved fittings come out to consistent dimensions.</span></li><li><b>Automatic seam welding</b><span>Pipe bodies are welded on an automatic seam welder for uniform quality along the whole seam.</span></li><li><b>Flange forming</b><span>Dedicated equipment forms the pipe ends for V-band assembly, with an even profile all the way around.</span></li><li><b>Laser and TIG welding</b><span>Fittings are assembled with laser welding, which keeps distortion and discoloration of thin stainless sheet low, and with TIG welding where it suits the part.</span></li></ul>`)}</div>
+<div id="references">${two('References', 'Selected projects', `${L.length ? `<p class="lead" style="margin-top:0">Emergency generator exhaust systems for ${L.length} data centers: ${gens} generators in total, with flue diameters from Ø${Math.min(...sizes)} to Ø${Math.max(...sizes)}.</p>` : ''}<ul class="enrefs">${refs.map((r) => `<li>${r}</li>`).join('')}</ul><p class="note">The full reference list is available in Korean on the <a href="/projects/" style="text-decoration:underline">project page</a>.</p>`)}</div>
+<div id="contact">${two('Contact', 'Inquiries and quotations', `<table class="info"><tr><th>Company</th><td>${esc(site.name_en)}</td></tr><tr><th>E-mail</th><td><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></td></tr><tr><th>Tel / Fax</th><td class="num">${esc(intl(site.tel))} / ${esc(intl(site.fax))}</td></tr><tr><th>Address</th><td>${esc(ADDR_EN)}</td></tr><tr><th>Catalogs</th><td>${list(sup.downloads).filter((d) => d.file && /카탈로그/.test(d.title)).map((d) => `<a href="${esc(d.file)}" download style="text-decoration:underline">${/LPF/.test(d.title) ? 'LPF gas-tight flue catalog' : 'Double-wall chimney catalog'}</a>`).join(' · ')} (PDF, in Korean)</td></tr></table><p class="note">For a quotation, please e-mail your drawings together with the equipment type, outlet diameter and quantities.</p>`)}</div>
+</div>`,
+  });
+}
+
 function render() {
   // 404
   pages.push({ url: '/404.html', html: layout({ url: '/404.html', title: '페이지를 찾을 수 없습니다', section: '', body: `<section class="subvis">${img(home.cta_image, '', srcset(home.cta_image)).replace(' loading="lazy"', '')}<div class="wrap"><div class="en">404</div><h1>페이지를 찾을 수 없습니다</h1></div></section><div class="wrap">${two('Not found', '주소를 다시 확인해 주세요', '<p class="lead" style="margin-top:0">요청하신 페이지가 없거나 이동되었습니다.</p><a class="arrow" href="/">홈으로</a>')}</div>` }) });
@@ -461,13 +510,26 @@ function render() {
   for (const p of pages) {
     const file = p.url.endsWith('.html') ? path.join(OUT, p.url) : path.join(OUT, p.url, 'index.html');
     fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, yrs(p.html).replace(/(src|href|poster|data-anim|data-m|data-pm|data-am)="(\/(?:uploads|css|js)\/[^"?]+)"/g, (m, a, s) => a + '="' + s + '?v=' + ver(s) + '"'));
+    fs.writeFileSync(file, imgFix(yrs(p.html)).replace(/(src|href|poster|data-anim|data-m|data-pm|data-am)="(\/(?:uploads|css|js)\/[^"?]+)"/g, (m, a, s) => a + '="' + s + '?v=' + ver(s) + '"'));
   }
   const today = new Date().toISOString().slice(0, 10);
   const urls = pages.filter((p) => !p.url.endsWith('.html') && !p.url.includes('thanks')).map((p) => `<url><loc>${baseUrl}${p.url}</loc><lastmod>${today}</lastmod></url>`).join('');
   fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`);
   fs.writeFileSync(path.join(OUT, 'robots.txt'), PRIVATE ? 'User-agent: *\nDisallow: /\n' : `User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: ${baseUrl}/sitemap.xml\n`);
   console.log(`built ${pages.length} pages → _site/`);
+}
+// 모든 /uploads 사진에 가로·세로 크기(로딩 중 글 밀림 방지)와 휴대폰용 작은 버전(srcset)을 자동으로 붙임
+function imgFix(html) {
+  const un = (s) => s.replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+  return html.replace(/<img\b[^>]*>/g, (tag) => {
+    const m = /\ssrc="(\/uploads\/[^"?]+)"/.exec(tag);
+    if (!m) return tag;
+    const src = un(m[1]), d = DIMS[src];
+    let add = '';
+    if (d && !/\swidth=/.test(tag)) add += ` width="${d[0]}" height="${d[1]}"`;
+    if (!/\ssrcset=/.test(tag)) add += srcset(src);
+    return add ? tag.slice(0, -1) + add + '>' : tag;
+  });
 }
 function yrs(html) {
   const from = 2008; // 중앙스택 창업 연도 기준

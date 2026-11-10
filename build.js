@@ -333,14 +333,14 @@ const moreBtn = 'font:inherit;font-size:15px;width:100%;padding:14px 0;margin-to
   const idcBlock = () => {
     const L = list(proj.idc); if (!L.length) return '';
     const gens = L.reduce((s, r) => s + [...String(r.scale || '').matchAll(/×\s*(\d+)\s*대/g)].reduce((a, m) => a + +m[1], 0), 0);
-    const sizes = L.flatMap((r) => [...String(r.size || '').matchAll(/(\d+)\s*A/g)].map((m) => +m[1]));
+    const sizes = L.flatMap((r) => [...String(r.size || '').matchAll(/Ø\s*(\d+)|(\d+)\s*A/g)].map((m) => +(m[1] || m[2])));
     const lo = Math.min(...sizes), hi = Math.max(...sizes), fs = 'font-size:clamp(34px,4vw,52px)';
-    const stat = (n, u, t) => `<div><b style="${fs}">${n}<sup>${u}</sup></b><span>${t}</span></div>`;
+    const stat = (n, u, t) => `<div><b style="${fs}">${n}${u ? `<sup>${u}</sup>` : ''}</b><span>${t}</span></div>`;
     const SHOW = 4; // 처음엔 4곳만, 나머지는 '더보기'
     const rows = L.map((r, i) => `<tr${i >= SHOW ? ' hidden data-more' : ''}><td>${esc(r.name)}</td><td>${esc(r.scale)}</td><td style="white-space:nowrap">${esc(r.size)}</td><td style="color:var(--muted);white-space:nowrap">${esc(r.year)}</td></tr>`).join('');
     const more = L.length > SHOW ? `<button type="button" id="idcMore" aria-expanded="false" style="${moreBtn}">전체 ${L.length}곳 보기 ▾</button><script>(function(){var b=document.getElementById('idcMore');b.onclick=function(){var o=b.getAttribute('aria-expanded')!=='true';document.querySelectorAll('tr[data-more]').forEach(function(r){r.hidden=!o});b.setAttribute('aria-expanded',o);b.textContent=o?'접기 ▴':'전체 ${L.length}곳 보기 ▾';};})();</script>` : '';
     const credit = proj.idc_partner ? `<p class="note">설비 시공 ${esc(proj.idc_partner)}</p>` : '';
-    return '<div id="idc">' + two('Data Center', esc(proj.idc_title || '데이터센터 비상발전기 연도'), `<div class="nums" style="margin-top:0;margin-bottom:36px">${stat(L.length, '곳', '데이터센터 현장')}${stat(gens, '대', '비상발전기')}${sizes.length ? stat(hi, 'A', `연도 관경 ${lo}A~${hi}A`) : ''}</div>
+    return '<div id="idc">' + two('Data Center', esc(proj.idc_title || '데이터센터 비상발전기 연도'), `<div class="nums" style="margin-top:0;margin-bottom:36px">${stat(L.length, '곳', '데이터센터 현장')}${stat(gens, '대', '비상발전기')}${sizes.length ? stat('Ø' + hi, '', `연도 관경 Ø${lo}~Ø${hi}`) : ''}</div>
 <div class="tw"><table class="tbl"><thead><tr><th>현장명</th><th>발전기 규모</th><th>연도 관경</th><th>연도</th></tr></thead><tbody>${rows}</tbody></table></div>${more}`, credit) + '</div>';
   };
 {

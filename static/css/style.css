@@ -36,10 +36,14 @@ body.over .top{background:transparent;color:#fff;border-bottom-color:rgba(255,25
 .top .wrap{display:flex;align-items:center;height:84px;gap:24px}
 .brand{display:flex;align-items:center;gap:12px;flex-shrink:0}
 .brand svg{width:116px;height:44px}
-.brand .logo-img{display:block;height:44px;width:auto;filter:brightness(1.6) saturate(1.15) drop-shadow(0 0 4px rgba(255,255,255,.18))}
+.brand .logo-img{display:block;height:44px;width:auto}
 .brand .ell{stroke:var(--navy)}
 body.over .brand .ell{stroke:#fff}
 .brand b{font-size:18px;font-weight:700;letter-spacing:.02em}
+/* 상단 상호: 스테인리스 질감 (흰 헤더=짙은 스텐, 히어로·다크=밝은 스텐) */
+.top .brand b{font-size:20px;letter-spacing:.04em;background:linear-gradient(180deg,#7b848d 0%,#4a535c 40%,#232a31 54%,#5d666f 76%,#8a939b 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(255,255,255,.9))}
+body.over:not(.menu-open) .top .brand b{background-image:linear-gradient(180deg,#ffffff 0%,#d9dee4 38%,#8e979f 52%,#c9ced4 70%,#f2f4f6 100%);filter:drop-shadow(0 1px 1px rgba(0,0,0,.55))}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .top .brand b{background-image:linear-gradient(180deg,#ffffff 0%,#d9dee4 38%,#8e979f 52%,#c9ced4 70%,#f2f4f6 100%);filter:drop-shadow(0 1px 1px rgba(0,0,0,.55))}}
 nav.gnb{margin-left:auto;display:flex}
 .gnb .item{position:relative}
 .gnb .item>a{display:block;padding:30px 26px;font-weight:500;font-size:16px;letter-spacing:.01em;position:relative}

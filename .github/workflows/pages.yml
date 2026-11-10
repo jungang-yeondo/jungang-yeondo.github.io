@@ -18,6 +18,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      # 휴대폰용 작은 사진 자동 생성 (실패해도 배포는 계속 — 그때는 원본 사진을 그대로 씀)
+      - run: npm install --no-save --no-audit --no-fund sharp && node variants.js
+        continue-on-error: true
       - run: node build.js
       - uses: actions/upload-pages-artifact@v3
         with:

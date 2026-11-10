@@ -2,20 +2,20 @@
   "slide_seconds": 4,
   "slides": [
     {
-      "image": "/uploads/logoplate.jpg",
-      "caption": "중앙연도 로고"
-    },
-    {
-      "image": "/uploads/factory-view.jpg",
-      "caption": "공장 전경"
-    },
-    {
       "image": "/uploads/factory-yard-01.jpg",
       "caption": "출하 대기 중인 연도 제품"
     },
     {
       "image": "/uploads/delivery-truck-01.jpg",
       "caption": "현장 납품"
+    },
+    {
+      "image": "/uploads/factory-view.jpg",
+      "caption": "공장 전경"
+    },
+    {
+      "image": "/uploads/logoplate.jpg",
+      "caption": "중앙연도 로고"
     }
   ],
   "hero_eyebrow": "Stainless Steel Chimney · Since 2008",
@@ -34,7 +34,7 @@
     {
       "value": "2013",
       "suffix": "",
-      "label": "(주)중앙연도 법인 전환 · 개설",
+      "label": "(주)중앙연도 법인 전환",
       "under": true
     },
     {
@@ -44,7 +44,7 @@
       "under": false
     },
     {
-      "value": "9",
+      "value": "10",
       "suffix": "",
       "label": "특허·디자인·상표",
       "under": false
@@ -57,7 +57,7 @@
   "product2_title": "LPF 기밀연도",
   "product2_text": "플랜지 홈 패킹과 LPF용 V밴드 체결로 이음부 누설을 막는 이중연도.",
   "eng_title": "열 손실을 최소화하는 25mm 공기 단열층",
-  "eng_text": "정밀 패킹 홈 가공과 LPF 전용 V밴드 밀착 체결로 이음부 누설을 원천 차단하는 고기밀 이중연도입니다.",
+  "eng_text": "정밀 패킹 홈 가공과 LPF 전용 V밴드 밀착 체결로 이음부 누설을 막는 고기밀 이중연도입니다.",
   "eng_specs": [
     {
       "label": "내부관",

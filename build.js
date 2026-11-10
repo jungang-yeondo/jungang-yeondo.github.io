@@ -510,7 +510,7 @@ function render() {
   for (const p of pages) {
     const file = p.url.endsWith('.html') ? path.join(OUT, p.url) : path.join(OUT, p.url, 'index.html');
     fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, imgFix(yrs(p.html)).replace(/(src|href|poster|data-anim|data-m|data-pm|data-am)="(\/(?:uploads|css|js)\/[^"?]+)"/g, (m, a, s) => a + '="' + s + '?v=' + ver(s) + '"'));
+    fs.writeFileSync(file, imgFix(yrs(p.html)).replace(/(src|href|poster|data-anim|data-m|data-pm|data-am)="(\/(?:uploads|css|js)\/[^"?]+)"/g, (m, a, s) => a + '="' + s + '?v=' + ver(unesc(s)) + '"'));
   }
   const today = new Date().toISOString().slice(0, 10);
   const urls = pages.filter((p) => !p.url.endsWith('.html') && !p.url.includes('thanks')).map((p) => `<url><loc>${baseUrl}${p.url}</loc><lastmod>${today}</lastmod></url>`).join('');
@@ -534,6 +534,10 @@ function imgFix(html) {
 function yrs(html) {
   const from = 2008; // 중앙스택 창업 연도 기준
   return html.replace(/\{년수\}/g, `<span class="years-since" data-from="${from}">${new Date().getFullYear() - from}</span>`);
+}
+// HTML 속성값(esc 처리됨)을 실제 파일 이름으로 되돌림: 'KT&amp;G' → 'KT&G'
+function unesc(s) {
+  return s.replace(/&(amp|lt|gt|quot|#39);/g, (m, k) => ({ amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'" }[k]));
 }
 function ver(s) {
   try { return require('crypto').createHash('md5').update(fs.readFileSync(path.join(ROOT, 'static', s))).digest('hex').slice(0, 8); }

@@ -153,6 +153,56 @@
       "contractor": "영익엔지니어링(주)"
     },
     {
+      "name": "서울시 교육청",
+      "category": "공공",
+      "contractor": "코리아플랜트(주)"
+    },
+    {
+      "name": "순천교도소",
+      "category": "공공",
+      "contractor": "코리아플랜트(주)"
+    },
+    {
+      "name": "동두천 미군부대",
+      "category": "공공",
+      "contractor": "통일로이엔지"
+    },
+    {
+      "name": "평택 미군부대",
+      "category": "공공",
+      "contractor": "통일로이엔지"
+    },
+    {
+      "name": "오산 미군부대",
+      "category": "공공",
+      "contractor": "통일로이엔지"
+    },
+    {
+      "name": "밀양구치소",
+      "category": "공공",
+      "contractor": "명성엔지니어링"
+    },
+    {
+      "name": "창원병무청",
+      "category": "공공",
+      "contractor": "명성엔지니어링"
+    },
+    {
+      "name": "국립외교원",
+      "category": "공공",
+      "contractor": "명성엔지니어링"
+    },
+    {
+      "name": "종로경찰서",
+      "category": "공공",
+      "contractor": "성운엔지니어링"
+    },
+    {
+      "name": "울산 소각장",
+      "category": "공공",
+      "contractor": "성운엔지니어링"
+    },
+    {
       "name": "잠실 실내체육관",
       "category": "문화·체육",
       "contractor": "미래스택"
@@ -183,6 +233,16 @@
       "contractor": "(주)세영종합건설"
     },
     {
+      "name": "아산병원",
+      "category": "의료",
+      "contractor": "용문엔지니어링"
+    },
+    {
+      "name": "성모병원",
+      "category": "의료",
+      "contractor": "휘담"
+    },
+    {
       "name": "숙명여자대학교",
       "category": "교육",
       "contractor": "한신테크"
@@ -211,6 +271,11 @@
       "name": "충주대학교",
       "category": "교육",
       "contractor": "다원건영(주)"
+    },
+    {
+      "name": "서울대학교",
+      "category": "교육",
+      "contractor": "통일로이엔지"
     },
     {
       "name": "대구 차량기지 사업소",
@@ -246,6 +311,11 @@
       "name": "엑스포 예술관",
       "category": "문화·체육",
       "contractor": "진화엔지니어링(주)"
+    },
+    {
+      "name": "수원 월드컵경기장",
+      "category": "문화·체육",
+      "contractor": "성운엔지니어링"
     },
     {
       "name": "SK하이닉스",
@@ -308,6 +378,16 @@
       "contractor": "대우이엔지(주)"
     },
     {
+      "name": "마곡 지식산업센터",
+      "category": "산업",
+      "contractor": "용문엔지니어링"
+    },
+    {
+      "name": "현대자동차 연구소",
+      "category": "산업",
+      "contractor": "휘담"
+    },
+    {
       "name": "부산 롯데월드",
       "category": "상업·숙박",
       "contractor": "(주)중앙이엔지"
@@ -338,6 +418,16 @@
       "contractor": "성영건설(주)"
     },
     {
+      "name": "잠실역 지하상가",
+      "category": "상업·숙박",
+      "contractor": "용문엔지니어링"
+    },
+    {
+      "name": "코스트코",
+      "category": "상업·숙박",
+      "contractor": "휘담"
+    },
+    {
       "name": "고양 KTX 차량기지",
       "category": "교통",
       "contractor": "화남이엔씨(주)"
@@ -351,6 +441,11 @@
       "name": "천안 고속터미널",
       "category": "교통",
       "contractor": "(주)삼전기업"
+    },
+    {
+      "name": "김해공항",
+      "category": "교통",
+      "contractor": "명성엔지니어링"
     }
   ],
   "gallery": [

@@ -118,11 +118,6 @@
       "contractor": "코리아플랜트(주)"
     },
     {
-      "name": "잠실 실내체육관",
-      "category": "문화·체육",
-      "contractor": "미래스택"
-    },
-    {
       "name": "한국은행",
       "category": "공공",
       "contractor": "코리아플랜트(주)"
@@ -156,6 +151,11 @@
       "name": "강북 정수사업소",
       "category": "공공",
       "contractor": "영익엔지니어링(주)"
+    },
+    {
+      "name": "잠실 실내체육관",
+      "category": "문화·체육",
+      "contractor": "미래스택"
     },
     {
       "name": "서울아산병원",

@@ -60,6 +60,44 @@
   ],
   "lineup_note": "예) 인너관 Ø300 기준 → 이중관 Ø350 · 50T 삼중관 Ø450 · 100T 삼중관 Ø550",
   "assembly_title": "조립 과정",
+  "lpf_assembly": [
+    {
+      "title": "내열 실란트 충전",
+      "text": "V밴드 안쪽 홈을 따라\n내열 실란트를 빈틈없이 채웁니다.",
+      "video": "/uploads/assembly-01.mp4",
+      "poster": "/uploads/assembly-01.jpg"
+    },
+    {
+      "title": "V밴드 걸치기",
+      "text": "실란트를 채운 V밴드를\n패킹이 장착된 플랜지에 먼저 걸쳐 둡니다.",
+      "video": "/uploads/lpf-assembly-02.mp4",
+      "poster": "/uploads/lpf-assembly-02.jpg"
+    },
+    {
+      "title": "관 맞대기",
+      "text": "홈만 가공된 다음 관 플랜지를 내려\n홈과 패킹이 맞물리도록 맞댑니다.",
+      "video": "/uploads/lpf-assembly-03.mp4",
+      "poster": "/uploads/lpf-assembly-03.jpg"
+    },
+    {
+      "title": "볼트 · 너트 체결",
+      "text": "V밴드 양 끝 브라켓 구멍 2곳에 볼트를 넣고\n너트로 조여 내부관을 단단히 고정합니다.",
+      "video": "/uploads/assembly-04.mp4",
+      "poster": "/uploads/assembly-04.jpg"
+    },
+    {
+      "title": "C카바 씌우기",
+      "text": "외부관 홈에 C카바를 걸어 V밴드를 완전히 덮고\n볼트로 체결해 마감합니다.",
+      "video": "/uploads/assembly-05.mp4",
+      "poster": "/uploads/assembly-05.jpg"
+    },
+    {
+      "title": "조립 완료",
+      "text": "이음부가 C카바로 깔끔하게 마감된\n이중연도가 완성됩니다.",
+      "video": "/uploads/assembly-06.mp4",
+      "poster": "/uploads/assembly-06.jpg"
+    }
+  ],
   "assembly": [
     {
       "title": "내열 실란트 충전",

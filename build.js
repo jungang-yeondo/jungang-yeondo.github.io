@@ -84,6 +84,7 @@ ${site.google_verification ? `<meta name="google-site-verification" content="${e
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Barlow+Condensed:wght@400;500;600&family=Cinzel:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@900&text=%28%EC%A3%BC%29%EC%A4%91%EC%95%99%EC%97%B0%EB%8F%84JUNGAYEOD%20&display=swap">
 <link rel="stylesheet" href="/css/style.css">
 <script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'Organization', name: site.name, alternateName: ['중앙연도', site.short_name, site.name_en], url: baseUrl || undefined, logo: baseUrl ? baseUrl + '/icon-192.png' : undefined, image: baseUrl && home.about_image ? baseUrl + home.about_image : undefined, description: site.seo_description, telephone: site.tel, faxNumber: site.fax, email: site.email, address: { '@type': 'PostalAddress', streetAddress: site.address, addressRegion: '경기도', addressLocality: '포천시', addressCountry: 'KR' }, foundingDate: '2013-03-13', sameAs: site.blog ? [site.blog] : undefined }).replace(/</g, '\\u003c')}</script>
 </head>

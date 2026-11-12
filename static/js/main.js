@@ -7,6 +7,7 @@
 
   var mb=document.getElementById('menuBtn'), mn=document.getElementById('mnav');
   if(mb) mb.addEventListener('click',function(){var o=mn.classList.toggle('open');body.classList.toggle('menu-open',o);mb.setAttribute('aria-expanded',o)});
+  if(mb&&mn) mn.addEventListener('click',function(e){if(e.target.closest('a')){mn.classList.remove('open');body.classList.remove('menu-open');mb.setAttribute('aria-expanded',false)}});
 
   // 메인 슬라이드
   var hero=document.getElementById('hero');

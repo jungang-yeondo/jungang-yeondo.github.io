@@ -41,7 +41,7 @@ body.over .top{background:transparent;color:#fff;border-bottom-color:rgba(255,25
 body.over .brand .ell{stroke:#fff}
 .brand b{font-size:18px;font-weight:700;letter-spacing:.02em}
 /* 상단 상호: 스테인리스 질감 (사이트는 항상 어두운 헤더) */
-.top .brand b{font-size:20px;letter-spacing:.04em;background:linear-gradient(180deg,#ffffff 0%,#d9dee4 38%,#8e979f 52%,#c9ced4 70%,#f2f4f6 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 1px rgba(0,0,0,.55))}
+.top .brand b{font-family:'Noto Serif KR',var(--font-body);font-weight:900;font-size:20px;letter-spacing:.04em;background:linear-gradient(180deg,#ffffff 0%,#d9dee4 38%,#8e979f 52%,#c9ced4 70%,#f2f4f6 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 1px rgba(0,0,0,.55))}
 nav.gnb{margin-left:auto;display:flex}
 .gnb .item{position:relative}
 .gnb .item>a{display:block;padding:30px 26px;font-weight:500;font-size:16px;letter-spacing:.01em;position:relative}

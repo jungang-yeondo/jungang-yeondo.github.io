@@ -295,7 +295,7 @@ add('/business/', {
   desc: '중앙연도 사업분야 — 보일러·발전기·냉온수기 연도 제작과 발주 접수부터 현장 납품까지의 제작 과정.',
   title: '사업분야', section: 'business', image: biz.banner,
   body: subPage({ en: 'Business', title: '사업분야', banner: biz.banner, section: 'business', current: '/business/', body:
-    two('Field', '적용 분야', `<div class="biz3">${list(biz.fields).map((f) => `<article><div class="im">${img(f.image, f.title)}</div><span class="en">${esc(f.label)}</span><b>${esc(f.title)}</b><p>${esc(f.text)}</p>${/발전기/.test(f.title) && list(proj.idc).length ? `<a class="mlink" href="/projects/#idc" style="margin-top:12px;font-size:15px">데이터센터 실적 ${list(proj.idc).length}곳 보기 →</a>` : ''}</article>`).join('')}</div>`) +
+    two('Field', '적용 분야', `<div class="biz3">${list(biz.fields).map((f) => `<article><div class="im">${img(f.image, f.title)}</div><span class="en">${esc(f.label)}</span><b>${esc(f.title)}</b><p>${br(f.text)}</p>${/발전기/.test(f.title) && list(proj.idc).length ? `<a class="mlink" href="/projects/#idc" style="margin-top:12px;font-size:15px">데이터센터 실적 ${list(proj.idc).length}곳 보기 →</a>` : ''}</article>`).join('')}</div>`) +
     two('Process', '발주 접수부터 납품까지', `<ol class="flow">${list(biz.process).map((p, i, a) => { const ph = p.phase || ''; const pi = [...new Set(a.map((x) => x.phase || ''))].indexOf(ph); return `<li class="ph${pi + 1}"><div class="f-hd"><span class="f-no en">${String(i + 1).padStart(2, '0')}</span>${ph ? `<a class="f-ph" href="/company/organization/">${esc(ph)}</a>` : ''}</div><b>${esc(p.title)}</b><p>${esc(p.text)}</p>${p.link ? `<a class="f-link" href="${esc(p.link)}">${esc(p.link_text || '바로가기')} →</a>` : ''}</li>`; }).join('')}</ol>`) }),
 });
 add('/business/facility/', {

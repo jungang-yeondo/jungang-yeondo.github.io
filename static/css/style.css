@@ -275,7 +275,7 @@ footer .blog:hover{border-color:#03C75A}
 .parts div{display:grid;grid-template-columns:64px 1fr;gap:2px 14px;padding:18px 0;border-bottom:1px solid var(--line)}
 .parts code{font-family:var(--font-en);font-size:22px;color:var(--red);grid-row:span 2;line-height:1.2}
 .parts b{font-weight:500}
-.parts span{font-size:14px;color:var(--muted)}
+.parts span{font-size:14px;color:var(--muted);word-break:keep-all}
 @media (max-width:900px){.parts{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.parts{grid-template-columns:1fr}}
 

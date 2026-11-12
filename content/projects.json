@@ -450,6 +450,41 @@
   ],
   "gallery": [
     {
+      "image": "/uploads/gallery-yongin-electron.jpg",
+      "caption": "용인 일렉트론",
+      "year": "2026"
+    },
+    {
+      "image": "/uploads/gallery-yongin-hitejinro-rnd.jpg",
+      "caption": "용인 하이트진로 통합연구소",
+      "year": "2026"
+    },
+    {
+      "image": "/uploads/gallery-yongsan-usfk.jpg",
+      "caption": "용산 미군부대",
+      "year": "2026"
+    },
+    {
+      "image": "/uploads/gallery-suwon-lottewellfood.jpg",
+      "caption": "수원 롯데웰푸드",
+      "year": "2026"
+    },
+    {
+      "image": "/uploads/gallery-hanyang-ecolab.jpg",
+      "caption": "한양 이콜랩",
+      "year": "2026"
+    },
+    {
+      "image": "/uploads/gallery-incheon-bnc-global.jpg",
+      "caption": "인천 비엔씨글로벌",
+      "year": "2026"
+    },
+    {
+      "image": "/uploads/gallery-sacheon-kai.jpg",
+      "caption": "사천 KAI",
+      "year": "2026"
+    },
+    {
       "image": "/uploads/음성 소방병원.jpg",
       "caption": "음성 소방병원",
       "year": "2026"
@@ -478,6 +513,21 @@
       "image": "/uploads/포항 동국산업.jpg",
       "caption": "포항 동국산업",
       "year": "2026"
+    },
+    {
+      "image": "/uploads/gallery-site-boiler-room.jpg",
+      "caption": "보일러실 연도 현장",
+      "year": "2025"
+    },
+    {
+      "image": "/uploads/gallery-site-outdoor-stack.jpg",
+      "caption": "옥외 수직 연도 현장",
+      "year": "2025"
+    },
+    {
+      "image": "/uploads/gallery-gyeongbuk-cloud-idc.jpg",
+      "caption": "경북클라우드 데이터센터",
+      "year": "2024"
     },
     {
       "image": "/uploads/delivery-truck-01.jpg",

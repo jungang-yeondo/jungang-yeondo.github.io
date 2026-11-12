@@ -319,12 +319,13 @@ footer .blog:hover{border-color:#03C75A}
 .gal figcaption span{font-family:var(--font-en);letter-spacing:.1em;opacity:.85}
 
 .dl{border-top:1px solid var(--ink)}
-.dl div{display:grid;grid-template-columns:64px 1fr auto;gap:20px;align-items:center;padding:24px 4px;border-bottom:1px solid var(--line)}
+.dl>div{display:grid;grid-template-columns:64px 1fr auto;gap:20px;align-items:center;padding:24px 4px;border-bottom:1px solid var(--line)}
 .dl .ext{font-family:var(--font-en);font-size:18px;color:var(--red);letter-spacing:.08em}
 .dl b{display:block;font-size:18px;font-weight:500}
 .dl span{font-size:14.5px;color:var(--muted)}
+.dl>div>div{min-width:0}.dl>div>div>span{display:block;margin-top:4px;line-height:1.55}
 .dl em{font-style:normal;font-size:14px;color:var(--muted);border:1px solid var(--line);padding:6px 14px;border-radius:30px;white-space:nowrap}
-@media (max-width:600px){.dl div{grid-template-columns:52px 1fr}.dl em{grid-column:2;justify-self:start}}
+@media (max-width:600px){.dl>div{grid-template-columns:52px 1fr}.dl a.get{grid-column:2;justify-self:start}.dl em{grid-column:2;justify-self:start}}
 
 .form{display:grid;grid-template-columns:1fr 1fr;gap:30px 32px}
 .form label{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--muted)}

@@ -129,7 +129,7 @@ ${body}
   </div>
 </footer>
 <script src="/js/main.js" defer></script>
-${site.naver_analytics ? `<script src="https://wcs.pstatic.net/wcslog.js"></script><script>if(!window.wcs_add)window.wcs_add={};wcs_add["wa"]=${JSON.stringify(String(site.naver_analytics))};if(window.wcs){wcs_do();}</script>` : ''}
+${site.naver_analytics ? `<script>(function(){var k='jy_notrack',q=location.search,m=/[?&]notrack=([01])/.exec(q),n=false;try{if(m){if(m[1]==='1')localStorage.setItem(k,'1');else localStorage.removeItem(k);}n=localStorage.getItem(k)==='1';}catch(e){}if(m){var d=document.createElement('div');d.textContent=n?'이 브라우저는 방문 통계에서 제외됩니다.':'이 브라우저도 방문 통계에 다시 포함됩니다.';d.style.cssText='position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:999;background:#111A2B;color:#fff;padding:12px 18px;border-radius:6px;font-size:14px;box-shadow:0 4px 16px rgba(0,0,0,.4)';document.body.appendChild(d);setTimeout(function(){d.remove();},4000);}if(n)return;var s=document.createElement('script');s.src='https://wcs.pstatic.net/wcslog.js';s.onload=function(){if(!window.wcs_add)window.wcs_add={};wcs_add["wa"]=${JSON.stringify(String(site.naver_analytics))};if(window.wcs)wcs_do();};document.body.appendChild(s);})();</script>` : ''}
 </body>
 </html>`;
 }

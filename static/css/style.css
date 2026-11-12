@@ -79,6 +79,7 @@ nav.gnb{margin-left:auto;display:flex}
 .hbtn:hover{background:#fff;border-color:#fff;color:#0B1220}
 .hbtn.ghost{background:transparent;border-color:rgba(255,255,255,.6)}
 .hbtn.ghost:hover{background:#fff;border-color:#fff;color:#0B1220}
+@media (max-width:600px){.hero-cta{display:grid;grid-template-columns:1fr 1fr;gap:10px}.hbtn{justify-content:center;padding:0 10px;font-size:15px}}
 @keyframes rise{from{transform:translateY(24px);opacity:.001}to{transform:none;opacity:1}}
 .hero-bar{position:absolute;left:0;right:0;bottom:0;z-index:3}
 .hero-bar .wrap{display:flex;align-items:center;gap:22px;padding-block:28px;color:#fff}

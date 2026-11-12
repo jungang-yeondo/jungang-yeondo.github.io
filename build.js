@@ -196,7 +196,7 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
     <div class="en rise">${esc(home.hero_eyebrow)}</div>
     <h1 class="rise">${lines(home.hero_title)}</h1>
     <p class="rise">${br(home.hero_text)}</p>
-    <div class="hero-cta rise"><a class="hbtn" href="/support/contact/">견적 문의 →</a><a class="hbtn ghost" href="/support/downloads/">카탈로그 받기</a><a class="hbtn ghost" href="/product/parts/">3D 모델 보기</a></div>
+    <div class="hero-cta rise"><a class="hbtn" href="/support/contact/">견적 문의 →</a><a class="hbtn ghost" href="/support/downloads/">카탈로그 받기</a><a class="hbtn ghost" href="/product/parts/">3D 모델 보기</a><a class="hbtn ghost" href="/product/stack/#assembly">조립 과정 보기</a></div>
   </div></div>
   <div class="hero-bar"><div class="wrap">
     <div class="cnt"><b id="sIdx">01</b> / ${pad(slides.length)}</div>

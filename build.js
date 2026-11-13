@@ -183,6 +183,11 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
   const specs = list(home.eng_specs).map((s) => `<li><span>${esc(s.label)}</span><span>${esc(s.value)}</span></li>`).join('');
   const names = list(proj.items).map((p) => `<span>${esc(p.name)}</span>`);
   const half = Math.ceil(names.length / 2);
+  // 분야별 대표 현장 수 칸 (많은 순) + 데이터센터 → 누르면 납품실적 페이지가 그 분야로 걸러져 열림
+  const secCnt = {}; list(proj.items).forEach((p) => { if (p.category) secCnt[p.category] = (secCnt[p.category] || 0) + 1; });
+  const secs = Object.entries(secCnt).sort((a, b) => b[1] - a[1]).map(([k, n]) => [k, n, `/projects/?cat=${encodeURIComponent(k)}`]);
+  if (list(proj.idc).length) secs.push(['데이터센터', list(proj.idc).length, '/projects/#idc']);
+  const secGrid = secs.length ? `<div class="wrap"><div class="secgrid">${secs.map(([k, n, h]) => `<a href="${h}" aria-label="${esc(k)} 대표 현장 ${n}곳 보기"><b>${n}<i>곳</i></b><span>${esc(k)}</span></a>`).join('')}</div><p class="secnote">대표 납품 현장 기준 · 누르면 분야별 실적으로 이동</p></div>` : '';
   const row = (a) => a.join('') + a.join('');
   const photos = list(home.project_photos).slice(0, 3).map((p) => `<figure>${img(p.image, p.caption)}<figcaption><b>${esc(p.caption)}</b><span>${esc(p.year)}</span></figcaption></figure>`).join('');
   const ip = list(proj.patents).filter((p) => p.home).slice(0, 4).map((p) => `<div class="r"><span class="k">${esc(p.type)}</span><b>${esc(p.title)}</b><span class="n">${esc(p.number)}</span><span class="y">${esc(p.year)}</span></div>`).join('');
@@ -238,6 +243,7 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
   <div class="headrow"><div><div class="label">Projects</div><h2 class="h2">${br(home.projects_title)}</h2></div><a class="arrow" href="/projects/" style="margin-top:0">납품실적 전체</a></div>
 </div>
   <div class="marq" aria-hidden="true"><div class="row">${row(names.slice(0, half))}</div><div class="row rev">${row(names.slice(half))}</div></div>
+  ${secGrid}
 <div class="wrap"><div class="pgrid">${photos}</div></div></section>
 
 <section class="sec tint"><div class="wrap">

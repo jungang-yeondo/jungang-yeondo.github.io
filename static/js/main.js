@@ -41,6 +41,8 @@
     draw();
     fbox.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){cur=b.textContent;fbox.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});draw()})});
     q.addEventListener('input',draw);
+    // 메인의 분야 칸에서 넘어온 경우(?cat=의료) 그 분야로 걸러서 표 위치로 이동
+    try{var pc=new URLSearchParams(location.search).get('cat');if(pc){fbox.querySelectorAll('button').forEach(function(b){if(b.textContent===pc)b.click()});setTimeout(function(){fbox.scrollIntoView({block:'start'})},60);}}catch(e){}
   }
 
   // 복사 버튼

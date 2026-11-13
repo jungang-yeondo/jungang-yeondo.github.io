@@ -61,3 +61,23 @@
   (window.requestIdleCallback||function(fn){setTimeout(fn,1500)})(function(){[].forEach.call(document.querySelectorAll('.lnb a'),function(a){pre(a.getAttribute('href'))});});
   document.addEventListener('touchstart',function(e){var a=e.target.closest&&e.target.closest('a[href^="/"]');if(a)pre(a.getAttribute('href'));},{passive:true});
 })();
+// 현장 사진: 누르면 같은 화면 위에 크게 보기 (← → / 스와이프 / ESC·바깥 누르면 닫기)
+(function(){
+  var figs=[].slice.call(document.querySelectorAll('.gal figure'));if(!figs.length)return;
+  var items=figs.map(function(f){var i=f.querySelector('img'),c=f.querySelector('figcaption');return {src:i.getAttribute('src'),alt:i.alt,cap:c?c.firstChild.textContent:'',yr:c&&c.querySelector('span')?c.querySelector('span').textContent:''};});
+  var lb=document.createElement('div');lb.className='lb';lb.setAttribute('role','dialog');lb.setAttribute('aria-modal','true');lb.hidden=true;
+  lb.innerHTML='<button class="lb-x" aria-label="닫기">×</button><button class="lb-p" aria-label="이전 사진">‹</button><figure><img alt=""><figcaption><b></b><span></span><i></i></figcaption></figure><button class="lb-n" aria-label="다음 사진">›</button>';
+  document.body.appendChild(lb);
+  var im=lb.querySelector('img'),cb=lb.querySelector('figcaption b'),cs=lb.querySelector('figcaption span'),ci=lb.querySelector('figcaption i'),cur=0,last=null;
+  function show(k){cur=(k+items.length)%items.length;var it=items[cur];im.classList.add('ld');im.onload=function(){im.classList.remove('ld')};im.src=it.src;im.alt=it.alt;cb.textContent=it.cap;cs.textContent=it.yr;ci.textContent=(cur+1)+' / '+items.length;
+    [cur-1,cur+1].forEach(function(j){var p=items[(j+items.length)%items.length];(new Image()).src=p.src;});}
+  function open(k){last=document.activeElement;show(k);lb.hidden=false;document.documentElement.style.overflow='hidden';lb.querySelector('.lb-x').focus();}
+  function close(){lb.hidden=true;document.documentElement.style.overflow='';if(last&&last.focus)last.focus();}
+  figs.forEach(function(f,k){f.tabIndex=0;f.setAttribute('role','button');f.setAttribute('aria-label',items[k].cap+' 사진 크게 보기');
+    f.addEventListener('click',function(){open(k)});f.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open(k);}});});
+  lb.querySelector('.lb-x').onclick=close;lb.querySelector('.lb-p').onclick=function(e){e.stopPropagation();show(cur-1)};lb.querySelector('.lb-n').onclick=function(e){e.stopPropagation();show(cur+1)};
+  lb.addEventListener('click',function(e){if(e.target===lb||e.target.tagName==='FIGURE')close();});
+  document.addEventListener('keydown',function(e){if(lb.hidden)return;if(e.key==='Escape')close();else if(e.key==='ArrowLeft')show(cur-1);else if(e.key==='ArrowRight')show(cur+1);});
+  var sx=0,sy=0;lb.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+  lb.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy))show(cur+(dx<0?1:-1));else if(dy>90&&Math.abs(dy)>Math.abs(dx))close();},{passive:true});
+})();

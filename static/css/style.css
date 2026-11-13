@@ -588,3 +588,19 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
 @media (max-width:900px){.enrefs{grid-template-columns:1fr 1fr}}
 @media (max-width:520px){.enrefs{grid-template-columns:1fr}}
 .enpage [id]{scroll-margin-top:84px}
+/* 현장 사진 크게 보기 */
+.gal figure{cursor:zoom-in}
+.gal figure:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.lb{position:fixed;inset:0;z-index:200;background:rgba(5,8,14,.97);display:flex;align-items:center;justify-content:center;padding:56px 72px;-webkit-tap-highlight-color:transparent}
+.lb[hidden]{display:none}
+.lb figure{margin:0;max-width:100%;max-height:100%;display:flex;flex-direction:column;align-items:center}
+.lb img{max-width:100%;max-height:calc(100vh - 150px);max-height:calc(100dvh - 150px);object-fit:contain;display:block;transition:opacity .2s}
+.lb img.ld{opacity:.35}
+.lb figcaption{display:flex;gap:14px;align-items:baseline;margin-top:14px;color:#fff;font-size:16px}
+.lb figcaption span,.lb figcaption i{font-family:var(--font-en);letter-spacing:.1em;opacity:.7;font-style:normal}
+.lb button{position:absolute;background:none;border:0;color:#fff;cursor:pointer;opacity:.8;font-size:44px;line-height:1;padding:10px 14px}
+.lb button:hover{opacity:1}
+.lb-x{top:10px;right:14px}
+.lb-p{left:10px;top:50%;transform:translateY(-50%);font-size:60px!important}
+.lb-n{right:10px;top:50%;transform:translateY(-50%);font-size:60px!important}
+@media (max-width:700px){.lb{padding:56px 8px 24px}.lb-p,.lb-n{top:auto;bottom:6px;transform:none;font-size:44px!important}.lb figcaption{font-size:14px;flex-wrap:wrap;justify-content:center}}

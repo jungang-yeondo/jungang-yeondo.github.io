@@ -617,3 +617,15 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
 .secnote{text-align:center;color:color-mix(in srgb,var(--ink) 72%,transparent);font-size:13.5px;margin:12px 0 0}
 #idc,#filters{scroll-margin-top:150px}
 @media (max-width:700px){.secgrid{grid-template-columns:repeat(4,1fr)}.secgrid b{font-size:26px}.secgrid span{font-size:12.5px}.secgrid a{padding:16px 4px 12px}.secgrid a::after{top:5px;right:6px;font-size:11px}}
+/* 인증·특허: 기업 인증 */
+.award{display:grid;gap:22px}
+.aw-tx .aw-k{display:block;font-size:13px;color:var(--red);letter-spacing:.04em}
+.aw-tx b{display:block;font-size:22px;font-weight:600;margin-top:4px}
+.aw-tx dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:14px 0 0;font-size:15px}
+.aw-tx dt{color:var(--muted)}.aw-tx dd{margin:0}
+.aw-tx p{margin:14px 0 0;color:var(--muted);line-height:1.7}
+.aw-gal{columns:auto;display:grid;grid-template-columns:.54fr 1fr 1fr 1fr;gap:12px}
+.aw-gal figure{margin:0;min-height:0}
+.aw-gal figure img{height:100%;aspect-ratio:4/3;object-fit:cover}
+.aw-gal figure:first-child img{aspect-ratio:auto}
+@media (max-width:760px){.aw-gal{grid-template-columns:1fr 1fr;gap:10px}.aw-gal figure:first-child{grid-column:span 2;max-width:320px;justify-self:center}.aw-gal figure:last-child{grid-column:span 2}.aw-gal figcaption{padding:10px 12px;font-size:13px}.aw-gal figcaption span{display:none}}

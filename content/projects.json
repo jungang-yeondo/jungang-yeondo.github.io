@@ -516,7 +516,7 @@
     },
     {
       "image": "/uploads/gallery-site-boiler-room.jpg",
-      "caption": "보일러실 연도 현장",
+      "caption": "캐스케이드 보일러 연도 현장",
       "year": "2025"
     },
     {
@@ -528,6 +528,11 @@
       "image": "/uploads/gallery-gyeongbuk-cloud-idc.jpg",
       "caption": "경북클라우드 데이터센터",
       "year": "2024"
+    },
+    {
+      "image": "/uploads/gallery-cascade-factory.jpg",
+      "caption": "NT75 캐스케이드 연결관 제작",
+      "year": "중앙연도"
     },
     {
       "image": "/uploads/delivery-truck-01.jpg",

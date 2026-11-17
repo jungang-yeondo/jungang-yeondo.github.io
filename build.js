@@ -423,10 +423,17 @@ const certGrid = () => {
   if (!L.length) return '';
   return lpfIp('<h3 style="margin:12px 0 0;font-size:20px;font-weight:600">LPF 기밀연도 핵심 특허 · 등록상표</h3>') + `<style>.certs{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2vw,24px);margin-bottom:48px}.certs a{display:block;color:inherit}.certs img{display:block;width:100%;height:auto;aspect-ratio:1/1.414;object-fit:cover;background:#fff;border:1px solid var(--line);transition:transform .3s}.certs a:hover img{transform:translateY(-4px)}.certs span{display:block;margin-top:10px;font-size:12px;color:var(--red)}.certs b{display:block;font-size:15px;font-weight:500;line-height:1.45}.certs small{display:block;font-size:13px;color:var(--muted)}@media (max-width:860px){.certs{grid-template-columns:repeat(2,1fr)}}</style><div class="certs">${L.map((p) => `<a href="/uploads/cert/cert-${esc(p.number)}.jpg" target="_blank" rel="noopener"><img src="/uploads/cert/cert-${esc(p.number)}-s.jpg" alt="${esc(p.type)} ${esc(p.title)} 증서" width="480" height="679" loading="lazy" decoding="async"><span>${esc(p.type)}</span><b>${esc(p.title)}</b><small>제 ${esc(p.number)} 호</small></a>`).join('')}</div>`;
 };
+// 기업 인증 (법무부 일자리 우수기업 등): 사진이 올라온 것만 표시, 누르면 크게 보기(.gal)
+const awardSec = () => {
+  const A = list(proj.awards).filter((a) => list(a.photos).some((p) => hasFile(p.image)));
+  if (!A.length) return '';
+  return two('Certification', '기업 인증', A.map((a) => `<div class="award"><div class="aw-tx"><span class="aw-k">${esc(a.issuer || '')}</span><b>${esc(a.title)}</b><dl>${a.number ? `<dt>인증번호</dt><dd>${esc(a.number)}</dd>` : ''}${a.period ? `<dt>인증기간</dt><dd class="num">${esc(a.period)}</dd>` : ''}</dl>${a.text ? `<p>${br(a.text)}</p>` : ''}</div><div class="gal aw-gal">${list(a.photos).filter((p) => hasFile(p.image)).map((p) => `<figure>${img(p.image, `${a.title} ${p.caption}`)}<figcaption>${esc(p.caption)}<span>${esc(p.year || '')}</span></figcaption></figure>`).join('')}</div></div>`).join(''));
+};
 add('/projects/certification/', {
   desc: '중앙연도 특허·디자인·상표 등록 현황과 증서, 포스코 스테인리스 강판 등 원자재 인증.',
   title: '인증·특허', section: 'projects', image: proj.banner,
   body: subPage({ en: 'Projects', title: '인증·특허', banner: proj.banner, section: 'projects', current: '/projects/certification/', body:
+    awardSec() +
     two('Patents', '특허 · 디자인 · 상표', certGrid() + `<div class="iprows" style="margin-top:0">${list(proj.patents).map((p) => `<div class="r"><span class="k">${esc(p.type)}</span><b>${esc(p.title)}</b><span class="n">${esc(p.number)}</span><span class="y">${esc(p.year)}</span></div>`).join('')}</div>`) +
     two('Material', '원자재 인증', `<div class="tw"><table class="tbl"><thead><tr><th>구분</th><th>발행</th><th>내용</th></tr></thead><tbody>${list(proj.materials).map((m) => `<tr><td>${esc(m.kind)}</td><td>${esc(m.issuer)}</td><td>${esc(m.content)}</td></tr>`).join('')}</tbody></table></div><p class="note">${esc(proj.materials_note)}</p>`) }),
 });

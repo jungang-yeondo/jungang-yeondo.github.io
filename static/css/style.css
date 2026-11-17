@@ -104,7 +104,8 @@ nav.gnb{margin-left:auto;display:flex}
 .arrow:hover::after{width:64px}
 
 /* about */
-.about{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(40px,6vw,100px);align-items:center}
+.about{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(40px,6vw,100px);align-items:start}
+@media (min-width:901px){.about .plate{margin-top:50px}}
 .about .plate{aspect-ratio:16/10;overflow:hidden}
 .about .plate img{width:100%;height:100%;object-fit:cover}
 .nums{display:grid;grid-template-columns:repeat(3,1fr);margin-top:56px;border-top:1px solid var(--line)}

@@ -42,7 +42,7 @@ const ADDR_EN = '65, Jeonggeum-ro 238beon-gil, Gasan-myeon, Pocheon-si, Gyeonggi
 const NAV = [
   { key: 'company', label: '회사소개', href: '/company/greeting/', sub: [['인사말', '/company/greeting/'], ['회사개요', '/company/overview/'], ['연혁', '/company/history/'], ['조직도', '/company/organization/'], ['오시는 길', '/company/location/']] },
   { key: 'business', label: '사업분야', href: '/business/', sub: [['사업분야', '/business/'], ['보유 설비 · 제작 기술', '/business/facility/']] },
-  { key: 'product', label: '제품소개', href: '/product/stack/', sub: [['스테인리스 연도', '/product/stack/'], ['LPF 기밀연도', '/product/lpf/'], ['주요 부품', '/product/parts/'], ['조립 과정', '/product/stack/#assembly']] },
+  { key: 'product', label: '제품소개', href: '/product/stack/', sub: [['스테인리스 연도', '/product/stack/'], ['LPF 기밀연도', '/product/lpf/'], ['캐스케이드 연도', '/product/cascade/'], ['주요 부품', '/product/parts/'], ['조립 과정', '/product/stack/#assembly']] },
   { key: 'projects', label: '납품실적', href: '/projects/', sub: [['납품실적', '/projects/'], ['현장 사진', '/projects/gallery/'], ['시공 협력사', '/projects/partners/'], ['인증·특허', '/projects/certification/']] },
   { key: 'support', label: '고객지원', href: '/support/downloads/', sub: [['자료실', '/support/downloads/'], ['온라인 문의', '/support/contact/']] },
 ];
@@ -346,6 +346,17 @@ const lpfIp = (head = '') => {
 };
 const lpfSum = `<style>.lpfsum{margin-top:22px}.lpfsum .one{margin:0 0 14px;font-size:16px;font-weight:600;line-height:1.6}.lpfsum ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}.lpfsum li{padding:10px 14px;border-left:3px solid var(--red);background:var(--bg-2);font-size:14px;line-height:1.5;color:var(--muted)}.lpfsum li b{display:block;font-size:15px;font-weight:600;color:var(--ink)}</style><div class="lpfsum"><p class="one">패킹 홈 플랜지와 V밴드로 이음부를 밀착시켜 기밀성을 높인 특허 이중연도입니다.</p><ul><li><b>공장에서 패킹 장착 후 출하</b>관경에 맞춘 패킹을 끼운 상태로 납품됩니다.</li><li><b>현장은 V밴드 체결만</b>맞대고 V밴드만 조이면 이음부가 완성됩니다.</li><li><b>누설에 민감한 현장용</b>비상 발전기 · 콘덴싱 보일러 배기 라인</li></ul></div>`;
 const lpfDev = prod.lpf_dev ? `<div style="margin:0 0 28px;padding:14px 16px;border-left:3px solid var(--red);background:var(--bg-2)"><span style="display:block;font-size:12px;color:var(--muted)">특허권 보유</span><b style="display:block;margin-top:2px;font-size:15px;line-height:1.5">${esc(prod.lpf_dev)}</b><a class="mlink" href="/projects/partners/" style="margin-top:10px;font-size:14px">시공 협력사 보기 →</a></div>` : '';
+// 캐스케이드 연도 (보일러 여러 대를 메인 연도 하나에 묶는 연결관 NT75)
+if (prod.cascade) {
+  const C = prod.cascade;
+  add('/product/cascade/', {
+    title: '캐스케이드 연도', section: 'product', image: C.image || prod.banner,
+    desc: C.desc || '',
+    body: subPage({ en: 'Products', title: '캐스케이드 연도', banner: prod.stack_banner || prod.banner, section: 'product', current: '/product/cascade/', body:
+      two('Cascade', esc(C.title || '캐스케이드 연도'), `${C.quote ? `<p class="quote" style="margin-bottom:20px">${br(C.quote)}</p>` : ''}<p class="lead" style="margin-top:0">${br(C.intro)}</p>${list(C.points).length ? `${lpfSum.slice(0, lpfSum.indexOf('</style>') + 8)}<div class="lpfsum"><ul>${list(C.points).map((p) => `<li><b>${esc(p.title)}</b>${br(p.text)}</li>`).join('')}</ul></div>` : ''}`) +
+      (list(C.photos).some((p) => hasFile(p.image)) ? two('Gallery', '제작 · 설치 사진', `<div class="gal">${list(C.photos).filter((p) => hasFile(p.image)).map((p) => `<figure>${img(p.image, p.caption)}<figcaption>${esc(p.caption)}<span>${esc(p.year || '')}</span></figcaption></figure>`).join('')}</div>`) : '') }),
+  });
+}
 add('/product/lpf/', {
   title: 'LPF 기밀연도', section: 'product', image: prod.banner,
   desc: 'LPF(Leakage Prevention Flange) 기밀연도 — 플랜지 홈 패킹과 V밴드 체결로 이음부 누설을 막는 이중연도. 발전기·콘덴싱 보일러용.',

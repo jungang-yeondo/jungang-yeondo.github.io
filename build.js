@@ -352,7 +352,7 @@ if (prod.cascade) {
   add('/product/cascade/', {
     title: '캐스케이드 연도', section: 'product', image: C.image || prod.banner,
     desc: C.desc || '',
-    body: subPage({ en: 'Products', title: '캐스케이드 연도', banner: prod.stack_banner || prod.banner, section: 'product', current: '/product/cascade/', body:
+    body: subPage({ en: 'Products', title: '캐스케이드 연도', banner: hasFile(C.banner) ? C.banner : (prod.stack_banner || prod.banner), section: 'product', current: '/product/cascade/', body:
       two('Cascade', esc(C.title || '캐스케이드 연도'), `${C.quote ? `<p class="quote" style="margin-bottom:20px">${br(C.quote)}</p>` : ''}<p class="lead" style="margin-top:0">${br(C.intro)}</p>${list(C.points).length ? `${lpfSum.slice(0, lpfSum.indexOf('</style>') + 8)}<div class="lpfsum"><ul>${list(C.points).map((p) => `<li><b>${esc(p.title)}</b>${br(p.text)}</li>`).join('')}</ul></div>` : ''}`) +
       (list(C.photos).some((p) => hasFile(p.image)) ? two('Gallery', '제작 · 설치 사진', `<div class="gal">${list(C.photos).filter((p) => hasFile(p.image)).map((p) => `<figure>${img(p.image, p.caption)}<figcaption>${esc(p.caption)}<span>${esc(p.year || '')}</span></figcaption></figure>`).join('')}</div>`) : '') }),
   });

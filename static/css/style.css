@@ -108,6 +108,7 @@ nav.gnb{margin-left:auto;display:flex}
 @media (min-width:901px){.about .plate{margin-top:50px}}
 .about .plate{aspect-ratio:16/10;overflow:hidden}
 .about .plate img{width:100%;height:100%;object-fit:cover}
+.about .plate,.about .plate img{-webkit-user-select:none;user-select:none;-webkit-user-drag:none;pointer-events:none}
 .nums{display:grid;grid-template-columns:repeat(3,1fr);margin-top:56px;border-top:1px solid var(--line)}
 .nums div{padding-top:22px}
 .nums b{font-family:var(--font-en);font-weight:500;font-size:clamp(44px,5vw,68px);line-height:1;display:block;letter-spacing:-.01em}

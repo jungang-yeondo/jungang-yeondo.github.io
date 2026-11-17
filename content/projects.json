@@ -535,6 +535,37 @@
       "year": "중앙연도"
     }
   ],
+  "awards": [
+    {
+      "title": "법무부 일자리 우수기업",
+      "number": "제105호",
+      "issuer": "법무부장관",
+      "period": "2026.10.12 ~ 2029.10.11",
+      "text": "법무부로부터 일자리 우수기업으로 인증받았습니다. 2026년 11월 16일 본사에서 인증식과 현판식을 열었습니다.",
+      "photos": [
+        {
+          "image": "/uploads/cert-moj-105.jpg",
+          "caption": "인증서",
+          "year": "2026"
+        },
+        {
+          "image": "/uploads/moj-ceremony-01.jpg",
+          "caption": "인증패 전달",
+          "year": "2026.11"
+        },
+        {
+          "image": "/uploads/moj-ceremony-02.jpg",
+          "caption": "현판 제막",
+          "year": "2026.11"
+        },
+        {
+          "image": "/uploads/moj-ceremony-03.jpg",
+          "caption": "기념 촬영",
+          "year": "2026.11"
+        }
+      ]
+    }
+  ],
   "patents": [
     {
       "type": "특허",

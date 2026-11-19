@@ -417,10 +417,11 @@ add('/projects/gallery/', {
   body: subPage({ en: 'Projects', title: '현장 사진', banner: proj.banner, section: 'projects', current: '/projects/gallery/', body:
     `<div style="padding-block:clamp(56px,7vw,96px)"><div class="gal">${list(proj.gallery).map((g) => `<figure>${img(g.image, g.caption)}<figcaption>${esc(g.caption)}<span>${esc(g.year)}</span></figcaption></figure>`).join('')}</div></div>` }),
 });
+const SB = hasFile('/uploads/banner-stories.jpg') ? '/uploads/banner-stories.jpg' : proj.banner;
 add('/projects/stories/', {
   desc: '중앙연도 공장 제작 스토리 — 스테인리스 연도와 부속을 실제로 제작하는 과정을 블로그에 기록합니다.',
-  title: '제작 스토리', section: 'projects', image: proj.banner,
-  body: subPage({ en: 'Projects', title: '제작 스토리', banner: proj.banner, section: 'projects', current: '/projects/stories/', body:
+  title: '제작 스토리', section: 'projects', image: SB,
+  body: subPage({ en: 'Projects', title: '제작 스토리', banner: SB, section: 'projects', current: '/projects/stories/', body:
     `<div style="padding-block:clamp(56px,7vw,96px)"><p class="bf-lead">공장에서 제작한 연도와 부속을 블로그에 꾸준히 기록하고 있습니다. 사진을 누르면 블로그 글로 이동합니다.</p>${stories.length ? storyCards(stories) : '<p class="bf-lead">제작 스토리를 준비 중입니다.</p>'}<p class="bf-more"><a class="arrow" href="${esc(BLOG_URL)}" target="_blank" rel="noopener">블로그에서 더 보기</a></p></div>` }),
 });
 // 시공 협력사: 대표 실적은 idc_partner와 items의 시공사 이름으로 자동 연결 ((주)·㈜·주식회사·공백 무시)

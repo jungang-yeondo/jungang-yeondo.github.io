@@ -644,4 +644,3 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
 .bf-more{margin:36px 0 0}
 @media (max-width:860px){.bf{grid-template-columns:repeat(2,1fr)}}
 .headrow+.bf{margin-top:28px}
-.subvis img[src*="banner-stories"]{object-position:50% 22%} /* 제작 스토리 배너: 공장 안쪽 깊이까지 보이게 */

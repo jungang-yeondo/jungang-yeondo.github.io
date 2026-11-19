@@ -57,7 +57,7 @@ const NAV = [
   { key: 'business', label: '사업분야', href: '/business/', sub: [['사업분야', '/business/'], ['보유 설비 · 제작 기술', '/business/facility/']] },
   { key: 'product', label: '제품소개', href: '/product/stack/', sub: [['스테인리스 연도', '/product/stack/'], ['LPF 기밀연도', '/product/lpf/'], ['캐스케이드 연도', '/product/cascade/'], ['주요 부품 (3D)', '/product/parts/'], ['주문제작', '/projects/stories/'], ['조립 과정', '/product/stack/#assembly']] },
   { key: 'projects', label: '납품실적', href: '/projects/', sub: [['납품실적', '/projects/'], ['현장 사진', '/projects/gallery/'], ['시공 협력사', '/projects/partners/'], ['인증·특허', '/projects/certification/']] },
-  { key: 'support', label: '고객지원', href: '/support/downloads/', sub: [['자료실', '/support/downloads/'], ['온라인 문의', '/support/contact/']] },
+  { key: 'support', label: '고객지원', href: '/support/downloads/', sub: [['자료실', '/support/downloads/'], ['자주 묻는 질문', '/support/faq/'], ['온라인 문의', '/support/contact/']] },
 ];
 
 const logo = `<img class="logo-img" src="/uploads/jungang-logo.png" alt="" width="328" height="150" decoding="async">`;
@@ -482,6 +482,18 @@ add('/projects/certification/', {
 });
 
 // ---------- SUPPORT ----------
+// 자주 묻는 질문 (content/support.json 의 faq)
+if (list(sup.faq).length) {
+  const F = list(sup.faq).filter((f) => f && f.question && f.answer);
+  const cats = [...new Set(F.map((f) => f.category || '기타'))];
+  const ld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: F.map((f) => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })) };
+  add('/support/faq/', {
+    desc: '중앙연도 자주 묻는 질문 — 견적 방법, 제작 기간, 배송, 재질(STS304), 이중관·삼중관, LPF 기밀연도, 주문제작 안내.',
+    title: '자주 묻는 질문', section: 'support', image: sup.banner,
+    body: subPage({ en: 'Customer', title: '자주 묻는 질문', banner: sup.banner, section: 'support', current: '/support/faq/', body:
+      `<div style="padding-block:clamp(56px,7vw,96px)">${cats.map((c) => `<section class="faq"><h2>${esc(c)}</h2>${F.filter((f) => (f.category || '기타') === c).map((f) => `<details><summary>${esc(f.question)}</summary><div class="a"><p>${esc(f.answer)}</p>${f.link_url ? `<a class="arrow" href="${esc(f.link_url)}"${/^https?:/.test(f.link_url) ? ' target="_blank" rel="noopener"' : ''}>${esc(f.link_label || '바로가기')}</a>` : ''}</div></details>`).join('')}</section>`).join('')}<div class="faq-end"><p>찾으시는 답이 없으면 편하게 문의해 주세요.</p>${kakaoBox}</div></div><script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>` }),
+  });
+}
 add('/support/downloads/', {
   desc: '중앙연도 자료실 — 일반연도 카탈로그, LPF 기밀연도 카탈로그, LPF 패킹 시험성적서 PDF 내려받기.',
   title: '자료실', section: 'support', image: sup.banner,

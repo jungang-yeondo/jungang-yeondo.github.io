@@ -631,3 +631,16 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
 .aw-gal figure img{height:100%;aspect-ratio:4/3;object-fit:cover}
 .aw-gal figure:first-child img{aspect-ratio:auto}
 @media (max-width:760px){.aw-gal{grid-template-columns:1fr 1fr;gap:10px}.aw-gal figure:first-child{grid-column:span 2;max-width:320px;justify-self:center}.aw-gal figure:last-child{grid-column:span 2}.aw-gal figcaption{padding:10px 12px;font-size:13px}.aw-gal figcaption span{display:none}}
+
+/* 제작 스토리 (블로그 '제작 실적' 자동 연동) */
+.bf{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2vw,24px)}
+.bf a{display:block;color:inherit;min-width:0}
+.bf .ph{display:block;aspect-ratio:1/1;overflow:hidden;background:var(--bg-2)}
+.bf img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.bf a:hover img{transform:scale(1.04)}
+.bf b{display:block;margin-top:12px;font-size:15px;font-weight:500;line-height:1.45;word-break:keep-all}
+.bf small{display:block;margin-top:4px;font-size:13px;color:var(--muted);font-family:var(--font-en);letter-spacing:.04em}
+.bf-lead{margin:0 0 28px;color:var(--muted);word-break:keep-all}
+.bf-more{margin:36px 0 0}
+@media (max-width:860px){.bf{grid-template-columns:repeat(2,1fr)}}
+.headrow+.bf{margin-top:28px}

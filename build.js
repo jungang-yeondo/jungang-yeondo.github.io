@@ -46,6 +46,12 @@ const stories = list(feed.posts).filter((p) => p && p.url && p.title);
 const BLOG_URL = feed.blog || 'https://blog.naver.com/jungangyeondo';
 const storyCards = (a) => `<div class="bf">${a.map((p) => `<a href="${esc(p.url)}" target="_blank" rel="noopener"><span class="ph">${p.image ? img(p.image, p.title) : ''}</span><b>${esc(p.title)}</b></a>`).join('')}</div>`;
 
+// 카카오톡 채널 1:1 채팅 (문의 버튼)
+const KAKAO = 'https://pf.kakao.com/_Irixan/chat';
+const kakaoSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#191919" d="M12 3C6.48 3 2 6.58 2 11c0 2.83 1.84 5.32 4.62 6.74l-1.02 3.73c-.09.33.28.6.57.41l4.43-2.93c.46.05.93.05 1.4.05 5.52 0 10-3.58 10-8S17.52 3 12 3z"/></svg>';
+const kakaoBox = `<a class="kk" href="${KAKAO}" target="_blank" rel="noopener">${kakaoSvg}<span><b>카카오톡으로 BM 보내고 견적 받기</b><small>평일 08:30~17:30 · BM이나 관경과 수량만 보내 주세요</small></span></a>`;
+const kakaoFloat = `<a class="kkf" href="${KAKAO}" target="_blank" rel="noopener" aria-label="카카오톡 문의" title="카카오톡 문의">${kakaoSvg}</a>`;
+
 const NAV = [
   { key: 'company', label: '회사소개', href: '/company/greeting/', sub: [['인사말', '/company/greeting/'], ['회사개요', '/company/overview/'], ['연혁', '/company/history/'], ['조직도', '/company/organization/'], ['오시는 길', '/company/location/']] },
   { key: 'business', label: '사업분야', href: '/business/', sub: [['사업분야', '/business/'], ['보유 설비 · 제작 기술', '/business/facility/']] },
@@ -136,6 +142,7 @@ ${body}
     <div class="c"><span>© ${new Date().getFullYear()} ${esc(site.name_en)} All rights reserved.${en ? '' : '<br>본 사이트의 사진·도면·카탈로그는 (주)중앙연도의 저작물로 무단 복제·사용을 금합니다.'}</span><span class="fl">${site.blog ? `<a class="blog" href="${esc(site.blog)}" target="_blank" rel="noopener"><i>N</i>블로그</a>` : ''}${en ? '<a href="/" lang="ko">한국어</a>' : '<a href="/privacy/">개인정보처리방침</a>'}</span></div>
   </div>
 </footer>
+${en ? '' : kakaoFloat}
 <script src="/js/main.js" defer></script>
 ${site.naver_analytics ? `<script>(function(){var k='jy_notrack',q=location.search,m=/[?&]notrack=([01])/.exec(q),n=false;try{if(m){if(m[1]==='1')localStorage.setItem(k,'1');else localStorage.removeItem(k);}n=localStorage.getItem(k)==='1';}catch(e){}if(m){var d=document.createElement('div');d.textContent=n?'이 브라우저는 방문 통계에서 제외됩니다.':'이 브라우저도 방문 통계에 다시 포함됩니다.';d.style.cssText='position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:999;background:#111A2B;color:#fff;padding:12px 18px;border-radius:6px;font-size:14px;box-shadow:0 4px 16px rgba(0,0,0,.4)';document.body.appendChild(d);setTimeout(function(){d.remove();},4000);}if(n||navigator.webdriver||/HeadlessChrome|Lighthouse/i.test(navigator.userAgent))return;var s=document.createElement('script');s.src='https://wcs.pstatic.net/wcslog.js';s.onload=function(){if(!window.wcs_add)window.wcs_add={};wcs_add["wa"]=${JSON.stringify(String(site.naver_analytics))};if(window.wcs)wcs_do();};document.body.appendChild(s);})();</script>` : ''}
 </body>
@@ -425,7 +432,7 @@ add('/projects/stories/', {
   desc: '중앙연도 주문제작 사례 — 규격품으로 맞지 않는 연도·덕트·부속을 도면과 현장 조건에 맞춰 제작한 실제 사례입니다.',
   title: '주문제작', section: 'product', image: SB,
   body: subPage({ en: 'Products', title: '주문제작', banner: SB, section: 'product', current: '/projects/stories/', body:
-    `<div style="padding-block:clamp(56px,7vw,96px)"><p class="bf-lead">규격품으로 맞지 않는 형태도 도면이나 스케치에 맞춰 제작합니다. 지금까지 주문제작한 연도와 부속을 소개합니다. 사진을 누르면 블로그 글로 이동합니다.</p>${syncBar}${stories.length ? storyCards(stories) : '<p class="bf-lead">주문제작 사례를 준비 중입니다.</p>'}<p class="bf-more"><a class="arrow" href="${esc(BLOG_URL)}" target="_blank" rel="noopener">블로그에서 더 보기</a></p></div>` }),
+    `<div style="padding-block:clamp(56px,7vw,96px)"><p class="bf-lead">규격품으로 맞지 않는 형태도 도면이나 스케치에 맞춰 제작합니다. 지금까지 주문제작한 연도와 부속을 소개합니다. 사진을 누르면 블로그 글로 이동합니다.</p>${syncBar}${stories.length ? storyCards(stories) : '<p class="bf-lead">주문제작 사례를 준비 중입니다.</p>'}${kakaoBox}<p class="bf-more"><a class="arrow" href="${esc(BLOG_URL)}" target="_blank" rel="noopener">블로그에서 더 보기</a></p></div>` }),
 });
 // 시공 협력사: 대표 실적은 idc_partner와 items의 시공사 이름으로 자동 연결 ((주)·㈜·주식회사·공백 무시)
 {
@@ -486,7 +493,7 @@ add('/support/contact/', {
   desc: `연도 견적·기술 문의 — 온라인 문의 양식과 전화 ${site.tel}.`,
   title: '온라인 문의', section: 'support', image: sup.banner,
   body: subPage({ en: 'Customer', title: '온라인 문의', banner: sup.banner, section: 'support', current: '/support/contact/', body:
-    two('Contact', '견적 · 기술 문의', `<form class="form" name="contact" method="POST" action="https://api.web3forms.com/submit">
+    two('Contact', '견적 · 기술 문의', `${kakaoBox}<form class="form" name="contact" method="POST" action="https://api.web3forms.com/submit">
 <input type="hidden" name="access_key" value="f16da7f0-6f2c-494e-abbd-a1a7d74753d4">
 <input type="hidden" name="subject" value="[중앙연도 홈페이지] 새 온라인 문의">
 <input type="hidden" name="from_name" value="중앙연도 홈페이지">

@@ -3,10 +3,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  # 블로그 '제작 실적' 새 글 반영 — 매일 07:23, 18:23 (한국시간)
+  # 블로그 '제작 실적' 새 글 반영 — 매일 11:03, 17:03 (한국시간)
   schedule:
-    - cron: '23 22 * * *'
-    - cron: '23 9 * * *'
+    - cron: '3 2 * * *'
+    - cron: '3 8 * * *'
 permissions:
   contents: read
   pages: write

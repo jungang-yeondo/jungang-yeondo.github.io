@@ -50,7 +50,7 @@ const NAV = [
   { key: 'company', label: '회사소개', href: '/company/greeting/', sub: [['인사말', '/company/greeting/'], ['회사개요', '/company/overview/'], ['연혁', '/company/history/'], ['조직도', '/company/organization/'], ['오시는 길', '/company/location/']] },
   { key: 'business', label: '사업분야', href: '/business/', sub: [['사업분야', '/business/'], ['보유 설비 · 제작 기술', '/business/facility/']] },
   { key: 'product', label: '제품소개', href: '/product/stack/', sub: [['스테인리스 연도', '/product/stack/'], ['LPF 기밀연도', '/product/lpf/'], ['캐스케이드 연도', '/product/cascade/'], ['주요 부품', '/product/parts/'], ['조립 과정', '/product/stack/#assembly']] },
-  { key: 'projects', label: '납품실적', href: '/projects/', sub: [['납품실적', '/projects/'], ['현장 사진', '/projects/gallery/'], ['제작 스토리', '/projects/stories/'], ['시공 협력사', '/projects/partners/'], ['인증·특허', '/projects/certification/']] },
+  { key: 'projects', label: '납품실적', href: '/projects/', sub: [['납품실적', '/projects/'], ['현장 사진', '/projects/gallery/'], ['주문제작 사례', '/projects/stories/'], ['시공 협력사', '/projects/partners/'], ['인증·특허', '/projects/certification/']] },
   { key: 'support', label: '고객지원', href: '/support/downloads/', sub: [['자료실', '/support/downloads/'], ['온라인 문의', '/support/contact/']] },
 ];
 
@@ -254,7 +254,7 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
 <div class="wrap"><div class="pgrid">${photos}</div></div></section>
 
 ${stories.length ? `<section class="sec" style="padding-top:0"><div class="wrap">
-  <div class="headrow"><div><div class="label">Factory Stories</div><h2 class="h2">공장에서 막 나온 제작 이야기</h2></div><a class="arrow" href="/projects/stories/" style="margin-top:0">제작 스토리 전체</a></div>
+  <div class="headrow"><div><div class="label">Custom Fabrication</div><h2 class="h2">도면대로 만든 주문제작 사례</h2></div><a class="arrow" href="/projects/stories/" style="margin-top:0">주문제작 사례 전체</a></div>
   ${storyCards(stories.slice(0, 4))}
 </div></section>
 
@@ -422,10 +422,10 @@ const syncAt = (() => { const d = new Date(feed.updated || ''); if (isNaN(d)) re
 const syncBar = `<div class="bf-sync"><span class="live"><i></i>블로그 자동 연동</span><span>매일 <b>오전 11시</b> · <b>오후 5시</b> 새 글 반영</span>${syncAt ? `<span class="at">최근 업데이트 ${syncAt}</span>` : ''}</div>`;
 const SB = hasFile('/uploads/banner-stories.jpg') ? '/uploads/banner-stories.jpg' : proj.banner;
 add('/projects/stories/', {
-  desc: '중앙연도 공장 제작 스토리 — 스테인리스 연도와 부속을 실제로 제작하는 과정을 블로그에 기록합니다.',
-  title: '제작 스토리', section: 'projects', image: SB,
-  body: subPage({ en: 'Projects', title: '제작 스토리', banner: SB, section: 'projects', current: '/projects/stories/', body:
-    `<div style="padding-block:clamp(56px,7vw,96px)"><p class="bf-lead">공장에서 제작한 연도와 부속을 블로그에 꾸준히 기록하고 있습니다. 사진을 누르면 블로그 글로 이동합니다.</p>${syncBar}${stories.length ? storyCards(stories) : '<p class="bf-lead">제작 스토리를 준비 중입니다.</p>'}<p class="bf-more"><a class="arrow" href="${esc(BLOG_URL)}" target="_blank" rel="noopener">블로그에서 더 보기</a></p></div>` }),
+  desc: '중앙연도 주문제작 사례 — 규격품으로 맞지 않는 연도·덕트·부속을 도면과 현장 조건에 맞춰 제작한 실제 사례입니다.',
+  title: '주문제작 사례', section: 'projects', image: SB,
+  body: subPage({ en: 'Projects', title: '주문제작 사례', banner: SB, section: 'projects', current: '/projects/stories/', body:
+    `<div style="padding-block:clamp(56px,7vw,96px)"><p class="bf-lead">규격품으로 맞지 않는 형태도 도면이나 스케치에 맞춰 제작합니다. 지금까지 주문제작한 연도와 부속을 소개합니다. 사진을 누르면 블로그 글로 이동합니다.</p>${syncBar}${stories.length ? storyCards(stories) : '<p class="bf-lead">주문제작 사례를 준비 중입니다.</p>'}<p class="bf-more"><a class="arrow" href="${esc(BLOG_URL)}" target="_blank" rel="noopener">블로그에서 더 보기</a></p></div>` }),
 });
 // 시공 협력사: 대표 실적은 idc_partner와 items의 시공사 이름으로 자동 연결 ((주)·㈜·주식회사·공백 무시)
 {

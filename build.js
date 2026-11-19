@@ -10,6 +10,9 @@ const OUT = path.join(ROOT, '_site');
 const load = (n) => JSON.parse(fs.readFileSync(path.join(ROOT, 'content', n + '.json'), 'utf8'));
 const site = load('site'), home = load('home'), company = load('company'), biz = load('business'),
       prod = load('products'), proj = load('projects'), sup = load('support');
+// 블로그 '제작 실적' 글 목록 (blogfeed.js가 배포 때 만듦 — 없으면 빈 목록)
+let feed = { posts: [] };
+try { feed = load('blogfeed'); } catch (e) {}
 
 // ---------- helpers ----------
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -39,11 +42,15 @@ const baseUrl = String(site.url || '').replace(/\/$/, '');
 const intl = (t) => '+82-' + String(t).replace(/^0/, '');
 const ADDR_EN = '65, Jeonggeum-ro 238beon-gil, Gasan-myeon, Pocheon-si, Gyeonggi-do, Republic of Korea';
 
+const stories = list(feed.posts).filter((p) => p && p.url && p.title);
+const BLOG_URL = feed.blog || 'https://blog.naver.com/jungangyeondo';
+const storyCards = (a) => `<div class="bf">${a.map((p) => `<a href="${esc(p.url)}" target="_blank" rel="noopener"><span class="ph">${p.image ? img(p.image, p.title) : ''}</span><b>${esc(p.title)}</b><small>${esc(String(p.date || '').replace(/-/g, '. '))}</small></a>`).join('')}</div>`;
+
 const NAV = [
   { key: 'company', label: '회사소개', href: '/company/greeting/', sub: [['인사말', '/company/greeting/'], ['회사개요', '/company/overview/'], ['연혁', '/company/history/'], ['조직도', '/company/organization/'], ['오시는 길', '/company/location/']] },
   { key: 'business', label: '사업분야', href: '/business/', sub: [['사업분야', '/business/'], ['보유 설비 · 제작 기술', '/business/facility/']] },
   { key: 'product', label: '제품소개', href: '/product/stack/', sub: [['스테인리스 연도', '/product/stack/'], ['LPF 기밀연도', '/product/lpf/'], ['캐스케이드 연도', '/product/cascade/'], ['주요 부품', '/product/parts/'], ['조립 과정', '/product/stack/#assembly']] },
-  { key: 'projects', label: '납품실적', href: '/projects/', sub: [['납품실적', '/projects/'], ['현장 사진', '/projects/gallery/'], ['시공 협력사', '/projects/partners/'], ['인증·특허', '/projects/certification/']] },
+  { key: 'projects', label: '납품실적', href: '/projects/', sub: [['납품실적', '/projects/'], ['현장 사진', '/projects/gallery/'], ['제작 스토리', '/projects/stories/'], ['시공 협력사', '/projects/partners/'], ['인증·특허', '/projects/certification/']] },
   { key: 'support', label: '고객지원', href: '/support/downloads/', sub: [['자료실', '/support/downloads/'], ['온라인 문의', '/support/contact/']] },
 ];
 
@@ -246,7 +253,12 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
   ${secGrid}
 <div class="wrap"><div class="pgrid">${photos}</div></div></section>
 
-<section class="sec tint"><div class="wrap">
+${stories.length ? `<section class="sec" style="padding-top:0"><div class="wrap">
+  <div class="headrow"><div><div class="label">Factory Stories</div><h2 class="h2">공장에서 막 나온 제작 이야기</h2></div><a class="arrow" href="/projects/stories/" style="margin-top:0">제작 스토리 전체</a></div>
+  ${storyCards(stories.slice(0, 4))}
+</div></section>
+
+` : ''}<section class="sec tint"><div class="wrap">
   <div class="headrow"><div><div class="label">Technology</div><h2 class="h2">${br(home.tech_title)}</h2></div><a class="arrow" href="/projects/certification/" style="margin-top:0">인증·특허 전체</a></div>
   <div class="iprows">${ip}</div>
 </div></section>`,
@@ -404,6 +416,12 @@ add('/projects/gallery/', {
   title: '현장 사진', section: 'projects', image: proj.banner,
   body: subPage({ en: 'Projects', title: '현장 사진', banner: proj.banner, section: 'projects', current: '/projects/gallery/', body:
     `<div style="padding-block:clamp(56px,7vw,96px)"><div class="gal">${list(proj.gallery).map((g) => `<figure>${img(g.image, g.caption)}<figcaption>${esc(g.caption)}<span>${esc(g.year)}</span></figcaption></figure>`).join('')}</div></div>` }),
+});
+add('/projects/stories/', {
+  desc: '중앙연도 공장 제작 스토리 — 스테인리스 연도와 부속을 실제로 제작하는 과정을 블로그에 기록합니다.',
+  title: '제작 스토리', section: 'projects', image: proj.banner,
+  body: subPage({ en: 'Projects', title: '제작 스토리', banner: proj.banner, section: 'projects', current: '/projects/stories/', body:
+    `<div style="padding-block:clamp(56px,7vw,96px)"><p class="bf-lead">공장에서 제작한 연도와 부속을 블로그에 꾸준히 기록하고 있습니다. 사진을 누르면 블로그 글로 이동합니다.</p>${stories.length ? storyCards(stories) : '<p class="bf-lead">제작 스토리를 준비 중입니다.</p>'}<p class="bf-more"><a class="arrow" href="${esc(BLOG_URL)}" target="_blank" rel="noopener">블로그에서 더 보기</a></p></div>` }),
 });
 // 시공 협력사: 대표 실적은 idc_partner와 items의 시공사 이름으로 자동 연결 ((주)·㈜·주식회사·공백 무시)
 {

@@ -49,7 +49,7 @@ const storyCards = (a) => `<div class="bf">${a.map((p) => `<a href="${esc(p.url)
 // 카카오톡 채널 1:1 채팅 (문의 버튼)
 const KAKAO = 'https://pf.kakao.com/_Irixan/chat';
 const kakaoSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#191919" d="M12 3C6.48 3 2 6.58 2 11c0 2.83 1.84 5.32 4.62 6.74l-1.02 3.73c-.09.33.28.6.57.41l4.43-2.93c.46.05.93.05 1.4.05 5.52 0 10-3.58 10-8S17.52 3 12 3z"/></svg>';
-const kakaoBox = `<a class="kk" href="${KAKAO}" target="_blank" rel="noopener">${kakaoSvg}<span><b>카카오톡으로 BM 보내고 견적 받기</b><small>평일 08:30~17:30 · BM이나 관경과 수량만 보내 주세요</small></span></a>`;
+const kakaoBox = `<a class="kk" href="${KAKAO}" target="_blank" rel="noopener">${kakaoSvg}<span><b>카카오톡으로 견적 문의하기</b><small>평일 08:30~17:30 · BM(자재 내역)을 보내 주시면 빠르게 견적을 안내해 드립니다</small></span></a>`;
 const kakaoFloat = `<a class="kkf" href="${KAKAO}" target="_blank" rel="noopener" aria-label="카카오톡 문의" title="카카오톡 문의">${kakaoSvg}</a>`;
 
 const NAV = [

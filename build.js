@@ -49,8 +49,8 @@ const storyCards = (a) => `<div class="bf">${a.map((p) => `<a href="${esc(p.url)
 const NAV = [
   { key: 'company', label: '회사소개', href: '/company/greeting/', sub: [['인사말', '/company/greeting/'], ['회사개요', '/company/overview/'], ['연혁', '/company/history/'], ['조직도', '/company/organization/'], ['오시는 길', '/company/location/']] },
   { key: 'business', label: '사업분야', href: '/business/', sub: [['사업분야', '/business/'], ['보유 설비 · 제작 기술', '/business/facility/']] },
-  { key: 'product', label: '제품소개', href: '/product/stack/', sub: [['스테인리스 연도', '/product/stack/'], ['LPF 기밀연도', '/product/lpf/'], ['캐스케이드 연도', '/product/cascade/'], ['주요 부품', '/product/parts/'], ['조립 과정', '/product/stack/#assembly']] },
-  { key: 'projects', label: '납품실적', href: '/projects/', sub: [['납품실적', '/projects/'], ['현장 사진', '/projects/gallery/'], ['주문제작 사례', '/projects/stories/'], ['시공 협력사', '/projects/partners/'], ['인증·특허', '/projects/certification/']] },
+  { key: 'product', label: '제품소개', href: '/product/stack/', sub: [['스테인리스 연도', '/product/stack/'], ['LPF 기밀연도', '/product/lpf/'], ['캐스케이드 연도', '/product/cascade/'], ['주요 부품 (3D)', '/product/parts/'], ['주문제작', '/projects/stories/'], ['조립 과정', '/product/stack/#assembly']] },
+  { key: 'projects', label: '납품실적', href: '/projects/', sub: [['납품실적', '/projects/'], ['현장 사진', '/projects/gallery/'], ['시공 협력사', '/projects/partners/'], ['인증·특허', '/projects/certification/']] },
   { key: 'support', label: '고객지원', href: '/support/downloads/', sub: [['자료실', '/support/downloads/'], ['온라인 문의', '/support/contact/']] },
 ];
 
@@ -423,8 +423,8 @@ const syncBar = `<div class="bf-sync"><span class="live"><i></i>블로그 자동
 const SB = hasFile('/uploads/banner-stories.jpg') ? '/uploads/banner-stories.jpg' : proj.banner;
 add('/projects/stories/', {
   desc: '중앙연도 주문제작 사례 — 규격품으로 맞지 않는 연도·덕트·부속을 도면과 현장 조건에 맞춰 제작한 실제 사례입니다.',
-  title: '주문제작 사례', section: 'projects', image: SB,
-  body: subPage({ en: 'Projects', title: '주문제작 사례', banner: SB, section: 'projects', current: '/projects/stories/', body:
+  title: '주문제작', section: 'product', image: SB,
+  body: subPage({ en: 'Products', title: '주문제작', banner: SB, section: 'product', current: '/projects/stories/', body:
     `<div style="padding-block:clamp(56px,7vw,96px)"><p class="bf-lead">규격품으로 맞지 않는 형태도 도면이나 스케치에 맞춰 제작합니다. 지금까지 주문제작한 연도와 부속을 소개합니다. 사진을 누르면 블로그 글로 이동합니다.</p>${syncBar}${stories.length ? storyCards(stories) : '<p class="bf-lead">주문제작 사례를 준비 중입니다.</p>'}<p class="bf-more"><a class="arrow" href="${esc(BLOG_URL)}" target="_blank" rel="noopener">블로그에서 더 보기</a></p></div>` }),
 });
 // 시공 협력사: 대표 실적은 idc_partner와 items의 시공사 이름으로 자동 연결 ((주)·㈜·주식회사·공백 무시)

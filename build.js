@@ -44,7 +44,7 @@ const ADDR_EN = '65, Jeonggeum-ro 238beon-gil, Gasan-myeon, Pocheon-si, Gyeonggi
 
 const stories = list(feed.posts).filter((p) => p && p.url && p.title);
 const BLOG_URL = feed.blog || 'https://blog.naver.com/jungangyeondo';
-const storyCards = (a) => `<div class="bf">${a.map((p) => `<a href="${esc(p.url)}" target="_blank" rel="noopener"><span class="ph">${p.image ? img(p.image, p.title) : ''}</span><b>${esc(p.title)}</b><small>${esc(String(p.date || '').replace(/-/g, '. '))}</small></a>`).join('')}</div>`;
+const storyCards = (a) => `<div class="bf">${a.map((p) => `<a href="${esc(p.url)}" target="_blank" rel="noopener"><span class="ph">${p.image ? img(p.image, p.title) : ''}</span><b>${esc(p.title)}</b></a>`).join('')}</div>`;
 
 const NAV = [
   { key: 'company', label: '회사소개', href: '/company/greeting/', sub: [['인사말', '/company/greeting/'], ['회사개요', '/company/overview/'], ['연혁', '/company/history/'], ['조직도', '/company/organization/'], ['오시는 길', '/company/location/']] },

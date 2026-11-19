@@ -67,7 +67,9 @@ function layout({ title, desc, url, section, body, image, en }) {
   const d = desc || site.seo_description;
   const canonical = baseUrl + url;
   const ogImg = baseUrl + (image || home.about_image || '');
-  const langLink = en ? '<a class="lang" href="/" lang="ko">한국어</a>' : '<a class="lang" href="/en/" lang="en">EN</a>';
+  const globe = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>';
+  const langLink = en ? `<a class="lang" href="/" lang="ko" title="한국어로 보기">${globe}<span>한국어</span></a>` : `<a class="lang" href="/en/" lang="en" title="View in English">${globe}<span>EN</span></a>`;
+  const langM = en ? `<a class="lang-m" href="/" lang="ko" aria-label="한국어로 보기">${globe}<span>KR</span></a>` : `<a class="lang-m" href="/en/" lang="en" aria-label="View in English">${globe}<span>EN</span></a>`;
   const EN_NAV = [['About', '#about'], ['Products', '#products'], ['Manufacturing', '#manufacturing'], ['References', '#references'], ['Contact', '#contact']];
   const gnbEn = EN_NAV.map(([l, h]) => `<div class="item"><a href="${h}">${l}</a></div>`).join('');
   const mnavEn = EN_NAV.map(([l, h]) => `<a href="${h}">${l}</a>`).join('') + '<a href="/" lang="ko">한국어</a>';
@@ -106,6 +108,7 @@ ${site.google_verification ? `<meta name="google-site-verification" content="${e
   <div class="wrap">
     <a class="brand" href="/" aria-label="${en ? 'JUNGANG YEONDO home' : esc(site.short_name) + ' 홈'}">${logo}<b>${en ? 'JUNGANG YEONDO' : esc(site.short_name)}</b></a>
     <nav class="gnb" aria-label="${en ? 'Main menu' : '주 메뉴'}">${en ? gnbEn : gnb}${langLink}</nav>
+    ${langM}
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mnav" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
   </div>
   <div class="mnav" id="mnav"><div class="wrap">${en ? mnavEn : mnav + '<b>Language</b><a href="/en/" lang="en">English</a>'}</div></div>

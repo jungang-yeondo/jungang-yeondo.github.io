@@ -3,6 +3,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # 블로그 '제작 실적' 새 글 반영 — 매일 07:23, 18:23 (한국시간)
+  schedule:
+    - cron: '23 22 * * *'
+    - cron: '23 9 * * *'
 permissions:
   contents: read
   pages: write
@@ -20,6 +24,9 @@ jobs:
           node-version: 20
       # 휴대폰용 작은 사진 자동 생성 (실패해도 배포는 계속 — 그때는 원본 사진을 그대로 씀)
       - run: npm install --no-save --no-audit --no-fund sharp && node variants.js
+        continue-on-error: true
+      # 블로그 '제작 실적' 글 가져오기 (실패해도 배포는 계속 — 그때는 기존 목록 사용)
+      - run: node blogfeed.js
         continue-on-error: true
       - run: node build.js
       - uses: actions/upload-pages-artifact@v3

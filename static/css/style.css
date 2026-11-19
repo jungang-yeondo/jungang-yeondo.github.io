@@ -644,3 +644,10 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
 .bf-more{margin:36px 0 0}
 @media (max-width:860px){.bf{grid-template-columns:repeat(2,1fr)}}
 .headrow+.bf{margin-top:28px}
+.bf-sync{display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;margin:-8px 0 32px;padding:14px 20px;border:1px solid var(--line);background:var(--bg-2);font-size:14px;color:var(--muted)}
+.bf-sync b{color:var(--ink);font-weight:600}
+.bf-sync .live{display:inline-flex;align-items:center;gap:8px;color:var(--ink);font-weight:600}
+.bf-sync .live i{width:8px;height:8px;border-radius:50%;background:#2ecc71;box-shadow:0 0 0 0 rgba(46,204,113,.6);animation:bfpulse 2s infinite}
+.bf-sync .at{margin-left:auto;font-family:var(--font-en);letter-spacing:.02em;font-size:13px}
+@keyframes bfpulse{0%{box-shadow:0 0 0 0 rgba(46,204,113,.55)}70%{box-shadow:0 0 0 8px rgba(46,204,113,0)}100%{box-shadow:0 0 0 0 rgba(46,204,113,0)}}
+@media (max-width:700px){.bf-sync{padding:12px 14px;gap:6px 14px;font-size:13px}.bf-sync .at{margin-left:0;width:100%}}

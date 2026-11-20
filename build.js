@@ -53,7 +53,7 @@ const kakaoBox = `<a class="kk" href="${KAKAO}" target="_blank" rel="noopener">$
 const kakaoFloat = `<a class="kkf" href="${KAKAO}" target="_blank" rel="noopener" aria-label="카카오톡 문의" title="카카오톡 문의">${kakaoSvg}</a>`;
 
 // 스테인리스 연도: 한눈에 보는 사양 (FAQ 답변과 같은 내용)
-const SPEC = [['재질', 'STS304', '포스코 스테인리스 · 외부관 AL 선택'], ['관경', 'Ø200 ~', '현장 조건에 맞춰 제작'], ['표준 길이', '977 · 477mm', '길이 조절관(AG)으로 맞춤'], ['구성', '단관 · 이중관 · 삼중관', '25mm 공기층 · 보온 50T/100T'], ['제작 기간', '평일 약 3일', '소구경은 더 빠르게 가능'], ['배송', '전국', '택배 · 화물차']];
+const SPEC = [['재질', 'STS304 · AL', 'STS 포스코 · AL(알루미늄 강판) 포스코스틸리온'], ['관경', 'Ø200 ~', '발주서 규격에 맞춰 제작'], ['직관 표준 길이', '977 · 477mm', '길이 조절관(AG)으로 맞춤'], ['구성', '단관 · 이중관 · 삼중관', '25mm 공기층 · 보온 25T/50T/100T'], ['제작 기간', '평일 약 3일', '작은 관경은 더 빠르게 가능'], ['배송', '전국', '대신택배 · 대신화물 · 화물차']];
 const specBox = `<div class="spec"><h3><i></i>한눈에 보는 사양</h3><dl>${SPEC.map(([k, v, n]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}<small>${esc(n)}</small></dd></div>`).join('')}</dl><div class="go"><span>BM(자재 내역)을 보내 주시면 빠르게 견적을 안내해 드립니다.</span><a href="${KAKAO}" target="_blank" rel="noopener">카카오톡 견적 문의 →</a></div></div>`;
 
 const NAV = [

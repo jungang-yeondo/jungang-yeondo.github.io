@@ -52,6 +52,10 @@ const kakaoSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#19191
 const kakaoBox = `<a class="kk" href="${KAKAO}" target="_blank" rel="noopener">${kakaoSvg}<span><b>카카오톡으로 견적 문의하기</b><small>평일 08:30~17:30 · BM(자재 내역)을 보내 주시면 빠르게 견적을 안내해 드립니다</small></span></a>`;
 const kakaoFloat = `<a class="kkf" href="${KAKAO}" target="_blank" rel="noopener" aria-label="카카오톡 문의" title="카카오톡 문의">${kakaoSvg}</a>`;
 
+// 스테인리스 연도: 한눈에 보는 사양 (FAQ 답변과 같은 내용)
+const SPEC = [['재질', 'STS304', '포스코 스테인리스 · 외부관 AL 선택'], ['관경', 'Ø200 ~', '현장 조건에 맞춰 제작'], ['표준 길이', '977 · 477mm', '길이 조절관(AG)으로 맞춤'], ['구성', '단관 · 이중관 · 삼중관', '25mm 공기층 · 보온 50T/100T'], ['제작 기간', '평일 약 3일', '소구경은 더 빠르게 가능'], ['배송', '전국', '택배 · 화물차']];
+const specBox = `<div class="spec"><h3><i></i>한눈에 보는 사양</h3><dl>${SPEC.map(([k, v, n]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}<small>${esc(n)}</small></dd></div>`).join('')}</dl><div class="go"><span>BM(자재 내역)을 보내 주시면 빠르게 견적을 안내해 드립니다.</span><a href="${KAKAO}" target="_blank" rel="noopener">카카오톡 견적 문의 →</a></div></div>`;
+
 const NAV = [
   { key: 'company', label: '회사소개', href: '/company/greeting/', sub: [['인사말', '/company/greeting/'], ['회사개요', '/company/overview/'], ['연혁', '/company/history/'], ['조직도', '/company/organization/'], ['오시는 길', '/company/location/']] },
   { key: 'business', label: '사업분야', href: '/business/', sub: [['사업분야', '/business/'], ['보유 설비 · 제작 기술', '/business/facility/']] },
@@ -345,7 +349,7 @@ add('/product/stack/', {
   title: '스테인리스 연도', section: 'product', image: prod.stack_image,
   desc: '스테인리스 조립식 이중연도 — STS304 내부관, 25mm 공기단열층, 단관·이중관·보온 삼중관, 재질·두께 규격과 주요 부품.',
   body: subPage({ en: 'Products', title: '스테인리스 연도', banner: prod.stack_banner || prod.banner, section: 'product', current: '/product/stack/', body:
-    two('Double-wall Stack', br(prod.stack_title), `<p class="quote" style="margin-bottom:20px">${br(prod.stack_quote)}</p><p class="lead" style="margin-top:0">${esc(prod.stack_intro)}</p><div class="duct-wide">${ductMotion('duct-motion')}</div>`) +
+    two('Double-wall Stack', br(prod.stack_title), `<p class="quote" style="margin-bottom:20px">${br(prod.stack_quote)}</p><p class="lead" style="margin-top:0">${esc(prod.stack_intro)}</p>${specBox}<div class="duct-wide">${ductMotion('duct-motion')}</div>`) +
     two('Feature', '특징', `<div class="feat4">${list(prod.features).map((f) => `<div><span class="en">${esc(f.en)}</span><b>${esc(f.title)}</b><p>${esc(f.text)}</p></div>`).join('')}</div>`) +
     two('Line-up', '구성 · 관경 산정', `<div class="lineup2">${list(prod.lineup).map((l, i) => `<div class="row">${l.image ? `<div class="ph">${img(l.image, l.title)}</div>` : `<div class="ph ic">${ICONS[Math.min(i, 2)]}</div>`}<div class="tx">${l.en ? `<span class="en">${esc(l.en)}</span>` : ''}<b>${esc(l.title)}</b><p>${esc(l.text)}</p><span class="f">${esc(l.formula)}</span></div></div>`).join('')}</div><p class="note">${esc(prod.lineup_note)}</p>`) +
     asmSec(prod.assembly, prod.assembly_title, 'assembly') +

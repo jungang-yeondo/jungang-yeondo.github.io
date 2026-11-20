@@ -704,3 +704,6 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
 .spec .go{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 22px;border-top:1px solid var(--line);font-size:14.5px}
 .spec .go a{color:var(--ink);font-weight:500;white-space:nowrap}
 @media (max-width:700px){.spec dl{grid-template-columns:1fr 1fr}.spec dl div{padding:14px 16px}.spec dl div:nth-child(3n){border-right:1px solid var(--line)}.spec dl div:nth-child(2n){border-right:0}.spec dl div:nth-last-child(-n+3){border-bottom:1px solid var(--line)}.spec dl div:nth-last-child(-n+2){border-bottom:0}.spec h3{padding:14px 16px}.spec .go{flex-direction:column;align-items:flex-start;padding:14px 16px}main .spec dt{font-size:13.5px!important}main .spec dd{font-size:16.5px!important}main .spec dd small{font-size:14px!important}}
+/* 영문 페이지: 휴대폰에서 회사명이 길어 메뉴 버튼이 밀려나지 않게 */
+@media (max-width:520px){html[lang=en] .top .brand b{font-size:13px;letter-spacing:0}}
+@media (max-width:360px){html[lang=en] .top .brand b{display:none}}

@@ -690,3 +690,17 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
 @media (max-width:700px){.faq summary{font-size:15.5px;padding:17px 2px}.faq .a{padding:0 2px 20px 22px;font-size:14.5px}}
 /* 휴대폰 가독성: 작은 설명 글씨 한 단계 키움 (50~60대 방문자) */
 @media (max-width:700px){main :is(dd,dt,td,th,small,label,li,.note,.tx span){font-size:15px!important;line-height:1.65}footer .c{font-size:13.5px}footer :is(dd,dt){font-size:15px}.p3d .hint{font-size:12.5px}main .ptn :is(.rf p,.rf a,.hl p,.hl a,.tg){font-size:14px!important}main .ptn .bd{font-size:12.5px!important}main .lpfip p{font-size:15px!important}main .lpfip .tg{font-size:12.5px!important}.secnote{font-size:14.5px}}
+/* 스테인리스 연도: 한눈에 보는 사양 */
+.spec{margin:28px 0 8px;border:1px solid var(--line);background:var(--bg-2)}
+.spec h3{margin:0;padding:16px 22px;border-bottom:1px solid var(--line);font-size:15px;font-weight:600;letter-spacing:.02em;display:flex;align-items:center;gap:10px}
+.spec h3 i{display:inline-block;width:4px;height:16px;background:var(--red)}
+.spec dl{display:grid;grid-template-columns:repeat(3,1fr);margin:0}
+.spec dl div{padding:18px 22px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.spec dl div:nth-child(3n){border-right:0}
+.spec dl div:nth-last-child(-n+3){border-bottom:0}
+.spec dt{font-size:13px;color:var(--muted);letter-spacing:.04em}
+.spec dd{margin:4px 0 0;font-size:17px;font-weight:600;line-height:1.45}
+.spec dd small{display:block;margin-top:2px;font-size:13.5px;font-weight:400;color:var(--muted)}
+.spec .go{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 22px;border-top:1px solid var(--line);font-size:14.5px}
+.spec .go a{color:var(--ink);font-weight:500;white-space:nowrap}
+@media (max-width:700px){.spec dl{grid-template-columns:1fr 1fr}.spec dl div{padding:14px 16px}.spec dl div:nth-child(3n){border-right:1px solid var(--line)}.spec dl div:nth-child(2n){border-right:0}.spec dl div:nth-last-child(-n+3){border-bottom:1px solid var(--line)}.spec dl div:nth-last-child(-n+2){border-bottom:0}.spec h3{padding:14px 16px}.spec .go{flex-direction:column;align-items:flex-start;padding:14px 16px}main .spec dt{font-size:13.5px!important}main .spec dd{font-size:16.5px!important}main .spec dd small{font-size:14px!important}}

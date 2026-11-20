@@ -450,7 +450,7 @@ footer .blog:hover{border-color:#03C75A}
 @media(max-width:900px){.pcard.has3d{grid-template-columns:1fr;gap:18px}.pcard.has3d .ph{aspect-ratio:4/3}}
 
 /* 기기 설정과 관계없이 항상 남색(다크) 배경 */
-:root,:root[data-theme="light"]{--bg:#0B111C;--bg-2:#121A28;--ink:#E8ECF2;--muted:#9AA4B5;--line:#253043;--navy:#8FAEE6;--red:#E8606A;color-scheme:dark}
+:root,:root[data-theme="light"]{--bg:#0B111C;--bg-2:#121A28;--ink:#E8ECF2;--muted:#AEB7C6;--line:#253043;--navy:#8FAEE6;--red:#E8606A;color-scheme:dark}
 /* 주요 부품: 모든 카드를 한 줄에 하나씩, 큰 화면 + 오른쪽 설명 */
 .pcards{grid-template-columns:1fr;gap:36px}
 .pcard{display:grid;grid-template-columns:2fr 1fr;gap:28px;align-items:center}
@@ -688,3 +688,5 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
 .faq-end{max-width:900px;margin-top:56px}
 .faq-end p{margin:0 0 16px;color:var(--muted)}
 @media (max-width:700px){.faq summary{font-size:15.5px;padding:17px 2px}.faq .a{padding:0 2px 20px 22px;font-size:14.5px}}
+/* 휴대폰 가독성: 작은 설명 글씨 한 단계 키움 (50~60대 방문자) */
+@media (max-width:700px){main :is(dd,dt,td,th,small,label,li,.note,.tx span){font-size:15px!important;line-height:1.65}footer .c{font-size:13.5px}footer :is(dd,dt){font-size:15px}.p3d .hint{font-size:12.5px}main .ptn :is(.rf p,.rf a,.hl p,.hl a,.tg){font-size:14px!important}main .ptn .bd{font-size:12.5px!important}main .lpfip p{font-size:15px!important}main .lpfip .tg{font-size:12.5px!important}.secnote{font-size:14.5px}}

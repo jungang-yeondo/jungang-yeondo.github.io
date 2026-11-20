@@ -707,3 +707,6 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
 /* 영문 페이지: 휴대폰에서 회사명이 길어 메뉴 버튼이 밀려나지 않게 */
 @media (max-width:520px){html[lang=en] .top .brand b{font-size:13px;letter-spacing:0}}
 @media (max-width:360px){html[lang=en] .top .brand b{display:none}}
+/* 영문 문의: 옆 칸 연락처 표가 좁아도 메일·번호가 줄바꿈되지 않게 */
+.info.cinfo th{width:72px;white-space:nowrap}.info.cinfo td{white-space:nowrap}
+@media (max-width:560px){.info.cinfo th{width:64px}.info.cinfo th,.info.cinfo td{font-size:15px!important}}

@@ -53,6 +53,11 @@ nav.gnb{margin-left:auto;display:flex}
 .gnb .sub a:hover{color:var(--red)}
 .menu-btn{display:none;margin-left:auto;background:none;border:0;color:inherit;cursor:pointer;width:44px;height:44px;padding:10px}
 .menu-btn span{display:block;height:2px;background:currentColor;margin:6px 0}
+.menu-btn{height:auto;padding:6px 10px 4px}
+.menu-btn span{margin:5px 0}
+.menu-btn em{display:block;margin-top:4px;font-style:normal;font-size:10.5px;font-weight:500;line-height:1;letter-spacing:.02em;text-align:center;white-space:nowrap}
+.menu-btn em::before{content:attr(data-o)}
+.menu-btn[aria-expanded="true"] em::before{content:attr(data-c)}
 .mnav{display:none;background:var(--bg);color:var(--ink);border-top:1px solid var(--line);max-height:calc(100vh - 84px);overflow:auto}
 .top .mnav .wrap{display:block;height:auto;padding-block:12px 24px}
 .mnav b{display:block;font-size:13px;color:var(--red);margin:16px 0 4px;letter-spacing:.06em}

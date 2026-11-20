@@ -109,7 +109,7 @@ ${site.google_verification ? `<meta name="google-site-verification" content="${e
     <a class="brand" href="/" aria-label="${en ? 'JUNGANG YEONDO home' : esc(site.short_name) + ' 홈'}">${logo}<b>${en ? 'JUNGANG YEONDO' : esc(site.short_name)}</b></a>
     <nav class="gnb" aria-label="${en ? 'Main menu' : '주 메뉴'}">${en ? gnbEn : gnb}${langLink}</nav>
     ${langM}
-    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mnav" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mnav" aria-label="메뉴 열기"><span></span><span></span><span></span><em data-o="${en ? 'MENU' : '메뉴'}" data-c="${en ? 'CLOSE' : '닫기'}"></em></button>
   </div>
   <div class="mnav" id="mnav"><div class="wrap">${en ? mnavEn : mnav + '<b>Language</b><a href="/en/" lang="en">English</a>'}</div></div>
 </header>

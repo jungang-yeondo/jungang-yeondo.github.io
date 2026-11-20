@@ -66,17 +66,28 @@ const NAV = [
 
 const logo = `<img class="logo-img" src="/uploads/jungang-logo.png" alt="" width="328" height="150" decoding="async">`;
 
+// 영문 페이지 메뉴 (문구는 여기서 직접 고칩니다)
+const EN_NAV = [
+  { key: 'about', label: 'About', href: '/en/about/' },
+  { key: 'products', label: 'Products', href: '/en/products/chimney/', sub: [['Double-wall chimney', '/en/products/chimney/'], ['LPF gas-tight flue', '/en/products/lpf/']] },
+  { key: 'references', label: 'References', href: '/en/references/' },
+  { key: 'certification', label: 'Patents', href: '/en/certification/' },
+  { key: 'contact', label: 'Contact', href: '/en/contact/' },
+];
+const EN_PAIR = { '/en/': '/', '/en/about/': '/company/greeting/', '/en/products/chimney/': '/product/stack/', '/en/products/lpf/': '/product/lpf/', '/en/references/': '/projects/', '/en/certification/': '/projects/certification/', '/en/contact/': '/support/contact/' };
+
 function layout({ title, desc, url, section, body, image, en }) {
   const fullTitle = en ? title : title ? `${title} | 중앙연도` : site.seo_title;
   const d = desc || site.seo_description;
   const canonical = baseUrl + url;
   const ogImg = baseUrl + (image || home.about_image || '');
   const globe = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>';
-  const langLink = en ? `<a class="lang" href="/" lang="ko" title="한국어로 보기">${globe}<span>한국어</span></a>` : `<a class="lang" href="/en/" lang="en" title="View in English">${globe}<span>EN</span></a>`;
-  const langM = en ? `<a class="lang-m" href="/" lang="ko" aria-label="한국어로 보기">${globe}<span>KR</span></a>` : `<a class="lang-m" href="/en/" lang="en" aria-label="View in English">${globe}<span>EN</span></a>`;
-  const EN_NAV = [['About', '#about'], ['Products', '#products'], ['Manufacturing', '#manufacturing'], ['References', '#references'], ['Contact', '#contact']];
-  const gnbEn = EN_NAV.map(([l, h]) => `<div class="item"><a href="${h}">${l}</a></div>`).join('');
-  const mnavEn = EN_NAV.map(([l, h]) => `<a href="${h}">${l}</a>`).join('') + '<a href="/" lang="ko">한국어</a>';
+  // 한국어 ↔ 영어 같은 내용 페이지끼리 연결 (짝이 없으면 각 언어 첫 화면으로)
+  const pair = en ? (EN_PAIR[url] || '/') : (Object.keys(EN_PAIR).find((k) => EN_PAIR[k] === url) || '/en/');
+  const langLink = en ? `<a class="lang" href="${pair}" lang="ko" title="한국어로 보기">${globe}<span>한국어</span></a>` : `<a class="lang" href="${pair}" lang="en" title="View in English">${globe}<span>EN</span></a>`;
+  const langM = en ? `<a class="lang-m" href="${pair}" lang="ko" aria-label="한국어로 보기">${globe}<span>KR</span></a>` : `<a class="lang-m" href="${pair}" lang="en" aria-label="View in English">${globe}<span>EN</span></a>`;
+  const gnbEn = EN_NAV.map((n) => `<div class="item"><a href="${n.href}"${n.key === section ? ' aria-current="true"' : ''}>${n.label}</a>${n.sub ? `<div class="sub">${n.sub.map(([l, h]) => `<a href="${h}">${l}</a>`).join('')}</div>` : ''}</div>`).join('');
+  const mnavEn = '<b>JUNGANG YEONDO</b><a href="/en/">Home</a>' + EN_NAV.map((n) => n.sub ? `<b>${n.label}</b>${n.sub.map(([l, h]) => `<a href="${h}">${l}</a>`).join('')}` : `<a href="${n.href}">${n.label}</a>`).join('') + `<b>Language</b><a href="${pair}" lang="ko">한국어</a>`;
   const gnb = NAV.map((n) => `<div class="item"><a href="${n.href}"${n.key === section ? ' aria-current="true"' : ''}>${n.label}</a><div class="sub">${n.sub.map(([l, h]) => `<a href="${h}">${l}</a>`).join('')}</div></div>`).join('');
   const mnav = NAV.map((n) => `<b>${n.label}</b>${n.sub.map(([l, h]) => `<a href="${h}">${l}</a>`).join('')}`).join('');
   return `<!doctype html>
@@ -87,7 +98,7 @@ ${PRIVATE ? '<meta name="robots" content="noindex, nofollow">\n' : ''}<meta name
 <title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(d)}">
 <link rel="canonical" href="${esc(canonical)}">
-${url === '/' || url === '/en/' ? `<link rel="alternate" hreflang="ko" href="${esc(baseUrl)}/">\n<link rel="alternate" hreflang="en" href="${esc(baseUrl)}/en/">` : ''}
+${(() => { const k = en ? EN_PAIR[url] : url, e = en ? url : Object.keys(EN_PAIR).find((x) => EN_PAIR[x] === url); return k && e ? `<link rel="alternate" hreflang="ko" href="${esc(baseUrl + k)}">\n<link rel="alternate" hreflang="en" href="${esc(baseUrl + e)}">` : ''; })()}
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="${esc(site.short_name)}">
 <meta property="og:title" content="${esc(fullTitle)}">
@@ -110,7 +121,7 @@ ${site.google_verification ? `<meta name="google-site-verification" content="${e
 <body class="over">
 <header class="top" id="top">
   <div class="wrap">
-    <a class="brand" href="/" aria-label="${en ? 'JUNGANG YEONDO home' : esc(site.short_name) + ' 홈'}">${logo}<b>${en ? 'JUNGANG YEONDO' : esc(site.short_name)}</b></a>
+    <a class="brand" href="${en ? '/en/' : '/'}" aria-label="${en ? 'JUNGANG YEONDO home' : esc(site.short_name) + ' 홈'}">${logo}<b>${en ? 'JUNGANG YEONDO' : esc(site.short_name)}</b></a>
     <nav class="gnb" aria-label="${en ? 'Main menu' : '주 메뉴'}">${en ? gnbEn : gnb}${langLink}</nav>
     ${langM}
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mnav" aria-label="메뉴 열기"><span></span><span></span><span></span><em data-o="${en ? 'MENU' : '메뉴'}" data-c="${en ? 'CLOSE' : '닫기'}"></em></button>
@@ -129,7 +140,7 @@ ${body}
 </section>
 <footer>
   <div class="wrap">
-    <a class="brand" href="/" aria-label="${esc(site.short_name)} 홈">${logo}</a>
+    <a class="brand" href="${en ? '/en/' : '/'}" aria-label="${esc(site.short_name)} 홈">${logo}</a>
     ${en ? `<dl>
       <div><dt>Company</dt><dd>${esc(site.name_en)}</dd></div>
       <div><dt>Business Reg. No.</dt><dd>${esc(site.bizno)}</dd></div>
@@ -146,7 +157,7 @@ ${body}
       <div><dt>FAX</dt><dd>${esc(site.fax)}</dd></div>
       <div><dt>E-mail</dt><dd>${esc(site.email)}</dd></div>
     </dl>`}
-    <div class="c"><span>© ${new Date().getFullYear()} ${esc(site.name_en)} All rights reserved.${en ? '' : '<br>본 사이트의 사진·도면·카탈로그는 (주)중앙연도의 저작물로 무단 복제·사용을 금합니다.'}</span><span class="fl">${site.blog ? `<a class="blog" href="${esc(site.blog)}" target="_blank" rel="noopener"><i>N</i>블로그</a>` : ''}${en ? '<a href="/" lang="ko">한국어</a>' : '<a href="/privacy/">개인정보처리방침</a>'}</span></div>
+    <div class="c"><span>© ${new Date().getFullYear()} ${esc(site.name_en)} All rights reserved.${en ? '' : '<br>본 사이트의 사진·도면·카탈로그는 (주)중앙연도의 저작물로 무단 복제·사용을 금합니다.'}</span><span class="fl">${site.blog ? `<a class="blog" href="${esc(site.blog)}" target="_blank" rel="noopener"><i>N</i>${en ? 'Blog' : '블로그'}</a>` : ''}${en ? '<a href="/en/contact/">Contact</a>' : '<a href="/privacy/">개인정보처리방침</a>'}</span></div>
   </div>
 </footer>
 ${en ? '' : kakaoFloat}
@@ -549,33 +560,158 @@ ${site.naver_analytics ? '<p><b>방문 기록 분석</b><br>방문 통계 확인
 });
 
 
-// ---------- ENGLISH (한 장짜리 영문 요약 · 문구는 여기서 직접 고칩니다) ----------
+// ---------- ENGLISH (핵심 페이지 영문판 · 문구는 여기서 직접 고칩니다) ----------
 {
   const L = list(proj.idc);
   const gens = L.reduce((s, r) => s + [...String(r.scale || '').matchAll(/×\s*(\d+)\s*대/g)].reduce((a, m) => a + +m[1], 0), 0);
   const sizes = L.flatMap((r) => [...String(r.size || '').matchAll(/Ø\s*(\d+)|(\d+)\s*A/g)].map((m) => +(m[1] || m[2])));
   const ipCount = list(proj.patents).length;
   const refs = ['Bank of Korea', 'Embassy of France in Korea', 'Asan Medical Center', 'Korea University Ansan Hospital', 'Inha University', 'Jamsil Indoor Stadium', 'SK hynix', 'Samsung Electronics Onyang Campus', 'Hyundai Motor Jeonju Plant', 'LG Energy Solution Ochang', 'NAVER Data Center GAK Sejong', 'Lotte World Busan'];
+  const IP_EN = {
+    '10-2955411': 'Insulated flue using rolling plates',
+    '10-2917514': 'Flue with cooling channels',
+    '10-2789643': 'Pipe connector for high-temperature exhaust gas',
+    '10-2774048': 'Pipe assembly',
+    '40-2227790': 'LPF · Leakage Prevention Flange',
+    '10-2301203': 'Automated pipe pre-forming device and pipe manufacturing method',
+    '30-1121362': 'Band for joining pipes',
+    '10-1939190': 'Air duct assembly for flues',
+    '10-1648312': 'Insulated flue assembly',
+    '10-1457159': 'System for preventing condensation inside a flue',
+  };
+  const TYPE_EN = { 특허: 'Patent', 상표: 'Trademark', 디자인: 'Design' };
+  const IDC_EN = {
+    '김포 IDC 1단계': 'Gimpo data center, phase 1', '이퀴닉스 향동동 SLX2-3': 'Equinix Hyangdong SLX2-3', '가산 GAMMA PJ': 'Gasan GAMMA project',
+    '경북 KT IDC': 'KT data center, Gyeongbuk', '강남 IDC': 'Gangnam data center', '가산동 IDC': 'Gasan-dong data center', '양주 SK B IDC': 'SK data center, Yangju',
+    '이퀴닉스 향동동 SLX2-2': 'Equinix Hyangdong SLX2-2', '광주 NHN IDC': 'NHN data center, Gwangju', '이퀴닉스 향동동 SLX2-1': 'Equinix Hyangdong SLX2-1',
+    '드림마크원 1·2차': 'Dream Mark One, phases 1–2', '상암동 IDC': 'Sangam-dong data center',
+  };
+  const scaleEn = (t) => String(t || '').replace(/디젤/g, 'Diesel').replace(/터빈/g, 'Turbine').replace(/kW\s*×\s*(\d+)\s*대/g, ' kW × $1');
   const card = (im, alt, t, p) => `<article>${im && hasFile(im) ? `<div class="im">${img(im, alt)}</div>` : ''}<h3>${t}</h3>${p}</article>`;
-  const banner = hasFile(prod.stack_banner) ? prod.stack_banner : prod.banner;
+  const EN_LNB = [['About', '/en/about/'], ['Double-wall chimney', '/en/products/chimney/'], ['LPF gas-tight flue', '/en/products/lpf/'], ['References', '/en/references/'], ['Patents', '/en/certification/'], ['Contact', '/en/contact/']];
+  const enSub = ({ label, title, banner, current, body }) => `<section class="subvis">${img(banner, '', ' fetchpriority="high"' + srcset(banner)).replace(' loading="lazy"', '')}<div class="wrap"><div class="en">${esc(label)}</div><h1>${esc(title)}</h1></div></section>
+<nav class="lnb" aria-label="Section menu"><div class="wrap">${EN_LNB.map(([l, h]) => `<a href="${h}"${h === current ? ' aria-current="true"' : ''}>${l}</a>`).join('')}</div></nav>
+<div class="wrap enpage">${body}</div>`;
+  const enAdd = (url, key, { title, desc, image, label, banner, body }) => add(url, { en: true, section: key, image, title: `${title} | JUNGANG YEONDO`, desc, body: enSub({ label, title, banner, current: url, body }) });
+  const more = (h, t) => `<p style="margin-top:22px"><a class="arrow" href="${h}">${t}</a></p>`;
+  const stackBanner = hasFile(prod.stack_banner) ? prod.stack_banner : prod.banner;
+  const lpfBanner = hasFile(prod.lpf_banner) ? prod.lpf_banner : prod.banner;
+  const nums = `<div class="nums" style="margin-top:36px"><div><b>2008</b><span>Founded</span></div><div><b>13,000<sup>+</sup></b><span>Sites supplied</span></div><div><b>${ipCount}</b><span>Patents, design &amp; trademark registrations</span></div></div>`;
+  const aboutText = `<div class="prose"><p>${esc(site.name_en)} manufactures prefabricated stainless steel chimney and flue systems for boilers, emergency generators and absorption chiller-heaters.</p><p>Our founder worked on chimney installation sites from 2000 before opening the workshop in 2008, and the company was incorporated in 2013. That hands-on experience still guides how we build: sections that go together quickly on site, with joints designed to stay gas-tight.</p><p>We fabricate to order from the contractor's drawings and have supplied more than 13,000 sites across Korea, as well as projects overseas.</p></div>`;
+  const mfgList = `<ul class="enlist"><li><b>CNC fiber laser cutting</b><span>Parts are cut directly from CAD flat patterns, so even curved fittings come out to consistent dimensions.</span></li><li><b>Automatic seam welding</b><span>Pipe bodies are welded on an automatic seam welder for uniform quality along the whole seam.</span></li><li><b>Flange forming</b><span>Dedicated equipment forms the pipe ends for V-band assembly, with an even profile all the way around.</span></li><li><b>Laser and TIG welding</b><span>Fittings are assembled with laser welding, which keeps distortion and discoloration of thin stainless sheet low, and with TIG welding where it suits the part.</span></li></ul>`;
+  const SPEC_EN = [['Material', 'STS304 · AL', 'POSCO stainless steel · aluminum-coated steel by POSCO Steeleon'], ['Diameter', 'Ø200 and up', 'Made to the sizes on your order'], ['Straight sections', '977 · 477 mm', 'Adjustable-length sections for exact fit'], ['Construction', 'Single · double · triple wall', '25 mm air gap · 25, 50 or 100 mm insulation'], ['Lead time', 'About 3 working days', 'Small diameters can be faster'], ['Delivery', 'Nationwide in Korea', 'Export shipments by arrangement']];
+  const specEn = `<div class="spec"><h3><i></i>Specifications at a glance</h3><dl>${SPEC_EN.map(([k, v, n]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}<small>${esc(n)}</small></dd></div>`).join('')}</dl><div class="go"><span>Send us your bill of materials and we will reply with a quotation.</span><a href="/en/contact/">Request a quotation →</a></div></div>`;
+  const thick = `<div class="tw"><table class="tbl"><thead><tr><th>Flue diameter</th><th class="c">up to Ø900</th><th class="c">Ø1000 – 1500</th><th class="c">Ø1600 and up</th></tr></thead><tbody><tr><td>STS304 inner pipe</td><td class="c num">0.8 mm</td><td class="c num">1.2 mm</td><td class="c num">1.5 mm</td></tr><tr><td>Outer casing, outdoor (STS304)</td><td class="c num">0.6 mm</td><td class="c num">0.8 mm</td><td class="c num">1.2 mm</td></tr><tr><td>Outer casing, indoor (aluminum-coated steel)</td><td class="c num">0.8 mm</td><td class="c num">0.8 mm</td><td class="c num">1.2 mm</td></tr></tbody></table></div><p class="note">Other lengths, materials and thicknesses are available on request.</p>`;
+  const ASM_EN = [
+    ['Apply sealant', 'Heat-resistant sealant is filled evenly along the groove inside the V-band.'],
+    ['Hang the V-band', 'The V-band is first hung on the flange at the end of the lower section.'],
+    ['Join the sections', 'The next section is lowered so the two flanges meet inside the V-band.'],
+    ['Bolt the V-band', 'Bolts go through the two brackets at the ends of the V-band and are tightened to lock the inner pipes together.'],
+    ['Fit the C-cover', 'A C-cover is hooked onto the grooves of the outer casing to cover the V-band completely, then bolted.'],
+    ['Finished joint', 'The joint is neatly closed by the C-cover.'],
+  ];
+  const ASM_LPF_EN = ASM_EN.map((x, i) => i === 1 ? ['Hang the V-band', 'The V-band is first hung on the flange that carries the factory-fitted gasket.'] : i === 2 ? ['Join the sections', 'The grooved flange of the next section is lowered so the groove and gasket lock together.'] : x);
+  const asmEn = (items, T, title) => asmSec(list(items).map((a, i) => ({ ...a, title: (T[i] || [])[0] || a.title, text: (T[i] || [])[1] || a.text })), title, 'assembly').replace(/ 조립 영상"/g, ' (assembly video)"');
+  const xsecEn = XSEC.replace('이중연도 단면: 내부관, 25mm 공기층, 외부 커버', 'Double-wall chimney cross-section: inner pipe, 25 mm air gap, outer casing').replace('>외부 커버<', '>Outer casing<').replace('>STS304 또는<', '>STS304 or<').replace('>알루미늄 도금강판<', '>aluminum-coated steel<').replace('>공기단열층<', '>Air gap<').replace('>내부관<', '>Inner pipe<');
+  const lpfSvgEn = LPF_SVG.replace('LPF 이음부 단면도', 'LPF joint cross-section').replace('V밴드 · STS304', 'V-band · STS304').replace('패킹 Ø6–8 (세라믹 / 내열실리콘)', 'Gasket Ø6–8 (ceramic / silicone)').replace('>외부 커버<', '>Outer casing<').replace('STS304 내부관', 'STS304 inner pipe');
+  const certImg = (n) => hasFile(`/uploads/cert/cert-${n}-s.jpg`);
+
+  // 1. 영문 첫 화면
   add('/en/', {
     en: true, section: 'en', image: home.about_image,
     title: 'Stainless Steel Chimney & Flue Systems | JUNGANG YEONDO',
     desc: 'JUNGANG YEONDO is a Korean manufacturer of prefabricated stainless steel double-wall chimney systems and LPF gas-tight flues for boilers, generators and absorption chiller-heaters.',
-    body: `<section class="subvis">${img(banner, 'Stainless steel chimney sections ready for shipment', ' fetchpriority="high"' + srcset(banner)).replace(' loading="lazy"', '')}<div class="wrap"><div class="en">Stainless Steel Chimney · Since 2008</div><h1>Stainless steel chimney systems, built to order in Korea</h1></div></section>
+    body: `<section class="subvis">${img(stackBanner, 'Stainless steel chimney sections ready for shipment', ' fetchpriority="high"' + srcset(stackBanner)).replace(' loading="lazy"', '')}<div class="wrap"><div class="en">Stainless Steel Chimney · Since 2008</div><h1>Stainless steel chimney systems, built to order in Korea</h1></div></section>
 <div class="wrap enpage">
-<div id="about">${two('About', 'A manufacturer focused on one product', `<div class="prose"><p>${esc(site.name_en)} manufactures prefabricated stainless steel chimney and flue systems for boilers, emergency generators and absorption chiller-heaters.</p><p>Our founder worked on chimney installation sites from 2000 before opening the workshop in 2008, and the company was incorporated in 2013. That hands-on experience still guides how we build: sections that go together quickly on site, with joints designed to stay gas-tight.</p><p>We fabricate to order from the contractor's drawings and have supplied more than 13,000 sites across Korea, as well as projects overseas.</p></div>
-<div class="nums" style="margin-top:36px"><div><b>2008</b><span>Founded</span></div><div><b>13,000<sup>+</sup></b><span>Sites supplied</span></div><div><b>${ipCount}</b><span>Patents, design &amp; trademark registrations</span></div></div>`)}</div>
-<div id="products">${two('Products', 'Product range', `<div class="encards">
-${card(home.product1_image, 'Prefabricated stainless steel double-wall chimney', 'Prefabricated double-wall chimney', `<p>A Type 304 stainless steel (STS304) inner pipe, a 25&nbsp;mm air gap for insulation, and an outer casing in stainless steel or aluminum-coated steel. Available as single-wall, double-wall and insulated triple-wall (50&nbsp;mm or 100&nbsp;mm insulation).</p><ul><li>Standard section lengths: 977&nbsp;mm and 477&nbsp;mm</li><li>Inner pipe thickness: 0.8&nbsp;mm up to Ø900, 1.2&nbsp;mm for Ø1000–1500, 1.5&nbsp;mm from Ø1600</li><li>Other lengths, materials and thicknesses on request</li></ul>`)}
-${card(home.product2_image, 'LPF gas-tight flue', 'LPF gas-tight flue', `<p>LPF (Leakage Prevention Flange) is a patented joint design. A groove formed in the flange holds the gasket in place, and a V-band clamp compresses it evenly around the joint. Gaskets are fitted at the factory, so on site the sections are simply aligned and clamped.</p><ul><li>Ceramic gaskets for high-temperature generator exhaust, heat-tested at over 800&nbsp;°C for 24 hours</li><li>Heat-resistant silicone gaskets for condensing boilers, where condensate is a concern</li><li>Korean Patent No. 10-1648312 and registered trademark No. 40-2227790, with rights held jointly with Mirae Stack</li></ul>`)}
-${card('', '', 'Fittings and supports', `<p>Everything needed to complete a chimney line: 45° and 90° elbows, tees and Y-junctions, reducers, adjustable-length sections, expansion bellows for generator lines, dampers, drain sections, inspection ports, rain caps, and wall and floor supports.</p><p><a class="mlink" href="/product/parts/">View the parts in 3D →</a></p>`)}
-</div>`)}</div>
-<div id="manufacturing">${two('Manufacturing', 'Made in our own plant', `<div class="prose"><p>All fabrication is done at our plant in Pocheon, Gyeonggi-do.</p></div><ul class="enlist"><li><b>CNC fiber laser cutting</b><span>Parts are cut directly from CAD flat patterns, so even curved fittings come out to consistent dimensions.</span></li><li><b>Automatic seam welding</b><span>Pipe bodies are welded on an automatic seam welder for uniform quality along the whole seam.</span></li><li><b>Flange forming</b><span>Dedicated equipment forms the pipe ends for V-band assembly, with an even profile all the way around.</span></li><li><b>Laser and TIG welding</b><span>Fittings are assembled with laser welding, which keeps distortion and discoloration of thin stainless sheet low, and with TIG welding where it suits the part.</span></li></ul>`)}</div>
-<div id="references">${two('References', 'Selected projects', `${L.length ? `<p class="lead" style="margin-top:0">Emergency generator exhaust systems for ${L.length} data centers: ${gens} generators in total, with flue diameters from Ø${Math.min(...sizes)} to Ø${Math.max(...sizes)}.</p>` : ''}<ul class="enrefs">${refs.map((r) => `<li>${r}</li>`).join('')}</ul><p class="note">The full reference list is available in Korean on the <a href="/projects/" style="text-decoration:underline">project page</a>.</p>`)}</div>
-<div id="contact">${two('Contact', 'Inquiries and quotations', `<table class="info"><tr><th>Company</th><td>${esc(site.name_en)}</td></tr><tr><th>E-mail</th><td><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></td></tr><tr><th>Tel / Fax</th><td class="num">${esc(intl(site.tel))} / ${esc(intl(site.fax))}</td></tr><tr><th>Address</th><td>${esc(ADDR_EN)}</td></tr><tr><th>Catalogs</th><td>${list(sup.downloads).filter((d) => d.file && /카탈로그/.test(d.title)).map((d) => `<a href="${esc(d.file)}" download style="text-decoration:underline">${/LPF/.test(d.title) ? 'LPF gas-tight flue catalog' : 'Double-wall chimney catalog'}</a>`).join(' · ')} (PDF, in Korean)</td></tr></table><p class="note">For a quotation, please e-mail your drawings together with the equipment type, outlet diameter and quantities.</p>`)}</div>
+${two('About', 'A manufacturer focused on one product', aboutText + nums + more('/en/about/', 'About the company'))}
+${two('Products', 'Product range', `<div class="encards">
+${card(home.product1_image, 'Prefabricated stainless steel double-wall chimney', 'Prefabricated double-wall chimney', `<p>A Type 304 stainless steel (STS304) inner pipe, a 25&nbsp;mm air gap for insulation, and an outer casing in stainless steel or aluminum-coated steel. Single, double and insulated triple wall.</p><p><a class="mlink" href="/en/products/chimney/">Specifications →</a></p>`)}
+${card(home.product2_image, 'LPF gas-tight flue', 'LPF gas-tight flue', `<p>A patented flange joint: the gasket sits in a groove formed in the flange and a V-band clamp compresses it evenly. Gaskets are fitted at the factory.</p><p><a class="mlink" href="/en/products/lpf/">How it works →</a></p>`)}
+${card('', '', 'Fittings and supports', `<p>Everything needed to complete a chimney line: elbows, tees and Y-junctions, reducers, adjustable-length sections, expansion bellows, dampers, drain sections, rain caps, and wall and floor supports.</p><p><a class="mlink" href="/product/parts/">View the parts in 3D →</a></p>`)}
+</div>`)}
+${two('Manufacturing', 'Made in our own plant', `<div class="prose"><p>All fabrication is done at our plant in Pocheon, Gyeonggi-do.</p></div>${mfgList}`)}
+${two('References', 'Selected projects', `${L.length ? `<p class="lead" style="margin-top:0">Emergency generator exhaust systems for ${L.length} data centers: ${gens} generators in total, with flue diameters from Ø${Math.min(...sizes)} to Ø${Math.max(...sizes)}.</p>` : ''}<ul class="enrefs">${refs.slice(0, 6).map((r) => `<li>${r}</li>`).join('')}</ul>${more('/en/references/', 'All references')}`)}
 </div>`,
   });
+
+  // 2. 회사 소개
+  const hist = [['2026', `Certified as an Excellent Employer by the Ministry of Justice (No. 105)`]].concat(
+    list(proj.patents).map((p) => [p.year, `${TYPE_EN[p.type] || p.type} registered: ${IP_EN[p.number] || p.title} (No. ${p.number})`]),
+    [['2013', `Incorporated as ${site.name_en}`], ['2008', 'Founded as Jungang Stack, a chimney fabrication workshop']]);
+  enAdd('/en/about/', 'about', {
+    title: 'About Us', label: 'Company', banner: home.cta_image, image: home.about_image,
+    desc: 'JUNGANG YEONDO, founded in 2008 in Pocheon, Korea, fabricates prefabricated stainless steel chimney and flue systems to order and has supplied more than 13,000 sites.',
+    body: two('About', 'A manufacturer focused on one product', aboutText + nums) +
+      two('History', 'Milestones', `<div class="tw"><table class="tbl"><tbody>${hist.map(([y, t]) => `<tr><td class="num" style="width:90px">${esc(y)}</td><td>${esc(t)}</td></tr>`).join('')}</tbody></table></div>`) +
+      two('Manufacturing', 'Made in our own plant', `<div class="prose"><p>Cutting, forming, welding and assembly are all done at our plant in Pocheon, Gyeonggi-do, about an hour north of Seoul.</p></div>${mfgList}`) +
+      two('Location', 'Head office and plant', `<table class="info"><tr><th>Company</th><td>${esc(site.name_en)}</td></tr><tr><th>Address</th><td>${esc(ADDR_EN)}</td></tr><tr><th>Tel / Fax</th><td class="num">${esc(intl(site.tel))} / ${esc(intl(site.fax))}</td></tr><tr><th>E-mail</th><td><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></td></tr></table>${more('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(ADDR_EN), 'Open in Google Maps')}`),
+  });
+
+  // 3. 스테인리스 이중연도
+  enAdd('/en/products/chimney/', 'products', {
+    title: 'Double-wall Chimney', label: 'Products', banner: stackBanner, image: prod.stack_image,
+    desc: 'Prefabricated stainless steel double-wall chimney: STS304 inner pipe, 25 mm air gap, single, double and insulated triple wall, Ø200 and up, 977 / 477 mm sections.',
+    body: two('Double-wall Chimney', 'Prefabricated stainless steel chimney', `<p class="lead" style="margin-top:0">A Type 304 stainless steel (STS304) inner pipe and an outer casing are held 25&nbsp;mm apart by spacers. The air gap insulates the flue without any extra work on site, and the sections join with V-band clamps.</p>${specEn}<div style="max-width:520px;margin-top:36px">${xsecEn}</div>`) +
+      two('Features', 'Why it works', `<div class="feat4"><div><span class="en">Economy</span><b>Compact and quick to install</b><p>Optimized outer diameters take less shaft space, and precise prefabricated sections cut installation time on site.</p></div><div><span class="en">Durability</span><b>Corrosion resistant</b><p>The STS304 inner pipe resists the chemicals in exhaust gas and acidic condensate for a long service life.</p></div><div><span class="en">Insulation</span><b>Insulated by design</b><p>The 25&nbsp;mm air gap provides basic insulation, with added insulation for hot or exposed runs.</p></div><div><span class="en">Safety</span><b>Gas-tight joints</b><p>Tight joints keep exhaust and harmful gases inside the flue.</p></div></div>`) +
+      two('Line-up', 'Construction and outer diameter', `<div class="lineup2">${[['Single Wall', 'Single wall', 'One layer of STS304 pipe, for exposed runs inside a plant room where no insulation is needed.', 'Outer Ø = D'], ['Double Wall · Air Insulated', 'Air-insulated double wall', 'Inner pipe and casing held 25 mm apart. The standard construction, with no extra insulation work needed.', 'Outer Ø = D + 50'], ['Triple Wall · 50T', 'Insulated triple wall, 50 mm', '50 mm insulation and an outer jacket added outside the double wall, reducing heat loss and condensation outdoors.', 'Outer Ø = D + 150'], ['Triple Wall · 100T', 'Insulated triple wall, 100 mm', 'Two layers of 50 mm insulation for cold climates and long outdoor runs.', 'Outer Ø = D + 250']].map(([en, t, x, f], i) => { const im = (list(prod.lineup)[i] || {}).image; return `<div class="row">${im ? `<div class="ph">${img(im, t)}</div>` : ''}<div class="tx"><span class="en">${en}</span><b>${t}</b><p>${x}</p><span class="f">${f}</span></div></div>`; }).join('')}</div><p class="note">D = inner pipe diameter. A 25 mm insulation option that fills the air gap is also available.</p>`) +
+      two('Thickness', 'Sheet thickness by diameter', thick) +
+      asmEn(prod.assembly, ASM_EN, 'How the sections join') +
+      two('Fittings', 'Fittings and supports', `<p class="lead" style="margin-top:0">45° and 90° elbows, tees and Y-junctions, reducers, adjustable-length sections, expansion bellows for generator lines, dampers, drain sections, inspection ports, rain caps, and wall and floor supports. Special fittings are made to drawings.</p>${more('/product/parts/', 'View the parts in 3D')}`),
+  });
+
+  // 4. LPF 기밀연도
+  enAdd('/en/products/lpf/', 'products', {
+    title: 'LPF Gas-tight Flue', label: 'Leakage Prevention Flange', banner: lpfBanner, image: prod.banner,
+    desc: 'LPF (Leakage Prevention Flange) gas-tight flue: a patented grooved flange with a factory-fitted gasket, clamped by a V-band. For emergency generators and condensing boilers.',
+    body: two('Leakage Prevention Flange', 'LPF gas-tight flue', `<p class="lead" style="margin-top:0">LPF is our patented joint for double-wall flues. A groove formed around the flange holds the gasket in place, and a V-band clamp compresses it evenly around the joint. Gaskets are fitted at the factory, so on site the sections are simply aligned and clamped.</p><div style="margin-top:32px">${lpfSvgEn}</div>`) +
+      two('Design', 'How it is made', `<div class="encards">${card('/uploads/lpf-flange-groove-01.jpg', 'LPF flange with a gasket groove', 'Grooved flange', '<p>A groove is formed around the flange. The gasket sits in it, so it cannot slip or fall out during assembly.</p>')}${card('/uploads/lpf-tee-01.jpg', 'LPF tee fitted with a gasket', 'Fittings too', '<p>Tees, elbows and other fittings get the same groove and gasket, so every joint in the line is equally tight.</p>')}${card('/uploads/lpf-sealant-02.jpg', 'LPF sections with factory-fitted gaskets', 'Fitted at the factory', '<p>Each gasket is fitted in one continuous ring before shipment. On site, the sections are aligned and clamped with the V-band.</p>')}</div>`) +
+      two('Gaskets', 'Choosing the gasket', `<div class="tw"><table class="tbl"><thead><tr><th>Gasket</th><th>Use when</th><th>Typical equipment</th></tr></thead><tbody><tr><td>Ceramic (non-combustible)</td><td>Exhaust temperatures are high</td><td>Emergency generators</td></tr><tr><td>Heat-resistant silicone</td><td>Condensate leakage is a concern</td><td>Condensing boilers, equipment with economizers</td></tr></tbody></table></div><p class="note">The ceramic gasket has been heat-tested at over 800&nbsp;°C for 24 hours. For condensing equipment, a heat-resistant coating on the inside of the inner pipe is available as an option. Joints use a 260–300&nbsp;°C heat-resistant sealant.</p>`) +
+      two('Patent', 'Patent and trademark', `<table class="info"><tr><th>Patent</th><td>Insulated flue assembly · No. 10-1648312</td></tr><tr><th>Trademark</th><td>LPF · Leakage Prevention Flange · No. 40-2227790</td></tr><tr><th>Rights</th><td>Held jointly by ${esc(site.name_en)} and Mirae Stack</td></tr></table>${more('/en/certification/', 'All patents and certificates')}`) +
+      asmEn(prod.lpf_assembly, ASM_LPF_EN, 'Assembly'),
+  });
+
+  // 5. 납품실적
+  const gal = list(proj.gallery).filter((g) => hasFile(g.image) && /^\/uploads\/gallery-/.test(g.image)).slice(0, 9);
+  enAdd('/en/references/', 'references', {
+    title: 'References', label: 'Projects', banner: hasFile(proj.banner) ? proj.banner : stackBanner, image: home.cta_image,
+    desc: `JUNGANG YEONDO references: more than 13,000 sites in Korea, including emergency generator exhaust systems for ${L.length} data centers.`,
+    body: two('References', 'More than 13,000 sites', `<p class="lead" style="margin-top:0">Hospitals, universities, factories, public buildings and data centers across Korea, supplied through mechanical contractors and installation partners.</p><ul class="enrefs">${refs.map((r) => `<li>${r}</li>`).join('')}</ul>`) +
+      (L.length ? two('Data centers', 'Emergency generator exhaust for data centers', `<p class="lead" style="margin-top:0">${L.length} data centers, ${gens} generators in total, flue diameters from Ø${Math.min(...sizes)} to Ø${Math.max(...sizes)}.</p><div class="tw"><table class="tbl"><thead><tr><th>Year</th><th>Project</th><th>Generators</th><th>Flue</th></tr></thead><tbody>${L.map((r) => `<tr><td class="num">${esc(r.year)}</td><td>${esc(IDC_EN[r.name] || r.name)}</td><td>${esc(scaleEn(r.scale))}</td><td class="num">${esc(r.size)}</td></tr>`).join('')}</tbody></table></div>`) : '') +
+      (gal.length ? two('Gallery', 'Site photos', `<div class="gal">${gal.map((g) => `<figure>${img(g.image, 'Chimney installation site')}<figcaption><span>${esc(g.year || '')}</span></figcaption></figure>`).join('')}</div>`) : ''),
+  });
+
+  // 6. 인증·특허
+  const aw = list(proj.awards)[0];
+  const AW_CAP = { 인증서: 'Certificate', '인증패 전달': 'Presentation', '현판 제막': 'Unveiling', '기념 촬영': 'Group photo' };
+  enAdd('/en/certification/', 'certification', {
+    title: 'Patents & Certification', label: 'Certification', banner: hasFile(proj.banner) ? proj.banner : stackBanner, image: home.about_image,
+    desc: `JUNGANG YEONDO holds ${ipCount} patent, design and trademark registrations in Korea, including the LPF gas-tight flue patent and trademark.`,
+    body: (aw && list(aw.photos).some((p) => hasFile(p.image)) ? two('Certification', 'Excellent Employer certification', `<div class="award"><div class="aw-tx"><span class="aw-k">Ministry of Justice, Republic of Korea</span><b>Excellent Employer certification</b><dl><dt>No.</dt><dd>105</dd><dt>Valid</dt><dd class="num">${esc(aw.period || '')}</dd></dl><p>Certified by the Ministry of Justice in October 2026. The certification ceremony was held at our head office in November 2026.</p></div><div class="gal aw-gal">${list(aw.photos).filter((p) => hasFile(p.image)).map((p) => `<figure>${img(p.image, AW_CAP[p.caption] || p.caption)}<figcaption>${esc(AW_CAP[p.caption] || p.caption)}</figcaption></figure>`).join('')}</div></div>`) : '') +
+      two('Patents', 'Patents, design and trademark', `<style>.certs{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2vw,24px);margin-bottom:40px}.certs a{display:block;color:inherit}.certs img{display:block;width:100%;height:auto;aspect-ratio:1/1.414;object-fit:cover;background:#fff;border:1px solid var(--line)}.certs span{display:block;margin-top:10px;font-size:12px;color:var(--red)}.certs b{display:block;font-size:15px;font-weight:500;line-height:1.45}.certs small{display:block;font-size:13px;color:var(--muted)}@media (max-width:860px){.certs{grid-template-columns:repeat(2,1fr)}}</style><div class="certs">${list(proj.patents).filter((p) => certImg(p.number)).map((p) => `<a href="/uploads/cert/cert-${esc(p.number)}.jpg" target="_blank" rel="noopener"><img src="/uploads/cert/cert-${esc(p.number)}-s.jpg" alt="${esc(TYPE_EN[p.type] || p.type)} certificate: ${esc(IP_EN[p.number] || p.title)}" width="480" height="679" loading="lazy" decoding="async"><span>${esc(TYPE_EN[p.type] || p.type)} · ${esc(p.year)}</span><b>${esc(IP_EN[p.number] || p.title)}</b><small>No. ${esc(p.number)}</small></a>`).join('')}</div><p class="note">Registered with the Korean Intellectual Property Office. Certificates are shown in Korean; click to enlarge.</p>`) +
+      two('Material', 'Raw material certification', `<div class="tw"><table class="tbl"><thead><tr><th>Type</th><th>Issued by</th><th>Covers</th></tr></thead><tbody><tr><td>KS product certification</td><td>POSCO</td><td>Cold-rolled stainless steel sheet and strip · KS D 3698</td></tr><tr><td>KS product certification</td><td>POSCO</td><td>Hot-rolled stainless steel sheet and strip · KS D 3705</td></tr><tr><td>Product certification · test report</td><td>POSCO Steeleon</td><td>Coated steel sheet for outer casings</td></tr><tr><td>Test report</td><td>Daeheung Chemical</td><td>Flue accessories</td></tr></tbody></table></div><p class="note">Copies of the original certificates are available on request.</p>`),
+  });
+
+  // 7. 문의 (영문 양식 → 회사 메일)
+  enAdd('/en/contact/', 'contact', {
+    title: 'Contact', label: 'Contact', banner: sup.banner, image: home.cta_image,
+    desc: 'Contact JUNGANG YEONDO for quotations on stainless steel chimney and LPF gas-tight flue systems.',
+    body: two('Contact', 'Inquiries and quotations', `<form class="form" name="contact-en" method="POST" action="https://api.web3forms.com/submit">
+<input type="hidden" name="access_key" value="f16da7f0-6f2c-494e-abbd-a1a7d74753d4">
+<input type="hidden" name="subject" value="[중앙연도 홈페이지] 영문 문의 (English inquiry)">
+<input type="hidden" name="from_name" value="JUNGANG YEONDO website (EN)">
+<input type="hidden" name="redirect" value="${baseUrl}/en/contact/thanks/">
+<input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off">
+<label>Company / Name<input name="name" required autocomplete="organization"></label>
+<label>E-mail<input name="email" type="email" required autocomplete="email"></label>
+<label>Phone<input name="phone" type="tel" placeholder="Optional" autocomplete="tel"></label>
+<label>Country<input name="country" autocomplete="country-name"></label>
+<label class="full">Message<textarea name="message" required placeholder="Equipment type, flue diameter, quantities, delivery schedule, etc."></textarea></label>
+<p class="full note" style="margin:0">Drawings and specifications can be sent to ${esc(site.email)}.</p>
+<label class="agree full"><input type="checkbox" name="agree" value="agreed" required> I agree that the information above may be used to reply to my inquiry.</label>
+<div class="full"><button class="btn" type="submit">Send inquiry →</button></div>
+</form>`, `<table class="info" style="margin-top:20px"><tr><th>E-mail</th><td><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></td></tr><tr><th>Tel</th><td class="num">${esc(intl(site.tel))}</td></tr><tr><th>Fax</th><td class="num">${esc(intl(site.fax))}</td></tr></table><p class="note" style="margin-top:14px">${esc(ADDR_EN)}</p><p class="note">Catalogs (PDF, in Korean): ${list(sup.downloads).filter((d) => d.file && /카탈로그/.test(d.title)).map((d) => `<a href="${esc(d.file)}" download style="text-decoration:underline">${/LPF/.test(d.title) ? 'LPF gas-tight flue' : 'Double-wall chimney'}</a>`).join(' · ')}</p>`),
+  });
+  add('/en/contact/thanks/', { en: true, section: 'contact', title: 'Thank you | JUNGANG YEONDO', image: home.cta_image, body: enSub({ label: 'Contact', title: 'Contact', banner: sup.banner, current: '/en/contact/', body: two('Thank you', 'Your inquiry has been sent', `<p class="lead" style="margin-top:0">Thank you for contacting us. We will review your inquiry and reply by e-mail.</p><a class="arrow" href="/en/">Back to home</a>`) }) });
 }
 
 function render() {

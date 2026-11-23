@@ -731,7 +731,7 @@ function render() {
   const today = new Date().toISOString().slice(0, 10);
   const urls = pages.filter((p) => !p.url.endsWith('.html') && !p.url.includes('thanks')).map((p) => `<url><loc>${baseUrl}${p.url}</loc><lastmod>${today}</lastmod></url>`).join('');
   fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`);
-  fs.writeFileSync(path.join(OUT, 'robots.txt'), PRIVATE ? 'User-agent: *\nDisallow: /\n' : `User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: ${baseUrl}/sitemap.xml\n`);
+  fs.writeFileSync(path.join(OUT, 'robots.txt'), PRIVATE ? 'User-agent: *\nDisallow: /\n' : `User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: ${baseUrl}/sitemap.xml\n\n#DaumWebMasterTool:dd4ca0252c5582d77a4e4acd666a91b40ad9e5231877e2c559745a8f290baf75:upewRfgI5y6IkdBZlCoHBQ==\n`);
   console.log(`built ${pages.length} pages → _site/`);
 }
 // 모든 /uploads 사진에 가로·세로 크기(로딩 중 글 밀림 방지)와 휴대폰용 작은 버전(srcset)을 자동으로 붙임

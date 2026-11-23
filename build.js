@@ -243,6 +243,7 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
   </div></div>
 </section>
 
+<section class="pts" aria-label="중앙연도 강점"><div class="wrap"><a href="/projects/"><b class="num">13,000<sup>+</sup></b><span>전국 납품 현장</span></a><a href="/product/lpf/"><b>LPF 특허</b><span>특허 받은 기밀연도</span></a><a href="/business/facility/"><b>자체 공장</b><span>CNC 레이저 · 자동 심 용접</span></a><a href="/support/faq/"><b>평일 3일</b><span>제작 · 전국 배송</span><small>물량·관경에 따라 당겨지거나 늦어질 수 있습니다</small></a></div></section>
 <section class="sec"><div class="wrap about">
   <div class="plate">${img(home.about_image, site.short_name)}</div>
   <div>

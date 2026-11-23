@@ -731,3 +731,8 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
 .kkf{transition:transform .25s,opacity .25s}
 .kkf.hide{transform:translateY(90px);opacity:0;pointer-events:none}
 @media (max-width:700px){.kkf{width:48px;height:48px}.kkf svg{width:25px;height:25px}}
+/* 메인 큰 제목: 스테인리스에 빛이 스치듯 6초마다 한 번 (글자에만 적용, 뒤 사진은 그대로) */
+.hero h1 span{background:linear-gradient(100deg,#e6eaef 0%,#e6eaef 40%,#aeb8c4 45%,#ffffff 50%,#aeb8c4 55%,#e6eaef 60%,#e6eaef 100%);background-size:250% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite}
+.hero h1 span:nth-child(2){animation-delay:.15s}
+@keyframes shine{0%,72%{background-position:100% 0}100%{background-position:0% 0}}
+@media (prefers-reduced-motion:reduce){.hero h1 span{animation:none;background:none;color:#fff}}

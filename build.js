@@ -81,7 +81,9 @@ function layout({ title, desc, url, section, body, image, en }) {
   const fullTitle = en ? title : title ? `${title} | 중앙연도` : site.seo_title;
   const d = desc || site.seo_description;
   const canonical = baseUrl + url;
-  const ogImg = baseUrl + (image || home.about_image || '');
+  // 링크 공유 미리보기(카톡 등): 전용 이미지(1200×630)가 올라와 있으면 모든 페이지에 사용
+  const OG = hasFile('/uploads/og-image.jpg') ? '/uploads/og-image.jpg' : '';
+  const ogImg = baseUrl + (OG ? OG + '?v=' + ver(OG) : (image || home.about_image || ''));
   const globe = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>';
   // 한국어 ↔ 영어 같은 내용 페이지끼리 연결 (짝이 없으면 각 언어 첫 화면으로)
   const pair = en ? (EN_PAIR[url] || '/') : (Object.keys(EN_PAIR).find((k) => EN_PAIR[k] === url) || '/en/');
@@ -106,7 +108,7 @@ ${(() => { const k = en ? EN_PAIR[url] : url, e = en ? url : Object.keys(EN_PAIR
 <meta property="og:description" content="${esc(d)}">
 <meta property="og:url" content="${esc(canonical)}">
 <meta property="og:image" content="${esc(ogImg)}">
-${site.naver_verification ? `<meta name="naver-site-verification" content="${esc(site.naver_verification)}">` : ''}
+${OG ? '<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n<meta name="twitter:card" content="summary_large_image">\n' : ''}${site.naver_verification ? `<meta name="naver-site-verification" content="${esc(site.naver_verification)}">` : ''}
 ${site.google_verification ? `<meta name="google-site-verification" content="${esc(site.google_verification)}">` : ''}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="48x48">

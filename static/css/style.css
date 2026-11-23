@@ -727,3 +727,7 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
 @media (max-width:760px){.pts .wrap{grid-template-columns:1fr 1fr}.pts a{padding:20px 14px;border-left:0;border-top:1px solid var(--line)}.pts a:nth-child(-n+2){border-top:0}.pts a:nth-child(odd){padding-left:0;border-right:1px solid var(--line)}.pts b{font-size:22px}main .pts span{font-size:13px!important;line-height:1.45}}
 .pts small{display:block;margin-top:4px;font-size:12.5px;color:var(--muted);opacity:.75;line-height:1.45}
 @media (max-width:760px){main .pts small{font-size:11.5px!important}}
+/* 카카오톡 버튼: 휴대폰에서 아래로 스크롤할 때 숨김 */
+.kkf{transition:transform .25s,opacity .25s}
+.kkf.hide{transform:translateY(90px);opacity:0;pointer-events:none}
+@media (max-width:700px){.kkf{width:48px;height:48px}.kkf svg{width:25px;height:25px}}

@@ -710,3 +710,8 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
 /* 영문 문의: 옆 칸 연락처 표가 좁아도 메일·번호가 줄바꿈되지 않게 */
 .info.cinfo th{width:72px;white-space:nowrap}.info.cinfo td{white-space:nowrap}
 @media (max-width:560px){.info.cinfo th{width:64px}.info.cinfo th,.info.cinfo td{font-size:15px!important}}
+/* LPF 사진: 크기 줄이고 설명 짧게 (PC 3열, 휴대폰 2열) */
+.lpf-story{grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 20px;margin-top:40px}
+.lpf-story .wide{grid-column:auto}.lpf-story .wide img{aspect-ratio:4/3}
+.lpf-story figcaption{margin-top:10px;font-size:14.5px;line-height:1.6}.lpf-story figcaption b{font-size:16px}
+@media (max-width:640px){.lpf-story{grid-template-columns:1fr 1fr;gap:20px 12px;margin-top:28px}main .lpf-story figcaption{font-size:13.5px!important;line-height:1.55}.lpf-story figcaption b{font-size:14.5px}}

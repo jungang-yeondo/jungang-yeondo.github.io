@@ -111,6 +111,101 @@
       "year": "2021"
     }
   ],
+  "exports": [
+    {
+      "slug": "philippines",
+      "title": "필리핀 플랜트 프로젝트 연도 수출",
+      "client": "(주)중앙이엔지",
+      "chain": "삼성엔지니어링 → 지엔씨에너지 → (주)중앙이엔지 → (주)중앙연도",
+      "dest": "필리핀",
+      "period": "2026년 11월",
+      "status": "수출 포장 · 선적",
+      "cover": "/uploads/export-phl-15.jpg",
+      "blog": "",
+      "intro": "삼성엔지니어링 프로젝트로 필리핀에 출하되는 연도입니다.\n긴 해상 운송에 맞춰 수출 전용으로 포장합니다.",
+      "desc": "중앙연도 해외 수출 — 삼성엔지니어링 필리핀 플랜트 프로젝트 연도. 팔레트 적재, 랩 포장, 열처리 받침목, 맞춤 목상자까지 수출 포장 과정을 소개합니다.",
+      "steps": [
+        {
+          "title": "적재 · 랩 포장",
+          "text": "제작을 마친 제품을 합판 팔레트 위에 관경별로 쌓고, 제품 사이에 완충재를 넣습니다.\n겉은 랩으로 감아 흔들리지 않게 고정합니다.",
+          "photos": [
+            {
+              "image": "/uploads/export-phl-01.jpg"
+            },
+            {
+              "image": "/uploads/export-phl-03.jpg"
+            },
+            {
+              "image": "/uploads/export-phl-02.jpg"
+            },
+            {
+              "image": "/uploads/export-phl-05.jpg"
+            },
+            {
+              "image": "/uploads/export-phl-04.jpg"
+            }
+          ]
+        },
+        {
+          "title": "받침목 고정",
+          "text": "제품 하단에 받침목을 대어 운송 중 밀리지 않게 잡아 줍니다.\n수출용 열처리(HT) 목재를 사용합니다.",
+          "photos": [
+            {
+              "image": "/uploads/export-phl-06.jpg"
+            },
+            {
+              "image": "/uploads/export-phl-07.jpg"
+            },
+            {
+              "image": "/uploads/export-phl-09.jpg"
+            }
+          ]
+        },
+        {
+          "title": "맞춤 목상자",
+          "text": "긴 해상 운송 동안 습기와 충격을 막도록,\n합판과 각재로 제품 크기에 맞춰 목상자를 현장에서 짜 올립니다.",
+          "photos": [
+            {
+              "image": "/uploads/export-phl-08.jpg"
+            },
+            {
+              "image": "/uploads/export-phl-12.jpg"
+            },
+            {
+              "image": "/uploads/export-phl-10.jpg"
+            },
+            {
+              "image": "/uploads/export-phl-11.jpg"
+            },
+            {
+              "image": "/uploads/export-phl-13.jpg"
+            },
+            {
+              "image": "/uploads/export-phl-14.jpg"
+            },
+            {
+              "image": "/uploads/export-phl-15.jpg"
+            },
+            {
+              "image": "/uploads/export-phl-18.jpg"
+            }
+          ]
+        },
+        {
+          "title": "대형 곡관",
+          "text": "대형 곡관(엘보)도 같은 방식으로 팔레트에 올려 포장합니다.",
+          "photos": [
+            {
+              "image": "/uploads/export-phl-16.jpg"
+            },
+            {
+              "image": "/uploads/export-phl-17.jpg"
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "items": [
     {
       "name": "청와대",

@@ -628,7 +628,7 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
 .secgrid a:hover::after{transform:translate(2px,-2px)}
 .secnote{text-align:center;color:color-mix(in srgb,var(--ink) 72%,transparent);font-size:13.5px;margin:12px 0 0}
 #idc,#filters{scroll-margin-top:150px}
-@media (max-width:700px){.secgrid{grid-template-columns:repeat(4,1fr)}.secgrid b{font-size:26px}.secgrid span{font-size:12.5px}.secgrid a{padding:16px 4px 12px}.secgrid a::after{top:5px;right:6px;font-size:11px}}
+@media (max-width:700px){.secgrid{grid-template-columns:repeat(var(--mc,4),1fr)}.secgrid b{font-size:26px}.secgrid span{font-size:12.5px}.secgrid a{padding:16px 4px 12px}.secgrid a::after{top:5px;right:6px;font-size:11px}}
 /* 인증·특허: 기업 인증 */
 .award{display:grid;gap:22px}
 .aw-tx .aw-k{display:block;font-size:13px;color:var(--red);letter-spacing:.04em}

@@ -431,6 +431,7 @@ const moreBtn = 'font:inherit;font-size:15px;width:100%;padding:14px 0;margin-to
     const ch = String(x.chain || '').split(/\s*(?:→|->|>)\s*/).filter(Boolean);
     return `<dl>${x.client ? `<dt>발주처</dt><dd>${esc(x.client)}</dd>` : ''}${ch.length ? `<dt>발주 경로</dt><dd class="chain">${ch.map((c, i) => `<span${i === ch.length - 1 ? ' class="me"' : ''}>${esc(c)}</span>`).join('<i>→</i>')}</dd>` : ''}${x.dest ? `<dt>목적지</dt><dd>${esc(x.dest)}</dd>` : ''}${x.period ? `<dt>시기</dt><dd>${esc(x.period)}</dd>` : ''}${x.status ? `<dt>진행</dt><dd>${esc(x.status)}</dd>` : ''}</dl>`;
   };
+  EXPS.forEach((x) => { if (x.title_en) EN_PAIR[`/en/references/export/${x.slug}/`] = `/projects/export/${x.slug}/`; });
   const exportCards = () => EXPS.length ? two('Export', '해외 수출', `${expCss}<div class="xcs">${EXPS.map((x) => `<a class="xc" href="/projects/export/${esc(x.slug)}/"><div class="ph">${img(x.cover, x.title)}</div><div class="tx"><span class="bd">해외 수출${x.dest ? ` · ${esc(x.dest)}` : ''}</span><h3>${esc(x.title)}</h3>${expDl(x)}<span class="go">수출 포장 과정 보기 →</span></div></a>`).join('')}</div>`) : '';
   EXPS.forEach((x) => {
     const steps = list(x.steps).map((s) => ({ ...s, ph: list(s.photos).map((p) => p.image || p).filter(hasFile) })).filter((s) => s.title && (s.ph.length || s.text));
@@ -464,11 +465,11 @@ const moreBtn = 'font:inherit;font-size:15px;width:100%;padding:14px 0;margin-to
     title: '납품실적', section: 'projects', image: proj.banner,
     desc: `${site.short_name} 연도 납품실적 — ${items.slice(0, 8).map((i) => i.name).join(', ')} 등 13,000곳 이상.`,
     body: subPage({ en: 'Projects', title: '납품실적', banner: proj.banner, section: 'projects', current: '/projects/', body:
-      idcBlock() + exportCards() + two('Reference', '대표 납품 현장', `<div class="filters" id="filters" role="group" aria-label="분야 필터">${cats.map((c, i) => `<button type="button" aria-pressed="${i === 0}">${esc(c)}</button>`).join('')}</div>
+      idcBlock() + two('Reference', '대표 납품 현장', `<div class="filters" id="filters" role="group" aria-label="분야 필터">${cats.map((c, i) => `<button type="button" aria-pressed="${i === 0}">${esc(c)}</button>`).join('')}</div>
 <div class="searchrow"><span class="rcnt" id="countLine"><b>${items.length}</b> 개 현장</span><input id="q" type="search" placeholder="현장명 · 시공사 검색" aria-label="현장 검색"></div>
 <div class="tw"><table class="tbl" id="rtable"><thead><tr><th>현장명</th><th>분야</th><th>시공사</th></tr></thead><tbody>${rows}</tbody></table></div>
 <button type="button" id="refMore" aria-expanded="false" hidden style="${moreBtn}"></button>
-<p class="note" id="noResult" hidden>검색 결과가 없습니다. 다른 이름으로 찾아보세요.</p>`, `<p class="note" style="margin-top:14px">${esc(proj.note)}</p>${list(proj.partners).length ? `<a href="/projects/partners/" style="display:inline-block;margin-top:22px;padding:12px 22px;border:1px solid var(--red);color:var(--red);font-weight:500;font-size:15px">시공 협력사 보기 →</a>` : ''}`) }),
+<p class="note" id="noResult" hidden>검색 결과가 없습니다. 다른 이름으로 찾아보세요.</p>`, `<p class="note" style="margin-top:14px">${esc(proj.note)}</p>${list(proj.partners).length ? `<a href="/projects/partners/" style="display:inline-block;margin-top:22px;padding:12px 22px;border:1px solid var(--red);color:var(--red);font-weight:500;font-size:15px">시공 협력사 보기 →</a>` : ''}`) + exportCards() }),
   });
 }
 add('/projects/gallery/', {
@@ -707,10 +708,24 @@ ${two('References', 'Selected projects', `${L.length ? `<p class="lead" style="m
 
   // 5. 납품실적
   const gal = list(proj.gallery).filter((g) => hasFile(g.image) && /^\/uploads\/gallery-/.test(g.image)).slice(0, 9);
+  // 해외 수출 (영문): title_en이 있는 건만
+  const EXPE = EXPS.filter((x) => x.title_en);
+  const expDlEn = (x) => `<dl>${x.project_en ? `<dt>Project</dt><dd>${esc(x.project_en)}</dd>` : ''}${x.dest_en ? `<dt>Destination</dt><dd>${esc(x.dest_en)}</dd>` : ''}${x.period_en ? `<dt>Date</dt><dd>${esc(x.period_en)}</dd>` : ''}${x.status_en ? `<dt>Scope</dt><dd>${esc(x.status_en)}</dd>` : ''}</dl>`;
+  const enExp = () => EXPE.length ? two('Export', 'Overseas projects', `${expCss}<div class="xcs">${EXPE.map((x) => `<a class="xc" href="/en/references/export/${esc(x.slug)}/"><div class="ph">${img(x.cover, x.title_en)}</div><div class="tx"><span class="bd">Export${x.dest_en ? ` · ${esc(x.dest_en)}` : ''}</span><h3>${esc(x.title_en)}</h3>${expDlEn(x)}<span class="go">See export packing →</span></div></a>`).join('')}</div>`) : '';
+  EXPE.forEach((x) => {
+    const steps = list(x.steps).map((s) => ({ t: s.title_en, d: s.text_en, ph: list(s.photos).map((p) => p.image || p).filter(hasFile) })).filter((s) => s.t && (s.ph.length || s.d));
+    enAdd(`/en/references/export/${x.slug}/`, 'references', {
+      title: x.title_en, label: 'Export', banner: x.cover, image: x.cover,
+      desc: x.desc_en || `JUNGANG YEONDO export: ${x.title_en}. How the chimney sections were packed for sea transport.`,
+      body: two('Export', esc(x.title_en), `${expCss}${x.intro_en ? `<p class="lead" style="margin:0 0 22px">${br(x.intro_en)}</p>` : ''}<div class="xc" style="grid-template-columns:1fr;border:0"><div class="tx" style="padding:0">${expDlEn(x)}</div></div>`) +
+        `<div class="xs">${steps.map((s) => `<section><div><h3>${esc(s.t)}</h3>${s.d ? `<p>${br(s.d)}</p>` : ''}</div><div class="gal">${s.ph.map((p) => `<figure>${img(p, s.t)}</figure>`).join('')}</div></section>`).join('')}</div>` +
+        `<div style="padding-bottom:clamp(56px,7vw,96px)"><a class="arrow" href="/en/references/">Back to references</a></div>`,
+    });
+  });
   enAdd('/en/references/', 'references', {
     title: 'References', label: 'Projects', banner: hasFile(proj.banner) ? proj.banner : stackBanner, image: home.cta_image,
     desc: `JUNGANG YEONDO references: more than 13,000 sites in Korea, including emergency generator exhaust systems for ${L.length} data centers.`,
-    body: two('References', 'More than 13,000 sites', `<p class="lead" style="margin-top:0">Hospitals, universities, factories, public buildings and data centers across Korea, supplied through mechanical contractors and installation partners.</p><ul class="enrefs">${refs.map((r) => `<li>${r}</li>`).join('')}</ul>`) +
+    body: two('References', 'More than 13,000 sites', `<p class="lead" style="margin-top:0">Hospitals, universities, factories, public buildings and data centers across Korea, supplied through mechanical contractors and installation partners.</p><ul class="enrefs">${refs.map((r) => `<li>${r}</li>`).join('')}</ul>`) + enExp() +
       (L.length ? two('Data centers', 'Emergency generator exhaust for data centers', `<p class="lead" style="margin-top:0">${L.length} data centers, ${gens} generators in total, flue diameters from Ø${Math.min(...sizes)} to Ø${Math.max(...sizes)}.</p><div class="tw"><table class="tbl"><thead><tr><th>Year</th><th>Project</th><th>Generators</th><th>Flue</th></tr></thead><tbody>${L.map((r) => `<tr><td class="num">${esc(r.year)}</td><td>${esc(IDC_EN[r.name] || r.name)}</td><td>${esc(scaleEn(r.scale))}</td><td class="num">${esc(r.size)}</td></tr>`).join('')}</tbody></table></div>`) : '') +
       (gal.length ? two('Gallery', 'Site photos', `<div class="gal">${gal.map((g) => `<figure>${img(g.image, 'Chimney installation site')}<figcaption><span>${esc(g.year || '')}</span></figcaption></figure>`).join('')}</div>`) : ''),
   });

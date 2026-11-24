@@ -265,6 +265,38 @@ collections:
               - { name: scale, label: "발전기 규모 (예: 디젤 2,500kW×4대 · 터빈 4,500kW×4대)", widget: string }
               - { name: size, label: "연도 관경 (예: Ø700 · Ø1600)", widget: string }
               - { name: year, label: 연도, widget: string }
+          - name: exports
+            label: "해외 수출 (대표 사진이 있는 건만 납품실적에 카드로 표시)"
+            label_singular: "수출 건"
+            summary: "{{fields.title}}"
+            widget: list
+            required: false
+            fields:
+              - { name: slug, label: "주소 이름 (영문, 예: philippines — 정한 뒤엔 바꾸지 마세요)", widget: string }
+              - { name: title, label: 제목, widget: string }
+              - { name: client, label: 발주처, widget: string, required: false }
+              - { name: chain, label: "발주 경로 (→ 로 구분)", widget: string, required: false }
+              - { name: dest, label: 목적지, widget: string, required: false }
+              - { name: period, label: 시기, widget: string, required: false }
+              - { name: status, label: 진행, widget: string, required: false }
+              - { name: cover, label: 대표 사진, widget: image }
+              - { name: blog, label: "블로그 글 주소 (있으면 버튼 표시)", widget: string, required: false }
+              - { name: intro, label: 소개 문구, widget: text, required: false }
+              - { name: desc, label: "검색 설명 (한두 문장)", widget: string, required: false }
+              - name: steps
+                label: "단계"
+                label_singular: "단계"
+                summary: "{{fields.title}}"
+                widget: list
+                fields:
+                  - { name: title, label: 단계 이름, widget: string }
+                  - { name: text, label: 설명, widget: text, required: false }
+                  - name: photos
+                    label: 사진
+                    label_singular: 사진
+                    widget: list
+                    required: false
+                    fields: [{ name: image, label: 사진, widget: image }]
           - name: items
             label: "대표 납품 현장"
             label_singular: "현장"
@@ -272,7 +304,7 @@ collections:
             widget: list
             fields:
               - { name: name, label: 현장명, widget: string }
-              - { name: category, label: 분야, widget: select, options: ["공공", "의료", "교육", "문화·체육", "산업", "상업·숙박", "교통", "주거", "기타"] }
+              - { name: category, label: 분야, widget: select, options: ["공공", "군사", "의료", "교육", "문화·체육", "산업", "상업·숙박", "교통", "주거", "기타"] }
               - { name: contractor, label: 시공사, widget: string, required: false }
           - name: gallery
             label: "현장 사진"

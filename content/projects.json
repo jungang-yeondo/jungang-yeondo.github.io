@@ -163,21 +163,6 @@
       "contractor": "코리아플랜트(주)"
     },
     {
-      "name": "동두천 미군부대",
-      "category": "군사",
-      "contractor": "통일로이엔지"
-    },
-    {
-      "name": "평택 미군부대",
-      "category": "군사",
-      "contractor": "통일로이엔지"
-    },
-    {
-      "name": "오산 미군부대",
-      "category": "군사",
-      "contractor": "통일로이엔지"
-    },
-    {
       "name": "밀양구치소",
       "category": "공공",
       "contractor": "명성엔지니어링"
@@ -203,9 +188,19 @@
       "contractor": "성운엔지니어링"
     },
     {
-      "name": "잠실 실내체육관",
-      "category": "문화·체육",
-      "contractor": "미래스택"
+      "name": "동두천 미군부대",
+      "category": "군사",
+      "contractor": "통일로이엔지"
+    },
+    {
+      "name": "평택 미군부대",
+      "category": "군사",
+      "contractor": "통일로이엔지"
+    },
+    {
+      "name": "오산 미군부대",
+      "category": "군사",
+      "contractor": "통일로이엔지"
     },
     {
       "name": "서울아산병원",
@@ -241,6 +236,46 @@
       "name": "성모병원",
       "category": "의료",
       "contractor": "휘담"
+    },
+    {
+      "name": "김포 우리병원",
+      "category": "의료",
+      "contractor": "미래스택"
+    },
+    {
+      "name": "잠실 실내체육관",
+      "category": "문화·체육",
+      "contractor": "미래스택"
+    },
+    {
+      "name": "국립어린이박물관",
+      "category": "문화·체육",
+      "contractor": "화성산업"
+    },
+    {
+      "name": "동탄 예술의전당",
+      "category": "문화·체육",
+      "contractor": "용문엔지니어링"
+    },
+    {
+      "name": "고양시 미술관",
+      "category": "문화·체육",
+      "contractor": "(주)필에이드엔지니어링"
+    },
+    {
+      "name": "남산타워 개보수",
+      "category": "문화·체육",
+      "contractor": "윤성기업(주)"
+    },
+    {
+      "name": "엑스포 예술관",
+      "category": "문화·체육",
+      "contractor": "진화엔지니어링(주)"
+    },
+    {
+      "name": "수원 월드컵경기장",
+      "category": "문화·체육",
+      "contractor": "성운엔지니어링"
     },
     {
       "name": "숙명여자대학교",
@@ -283,39 +318,24 @@
       "contractor": "미래스택"
     },
     {
-      "name": "김포 우리병원",
-      "category": "의료",
-      "contractor": "미래스택"
+      "name": "고양 KTX 차량기지",
+      "category": "교통",
+      "contractor": "화남이엔씨(주)"
     },
     {
-      "name": "국립어린이박물관",
-      "category": "문화·체육",
-      "contractor": "화성산업"
+      "name": "구로·상계 차량기지",
+      "category": "교통",
+      "contractor": "태성기건(주)"
     },
     {
-      "name": "동탄 예술의전당",
-      "category": "문화·체육",
-      "contractor": "용문엔지니어링"
+      "name": "천안 고속터미널",
+      "category": "교통",
+      "contractor": "(주)삼전기업"
     },
     {
-      "name": "고양시 미술관",
-      "category": "문화·체육",
-      "contractor": "(주)필에이드엔지니어링"
-    },
-    {
-      "name": "남산타워 개보수",
-      "category": "문화·체육",
-      "contractor": "윤성기업(주)"
-    },
-    {
-      "name": "엑스포 예술관",
-      "category": "문화·체육",
-      "contractor": "진화엔지니어링(주)"
-    },
-    {
-      "name": "수원 월드컵경기장",
-      "category": "문화·체육",
-      "contractor": "성운엔지니어링"
+      "name": "김해공항",
+      "category": "교통",
+      "contractor": "명성엔지니어링"
     },
     {
       "name": "SK하이닉스",
@@ -426,26 +446,6 @@
       "name": "코스트코",
       "category": "상업·숙박",
       "contractor": "휘담"
-    },
-    {
-      "name": "고양 KTX 차량기지",
-      "category": "교통",
-      "contractor": "화남이엔씨(주)"
-    },
-    {
-      "name": "구로·상계 차량기지",
-      "category": "교통",
-      "contractor": "태성기건(주)"
-    },
-    {
-      "name": "천안 고속터미널",
-      "category": "교통",
-      "contractor": "(주)삼전기업"
-    },
-    {
-      "name": "김해공항",
-      "category": "교통",
-      "contractor": "명성엔지니어링"
     }
   ],
   "gallery": [

@@ -170,10 +170,18 @@ ${site.naver_analytics ? `<script>(function(){var k='jy_notrack',q=location.sear
 </html>`;
 }
 
+// 인증·특허 상단: 증서 사진이 왼쪽으로 끝없이 흘러가는 띠 (banner에 CMQ를 넣으면 사진 대신 이걸 표시)
+const CMQ = '#cert-marquee';
+const certMq = () => {
+  const L = list(proj.patents).map((p) => `/uploads/cert/cert-${p.number}-s.jpg`).filter(hasFile);
+  const lpf = L.filter((u) => /10-1648312|40-2227790/.test(u)), rest = L.filter((u) => !lpf.includes(u));
+  const items = [...lpf, ...rest].map((u) => `<img src="${esc(u)}" alt="" width="480" height="679" decoding="async">`).join('');
+  return `<style>.subvis .cmq{position:absolute;inset:0;display:flex;align-items:center;overflow:hidden}.subvis .cmq-t{display:flex;width:max-content;animation:cmq 55s linear infinite}.subvis .cmq img{position:static;inset:auto;width:auto;height:clamp(210px,30vw,360px);aspect-ratio:480/679;object-fit:cover;opacity:.62;animation:none;margin-right:clamp(14px,1.6vw,24px);background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.45)}@keyframes cmq{to{transform:translateX(-50%)}}@media (prefers-reduced-motion:reduce){.subvis .cmq-t{animation:none}}</style><div class="cmq" aria-hidden="true"><div class="cmq-t">${items}${items}${items}${items}</div></div>`;
+};
 function subPage({ en, title, banner, section, current, body }) {
   const nav = NAV.find((n) => n.key === section);
   const lnb = nav.sub.map(([l, h]) => `<a href="${h}"${h === current ? ' aria-current="true"' : ''}>${l}</a>`).join('');
-  return `<section class="subvis">${img(banner, '', ' fetchpriority="high"' + srcset(banner)).replace(' loading="lazy"', '')}<div class="wrap"><div class="en">${esc(en)}</div><h1>${esc(title)}</h1></div></section>
+  return `<section class="subvis">${banner === CMQ ? certMq() : img(banner, '', ' fetchpriority="high"' + srcset(banner)).replace(' loading="lazy"', '')}<div class="wrap"><div class="en">${esc(en)}</div><h1>${esc(title)}</h1></div></section>
 <nav class="lnb" aria-label="${esc(nav.label)} 하위 메뉴"><div class="wrap">${lnb}</div></nav>
 <div class="wrap">${body}</div>`;
 }
@@ -519,7 +527,7 @@ const CB = hasFile('/uploads/banner-cert.jpg') ? '/uploads/banner-cert.jpg' : pr
 add('/projects/certification/', {
   desc: '중앙연도 특허·디자인·상표 등록 현황과 증서, 포스코 스테인리스 강판 등 원자재 인증.',
   title: '인증·특허', section: 'projects', image: CB,
-  body: subPage({ en: 'Projects', title: '인증·특허', banner: CB, section: 'projects', current: '/projects/certification/', body:
+  body: subPage({ en: 'Projects', title: '인증·특허', banner: CMQ, section: 'projects', current: '/projects/certification/', body:
     awardSec() +
     two('Patents', '특허 · 디자인 · 상표', certGrid() + `<div class="iprows" style="margin-top:0">${list(proj.patents).map((p) => `<div class="r"><span class="k">${esc(p.type)}</span><b>${esc(p.title)}</b><span class="n">${esc(p.number)}</span><span class="y">${esc(p.year)}</span></div>`).join('')}</div>`) +
     two('Material', '원자재 인증', `<div class="tw"><table class="tbl"><thead><tr><th>구분</th><th>발행</th><th>내용</th></tr></thead><tbody>${list(proj.materials).map((m) => `<tr><td>${esc(m.kind)}</td><td>${esc(m.issuer)}</td><td>${esc(m.content)}</td></tr>`).join('')}</tbody></table></div><p class="note">${esc(proj.materials_note)}</p>`) }),
@@ -618,7 +626,7 @@ ${site.naver_analytics ? '<p><b>방문 기록 분석</b><br>방문 통계 확인
   const scaleEn = (t) => String(t || '').replace(/디젤/g, 'Diesel').replace(/터빈/g, 'Turbine').replace(/kW\s*×\s*(\d+)\s*대/g, ' kW × $1');
   const card = (im, alt, t, p) => `<article>${im && hasFile(im) ? `<div class="im">${img(im, alt)}</div>` : ''}<h3>${t}</h3>${p}</article>`;
   const EN_LNB = [['About', '/en/about/'], ['Double-wall chimney', '/en/products/chimney/'], ['LPF gas-tight flue', '/en/products/lpf/'], ['References', '/en/references/'], ['Patents', '/en/certification/'], ['Contact', '/en/contact/']];
-  const enSub = ({ label, title, banner, current, body }) => `<section class="subvis">${img(banner, '', ' fetchpriority="high"' + srcset(banner)).replace(' loading="lazy"', '')}<div class="wrap"><div class="en">${esc(label)}</div><h1>${esc(title)}</h1></div></section>
+  const enSub = ({ label, title, banner, current, body }) => `<section class="subvis">${banner === CMQ ? certMq() : img(banner, '', ' fetchpriority="high"' + srcset(banner)).replace(' loading="lazy"', '')}<div class="wrap"><div class="en">${esc(label)}</div><h1>${esc(title)}</h1></div></section>
 <nav class="lnb" aria-label="Section menu"><div class="wrap">${EN_LNB.map(([l, h]) => `<a href="${h}"${h === current ? ' aria-current="true"' : ''}>${l}</a>`).join('')}</div></nav>
 <div class="wrap enpage">${body}</div>`;
   const enAdd = (url, key, { title, desc, image, label, banner, body }) => add(url, { en: true, section: key, image, title: `${title} | JUNGANG YEONDO`, desc, body: enSub({ label, title, banner, current: url, body }) });
@@ -711,7 +719,7 @@ ${two('References', 'Selected projects', `${L.length ? `<p class="lead" style="m
   const aw = list(proj.awards)[0];
   const AW_CAP = { 인증서: 'Certificate', '인증패 전달': 'Presentation', '현판 제막': 'Unveiling', '기념 촬영': 'Group photo' };
   enAdd('/en/certification/', 'certification', {
-    title: 'Patents & Certification', label: 'Certification', banner: hasFile(CB) ? CB : stackBanner, image: home.about_image,
+    title: 'Patents & Certification', label: 'Certification', banner: CMQ, image: home.about_image,
     desc: `JUNGANG YEONDO holds ${ipCount} patent, design and trademark registrations in Korea, including the LPF gas-tight flue patent and trademark.`,
     body: (aw && list(aw.photos).some((p) => hasFile(p.image)) ? two('Certification', 'Excellent Employer certification', `<div class="award"><div class="aw-tx"><span class="aw-k">Ministry of Justice, Republic of Korea</span><b>Excellent Employer certification</b><dl><dt>No.</dt><dd>105</dd><dt>Valid</dt><dd class="num">${esc(aw.period || '')}</dd></dl><p>Certified by the Ministry of Justice in October 2026. The certification ceremony was held at our head office in November 2026.</p></div><div class="gal aw-gal">${list(aw.photos).filter((p) => hasFile(p.image)).map((p) => `<figure>${img(p.image, AW_CAP[p.caption] || p.caption)}<figcaption>${esc(AW_CAP[p.caption] || p.caption)}</figcaption></figure>`).join('')}</div></div>`) : '') +
       two('Patents', 'Patents, design and trademark', `<style>.certs{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2vw,24px);margin-bottom:40px}.certs a{display:block;color:inherit}.certs img{display:block;width:100%;height:auto;aspect-ratio:1/1.414;object-fit:cover;background:#fff;border:1px solid var(--line)}.certs span{display:block;margin-top:10px;font-size:12px;color:var(--red)}.certs b{display:block;font-size:15px;font-weight:500;line-height:1.45}.certs small{display:block;font-size:13px;color:var(--muted)}@media (max-width:860px){.certs{grid-template-columns:repeat(2,1fr)}}</style><div class="certs">${list(proj.patents).filter((p) => certImg(p.number)).map((p) => `<a href="/uploads/cert/cert-${esc(p.number)}.jpg" target="_blank" rel="noopener"><img src="/uploads/cert/cert-${esc(p.number)}-s.jpg" alt="${esc(TYPE_EN[p.type] || p.type)} certificate: ${esc(IP_EN[p.number] || p.title)}" width="480" height="679" loading="lazy" decoding="async"><span>${esc(TYPE_EN[p.type] || p.type)} · ${esc(p.year)}</span><b>${esc(IP_EN[p.number] || p.title)}</b><small>No. ${esc(p.number)}</small></a>`).join('')}</div><p class="note">Registered with the Korean Intellectual Property Office. Certificates are shown in Korean; click to enlarge.</p>`) +

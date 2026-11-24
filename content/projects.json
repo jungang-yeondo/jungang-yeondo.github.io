@@ -124,10 +124,19 @@
       "blog": "",
       "intro": "삼성엔지니어링 프로젝트로 필리핀에 출하되는 연도입니다.\n긴 해상 운송에 맞춰 수출 전용으로 포장합니다.",
       "desc": "중앙연도 해외 수출 — 삼성엔지니어링 프로젝트로 필리핀에 수출하는 연도. 팔레트 적재, 랩 포장, 열처리 받침목, 맞춤 목상자까지 수출 포장 과정을 소개합니다.",
+      "title_en": "Chimney export to the Philippines",
+      "project_en": "Samsung E&A",
+      "dest_en": "Philippines",
+      "period_en": "November 2026",
+      "status_en": "Export packing · Shipment",
+      "intro_en": "Double-wall chimney sections made for a Samsung E&A project in the Philippines, packed in our yard for long sea transport.",
+      "desc_en": "JUNGANG YEONDO export to the Philippines for a Samsung E&A project: palletizing, stretch wrapping, heat-treated timber blocking and custom wooden crates for sea transport.",
       "steps": [
         {
           "title": "적재 · 랩 포장",
           "text": "제작을 마친 제품을 합판 팔레트 위에 관경별로 쌓고, 제품 사이에 완충재를 넣습니다.\n겉은 랩으로 감아 흔들리지 않게 고정합니다.",
+          "title_en": "Palletizing & stretch wrap",
+          "text_en": "Finished sections are stacked by diameter on plywood pallets, with protective foam between them.\nEach stack is stretch-wrapped so it cannot shift.",
           "photos": [
             {
               "image": "/uploads/export-phl-01.jpg"
@@ -149,6 +158,8 @@
         {
           "title": "받침목 고정",
           "text": "제품 하단에 받침목을 대어 운송 중 밀리지 않게 잡아 줍니다.\n수출용 열처리(HT) 목재를 사용합니다.",
+          "title_en": "Timber blocking",
+          "text_en": "Timber blocks are fixed around the base so the load cannot slide in transit.\nAll export timber is heat-treated (HT marked).",
           "photos": [
             {
               "image": "/uploads/export-phl-06.jpg"
@@ -164,6 +175,8 @@
         {
           "title": "맞춤 목상자",
           "text": "긴 해상 운송 동안 습기와 충격을 막도록,\n합판과 각재로 제품 크기에 맞춰 목상자를 현장에서 짜 올립니다.",
+          "title_en": "Custom wooden crates",
+          "text_en": "Plywood crates are built on site to fit each load,\nprotecting the sections from moisture and impact at sea.",
           "photos": [
             {
               "image": "/uploads/export-phl-08.jpg"
@@ -194,6 +207,8 @@
         {
           "title": "대형 곡관",
           "text": "대형 곡관(엘보)도 같은 방식으로 팔레트에 올려 포장합니다.",
+          "title_en": "Large elbows",
+          "text_en": "Large elbows are palletized and packed the same way.",
           "photos": [
             {
               "image": "/uploads/export-phl-16.jpg"

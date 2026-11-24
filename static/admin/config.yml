@@ -283,6 +283,13 @@ collections:
               - { name: blog, label: "블로그 글 주소 (있으면 버튼 표시)", widget: string, required: false }
               - { name: intro, label: 소개 문구, widget: text, required: false }
               - { name: desc, label: "검색 설명 (한두 문장)", widget: string, required: false }
+              - { name: title_en, label: "영문 제목 (있으면 영문 References에도 표시)", widget: string, required: false }
+              - { name: project_en, label: "영문 프로젝트 (예: Samsung E&A)", widget: string, required: false }
+              - { name: dest_en, label: 영문 목적지, widget: string, required: false }
+              - { name: period_en, label: "영문 시기 (예: November 2026)", widget: string, required: false }
+              - { name: status_en, label: 영문 진행, widget: string, required: false }
+              - { name: intro_en, label: 영문 소개 문구, widget: text, required: false }
+              - { name: desc_en, label: 영문 검색 설명, widget: string, required: false }
               - name: steps
                 label: "단계"
                 label_singular: "단계"
@@ -291,6 +298,8 @@ collections:
                 fields:
                   - { name: title, label: 단계 이름, widget: string }
                   - { name: text, label: 설명, widget: text, required: false }
+                  - { name: title_en, label: 영문 단계 이름, widget: string, required: false }
+                  - { name: text_en, label: 영문 설명, widget: text, required: false }
                   - name: photos
                     label: 사진
                     label_singular: 사진

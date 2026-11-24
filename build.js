@@ -415,6 +415,26 @@ add('/product/lpf/', {
 // ---------- PROJECTS ----------
 const moreBtn = 'font:inherit;font-size:15px;width:100%;padding:14px 0;margin-top:-1px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);cursor:pointer';
   // 데이터센터(IDC) 실적: 현장 수 · 발전기 대수 · 연도 관경은 표에서 자동 계산
+  // 해외 수출: content/projects.json의 exports — 대표 사진(cover)이 올라온 건만 납품실적에 카드로, 상세는 /projects/export/<slug>/
+  // 단계(steps)마다 사진을 계속 추가하면 됨 (올라온 사진만 표시)
+  const EXPS = list(proj.exports).filter((x) => x.slug && hasFile(x.cover));
+  const expCss = '<style>.xcs{display:grid;gap:16px}.xc{display:grid;grid-template-columns:1.1fr 1fr;border:1px solid var(--line);color:inherit;transition:border-color .2s}a.xc:hover{border-color:var(--red)}.xc .ph{overflow:hidden}.xc .ph img{display:block;width:100%;height:100%;object-fit:cover;aspect-ratio:4/3;transition:transform .5s}a.xc:hover .ph img{transform:scale(1.03)}.xc .tx{padding:clamp(20px,3vw,36px);display:flex;flex-direction:column;gap:14px}.xc .bd{align-self:flex-start;font-size:12px;font-weight:700;color:#fff;background:var(--red);padding:3px 9px}.xc h3{margin:0;font-size:clamp(20px,2.2vw,26px);line-height:1.35}.xc dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14.5px;line-height:1.55}.xc dt{color:var(--muted);font-size:13px}.xc dd{margin:0}.chain{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}.chain span{white-space:nowrap}.chain i{font-style:normal;color:var(--muted)}.chain .me{font-weight:700;color:var(--red)}.xc .go{margin-top:auto;font-weight:500;font-size:15px;color:var(--red)}.xs{counter-reset:s}.xs section{display:grid;grid-template-columns:minmax(0,300px) 1fr;gap:clamp(18px,3vw,40px);padding-block:clamp(28px,4vw,44px);border-top:1px solid var(--line)}.xs h3{margin:0;font-size:21px;line-height:1.35}.xs h3:before{counter-increment:s;content:counter(s,decimal-leading-zero);display:block;font-size:13px;color:var(--red);font-weight:700;margin-bottom:6px}.xs p{margin:10px 0 0;color:var(--muted);font-size:15px;line-height:1.7}.xs .gal{columns:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.xs .gal figure{margin:0}.xs .gal img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}.xblog{display:inline-block;margin-top:28px;padding:12px 22px;border:1px solid var(--red);color:var(--red);font-weight:500;font-size:15px}@media (max-width:760px){.xc{grid-template-columns:1fr}.xc dl{font-size:13.5px}.xs section{grid-template-columns:1fr}.xs .gal{grid-template-columns:1fr 1fr}}</style>';
+  const expDl = (x) => {
+    const ch = String(x.chain || '').split(/\s*(?:→|->|>)\s*/).filter(Boolean);
+    return `<dl>${x.client ? `<dt>발주처</dt><dd>${esc(x.client)}</dd>` : ''}${ch.length ? `<dt>발주 경로</dt><dd class="chain">${ch.map((c, i) => `<span${i === ch.length - 1 ? ' class="me"' : ''}>${esc(c)}</span>`).join('<i>→</i>')}</dd>` : ''}${x.dest ? `<dt>목적지</dt><dd>${esc(x.dest)}</dd>` : ''}${x.period ? `<dt>시기</dt><dd>${esc(x.period)}</dd>` : ''}${x.status ? `<dt>진행</dt><dd>${esc(x.status)}</dd>` : ''}</dl>`;
+  };
+  const exportCards = () => EXPS.length ? two('Export', '해외 수출', `${expCss}<div class="xcs">${EXPS.map((x) => `<a class="xc" href="/projects/export/${esc(x.slug)}/"><div class="ph">${img(x.cover, x.title)}</div><div class="tx"><span class="bd">해외 수출${x.dest ? ` · ${esc(x.dest)}` : ''}</span><h3>${esc(x.title)}</h3>${expDl(x)}<span class="go">수출 포장 과정 보기 →</span></div></a>`).join('')}</div>`) : '';
+  EXPS.forEach((x) => {
+    const steps = list(x.steps).map((s) => ({ ...s, ph: list(s.photos).map((p) => p.image || p).filter(hasFile) })).filter((s) => s.title && (s.ph.length || s.text));
+    add(`/projects/export/${x.slug}/`, {
+      title: `해외 수출 · ${x.dest || x.title}`, section: 'projects', image: x.cover,
+      desc: x.desc || `${site.short_name} 해외 수출 — ${x.title}. 수출 포장 과정을 소개합니다.`,
+      body: subPage({ en: 'Export', title: '해외 수출', banner: x.cover, section: 'projects', current: '/projects/', body:
+        two('Export', esc(x.title), `${expCss}${x.intro ? `<p class="lead" style="margin:0 0 22px">${br(x.intro)}</p>` : ''}<div class="xc" style="grid-template-columns:1fr;border:0"><div class="tx" style="padding:0">${expDl(x)}</div></div>`) +
+        `<div class="xs">${steps.map((s) => `<section><div><h3>${esc(s.title)}</h3>${s.text ? `<p>${br(s.text)}</p>` : ''}</div><div class="gal">${s.ph.map((p) => `<figure>${img(p, s.title)}</figure>`).join('')}</div></section>`).join('')}</div>` +
+        `<div style="padding-bottom:clamp(56px,7vw,96px)">${x.blog ? `<a class="xblog" href="${esc(x.blog)}" target="_blank" rel="noopener">블로그에서 자세히 보기 →</a> ` : ''}<a class="arrow" href="/projects/" style="margin-left:18px">납품실적으로</a></div>` }),
+    });
+  });
   const idcBlock = () => {
     const L = list(proj.idc); if (!L.length) return '';
     const gens = L.reduce((s, r) => s + [...String(r.scale || '').matchAll(/×\s*(\d+)\s*대/g)].reduce((a, m) => a + +m[1], 0), 0);
@@ -436,7 +456,7 @@ const moreBtn = 'font:inherit;font-size:15px;width:100%;padding:14px 0;margin-to
     title: '납품실적', section: 'projects', image: proj.banner,
     desc: `${site.short_name} 연도 납품실적 — ${items.slice(0, 8).map((i) => i.name).join(', ')} 등 13,000곳 이상.`,
     body: subPage({ en: 'Projects', title: '납품실적', banner: proj.banner, section: 'projects', current: '/projects/', body:
-      idcBlock() + two('Reference', '대표 납품 현장', `<div class="filters" id="filters" role="group" aria-label="분야 필터">${cats.map((c, i) => `<button type="button" aria-pressed="${i === 0}">${esc(c)}</button>`).join('')}</div>
+      idcBlock() + exportCards() + two('Reference', '대표 납품 현장', `<div class="filters" id="filters" role="group" aria-label="분야 필터">${cats.map((c, i) => `<button type="button" aria-pressed="${i === 0}">${esc(c)}</button>`).join('')}</div>
 <div class="searchrow"><span class="rcnt" id="countLine"><b>${items.length}</b> 개 현장</span><input id="q" type="search" placeholder="현장명 · 시공사 검색" aria-label="현장 검색"></div>
 <div class="tw"><table class="tbl" id="rtable"><thead><tr><th>현장명</th><th>분야</th><th>시공사</th></tr></thead><tbody>${rows}</tbody></table></div>
 <button type="button" id="refMore" aria-expanded="false" hidden style="${moreBtn}"></button>

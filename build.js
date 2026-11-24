@@ -508,12 +508,12 @@ add('/projects/certification/', {
 if (list(sup.faq).length) {
   const F = list(sup.faq).filter((f) => f && f.question && f.answer);
   const cats = [...new Set(F.map((f) => f.category || '기타'))];
-  const ld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: F.map((f) => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })) };
+  const ld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: F.map((f) => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer + (f.table && list(f.table.rows).length ? ' ' + list(f.table.rows).map((r) => `${r[0]}: ${list(f.table.head).slice(1).map((h, i) => `${h} ${r[i + 1]}`).join(', ')}`).join(' / ') + (f.table.unit ? ` (${f.table.unit})` : '') : '') } })) };
   add('/support/faq/', {
     desc: '중앙연도 자주 묻는 질문 — 견적 방법, 제작 기간, 배송, 재질(STS304), 이중관·삼중관, LPF 기밀연도, 주문제작 안내.',
     title: '자주 묻는 질문', section: 'support', image: sup.banner,
     body: subPage({ en: 'Customer', title: '자주 묻는 질문', banner: sup.banner, section: 'support', current: '/support/faq/', body:
-      `<div style="padding-block:clamp(56px,7vw,96px)">${cats.map((c) => `<section class="faq"><h2>${esc(c)}</h2>${F.filter((f) => (f.category || '기타') === c).map((f) => `<details><summary>${esc(f.question)}</summary><div class="a"><p>${esc(f.answer)}</p>${f.link_url ? `<a class="arrow" href="${esc(f.link_url)}"${/^https?:/.test(f.link_url) ? ' target="_blank" rel="noopener"' : ''}>${esc(f.link_label || '바로가기')}</a>` : ''}</div></details>`).join('')}</section>`).join('')}<div class="faq-end"><p>찾으시는 답이 없으면 편하게 문의해 주세요.</p>${kakaoBox}</div></div><script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>` }),
+      `<div style="padding-block:clamp(56px,7vw,96px)">${cats.map((c) => `<section class="faq"><h2>${esc(c)}</h2>${F.filter((f) => (f.category || '기타') === c).map((f) => `<details><summary>${esc(f.question)}</summary><div class="a"><p>${esc(f.answer)}</p>${f.table && list(f.table.rows).length ? `<div class="tw"><table class="ftbl">${f.table.caption ? `<caption>${esc(f.table.caption)}</caption>` : ''}<thead><tr>${list(f.table.head).map((h) => `<th scope="col">${esc(h).replace(/~/g, '~<wbr>')}</th>`).join('')}</tr></thead><tbody>${list(f.table.rows).map((r) => `<tr>${list(r).map((c, i) => i ? `<td>${esc(c)}</td>` : `<th scope="row">${esc(c)}</th>`).join('')}</tr>`).join('')}</tbody></table></div>` : ''}${f.link_url ? `<a class="arrow" href="${esc(f.link_url)}"${/^https?:/.test(f.link_url) ? ' target="_blank" rel="noopener"' : ''}>${esc(f.link_label || '바로가기')}</a>` : ''}</div></details>`).join('')}</section>`).join('')}<div class="faq-end"><p>찾으시는 답이 없으면 편하게 문의해 주세요.</p>${kakaoBox}</div></div><script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>` }),
   });
 }
 add('/support/downloads/', {

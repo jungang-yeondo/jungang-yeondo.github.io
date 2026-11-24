@@ -487,7 +487,8 @@ add('/projects/stories/', {
     const n = co(p.name);
     const idc = n && co(proj.idc_partner) === n ? list(proj.idc).length : 0;
     const sites = n ? list(proj.items).filter((i) => co(i.contractor).includes(n)).map((i) => i.name) : [];
-    const refs = idc || sites.length ? `<div class="rf"><span>대표 실적</span>${idc ? `<a href="#idc" data-idc>데이터센터 비상발전기 연도 ${idc}곳 →</a>` : ''}${sites.length ? `<p>${sites.map(esc).join(' · ')}</p>` : ''}</div>` : '';
+    const xs = n ? EXPS.filter((x) => co(x.client) === n) : [];
+    const refs = idc || sites.length || xs.length ? `<div class="rf"><span>대표 실적</span>${idc ? `<div><a href="#idc" data-idc>데이터센터 비상발전기 연도 ${idc}곳 →</a></div>` : ''}${xs.map((x) => `<div><a href="/projects/export/${esc(x.slug)}/">해외 수출${x.dest ? ` · ${esc(x.dest)}` : ''} (${esc(x.title.replace(/^.*\((.+)\).*$/, '$1'))}) →</a></div>`).join('')}${sites.length ? `<p>${sites.map(esc).join(' · ')}</p>` : ''}</div>` : '';
     const ppl = list(p.contacts).map((c) => row(esc(c.role || '담당'), `${esc(c.name)}${c.phone ? ` <a class="ph" href="${esc(telHref(c.phone))}">${esc(c.phone)}</a>` : ''}`)).join('');
     return `<article><h3>${esc(p.name)}</h3>${p.tagline ? `<p class="tg">${esc(p.tagline)}</p>` : ''}${p.highlight ? `<div class="hl"><span class="bd">${esc(p.highlight)}</span>${p.highlight_text ? `<p>${esc(p.highlight_text)}</p>` : ''}${p.highlight_link ? `<a href="${esc(p.highlight_link)}">${esc(p.highlight_link_label || '자세히 보기')} →</a>` : ''}</div>` : ''}
 <dl>${row('전화', p.tel && `<a href="${esc(telHref(p.tel))}">${esc(p.tel)}</a>`)}${row('팩스', esc(p.fax))}${row('이메일', p.email && `<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>`)}${ppl}${row('본사', esc(p.hq))}${row('공장', esc(p.factory))}</dl>${refs}</article>`;

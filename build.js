@@ -467,7 +467,7 @@ const moreBtn = 'font:inherit;font-size:15px;width:100%;padding:14px 0;margin-to
     body: subPage({ en: 'Projects', title: '납품실적', banner: proj.banner, section: 'projects', current: '/projects/', body:
       idcBlock() + two('Reference', '대표 납품 현장', `<div class="filters" id="filters" role="group" aria-label="분야 필터">${cats.map((c, i) => `<button type="button" aria-pressed="${i === 0}">${esc(c)}</button>`).join('')}</div>
 <div class="searchrow"><span class="rcnt" id="countLine"><b>${items.length}</b> 개 현장</span><input id="q" type="search" placeholder="현장명 · 시공사 검색" aria-label="현장 검색"></div>
-<div class="tw"><table class="tbl" id="rtable"><thead><tr><th>현장명</th><th>분야</th><th>시공사</th></tr></thead><tbody>${rows}</tbody></table></div>
+<div class="tw"><table class="tbl" id="rtable" data-show="9"><thead><tr><th>현장명</th><th>분야</th><th>시공사</th></tr></thead><tbody>${rows}</tbody></table></div>
 <button type="button" id="refMore" aria-expanded="false" hidden style="${moreBtn}"></button>
 <p class="note" id="noResult" hidden>검색 결과가 없습니다. 다른 이름으로 찾아보세요.</p>`, `<p class="note" style="margin-top:14px">${esc(proj.note)}</p>${list(proj.partners).length ? `<a href="/projects/partners/" style="display:inline-block;margin-top:22px;padding:12px 22px;border:1px solid var(--red);color:var(--red);font-weight:500;font-size:15px">시공 협력사 보기 →</a>` : ''}`) + exportCards() }),
   });

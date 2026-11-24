@@ -222,7 +222,7 @@ const LPF_SVG = `<svg viewBox="0 0 760 300" role="img" aria-label="LPF 이음부
   const secCnt = {}; list(proj.items).forEach((p) => { if (p.category) secCnt[p.category] = (secCnt[p.category] || 0) + 1; });
   const secs = Object.entries(secCnt).sort((a, b) => b[1] - a[1]).map(([k, n]) => [k, n, `/projects/?cat=${encodeURIComponent(k)}`]);
   if (list(proj.idc).length) secs.push(['데이터센터', list(proj.idc).length, '/projects/#idc']);
-  const secGrid = secs.length ? `<div class="wrap"><div class="secgrid">${secs.map(([k, n, h]) => `<a href="${h}" aria-label="${esc(k)} 대표 현장 ${n}곳 보기"><b>${n}<i>곳</i></b><span>${esc(k)}</span></a>`).join('')}</div><p class="secnote">대표 납품 현장 기준 · 누르면 분야별 실적으로 이동</p></div>` : '';
+  const secGrid = secs.length ? `<div class="wrap"><div class="secgrid" style="--mc:${secs.length % 4 === 0 || secs.length % 3 !== 0 ? 4 : 3}">${secs.map(([k, n, h]) => `<a href="${h}" aria-label="${esc(k)} 대표 현장 ${n}곳 보기"><b>${n}<i>곳</i></b><span>${esc(k)}</span></a>`).join('')}</div><p class="secnote">대표 납품 현장 기준 · 누르면 분야별 실적으로 이동</p></div>` : '';
   const row = (a) => a.join('') + a.join('');
   const photos = list(home.project_photos).slice(0, 3).map((p) => `<figure>${img(p.image, p.caption)}<figcaption><b>${esc(p.caption)}</b><span>${esc(p.year)}</span></figcaption></figure>`).join('');
   const ip = list(proj.patents).filter((p) => p.home).slice(0, 4).map((p) => `<div class="r"><span class="k">${esc(p.type)}</span><b>${esc(p.title)}</b><span class="n">${esc(p.number)}</span><span class="y">${esc(p.year)}</span></div>`).join('');

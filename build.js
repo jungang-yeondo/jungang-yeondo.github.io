@@ -434,7 +434,7 @@ const moreBtn = 'font:inherit;font-size:15px;width:100%;padding:14px 0;margin-to
   EXPS.forEach((x) => { if (x.title_en) EN_PAIR[`/en/references/export/${x.slug}/`] = `/projects/export/${x.slug}/`; });
   const exportCards = () => EXPS.length ? two('Export', '해외 수출', `${expCss}<div class="xcs">${EXPS.map((x) => `<a class="xc" href="/projects/export/${esc(x.slug)}/"><div class="ph">${img(x.cover, x.title)}</div><div class="tx"><span class="bd">해외 수출${x.dest ? ` · ${esc(x.dest)}` : ''}</span><h3>${esc(x.title)}</h3>${expDl(x)}<span class="go">수출 포장 과정 보기 →</span></div></a>`).join('')}</div>`) : '';
   EXPS.forEach((x) => {
-    const steps = list(x.steps).map((s) => ({ ...s, ph: list(s.photos).map((p) => p.image || p).filter(hasFile) })).filter((s) => s.title && (s.ph.length || s.text));
+    const steps = list(x.steps).map((s) => ({ ...s, ph: list(s.photos).map((p) => p.image || p).filter(hasFile) })).filter((s) => s.title && s.ph.length);
     add(`/projects/export/${x.slug}/`, {
       title: `해외 수출 · ${x.dest || x.title}`, section: 'projects', image: x.cover,
       desc: x.desc || `${site.short_name} 해외 수출 — ${x.title}. 수출 포장 과정을 소개합니다.`,
@@ -713,7 +713,7 @@ ${two('References', 'Selected projects', `${L.length ? `<p class="lead" style="m
   const expDlEn = (x) => `<dl>${x.project_en ? `<dt>Project</dt><dd>${esc(x.project_en)}</dd>` : ''}${x.dest_en ? `<dt>Destination</dt><dd>${esc(x.dest_en)}</dd>` : ''}${x.period_en ? `<dt>Date</dt><dd>${esc(x.period_en)}</dd>` : ''}${x.status_en ? `<dt>Scope</dt><dd>${esc(x.status_en)}</dd>` : ''}</dl>`;
   const enExp = () => EXPE.length ? two('Export', 'Overseas projects', `${expCss}<div class="xcs">${EXPE.map((x) => `<a class="xc" href="/en/references/export/${esc(x.slug)}/"><div class="ph">${img(x.cover, x.title_en)}</div><div class="tx"><span class="bd">Export${x.dest_en ? ` · ${esc(x.dest_en)}` : ''}</span><h3>${esc(x.title_en)}</h3>${expDlEn(x)}<span class="go">See export packing →</span></div></a>`).join('')}</div>`) : '';
   EXPE.forEach((x) => {
-    const steps = list(x.steps).map((s) => ({ t: s.title_en, d: s.text_en, ph: list(s.photos).map((p) => p.image || p).filter(hasFile) })).filter((s) => s.t && (s.ph.length || s.d));
+    const steps = list(x.steps).map((s) => ({ t: s.title_en, d: s.text_en, ph: list(s.photos).map((p) => p.image || p).filter(hasFile) })).filter((s) => s.t && s.ph.length);
     enAdd(`/en/references/export/${x.slug}/`, 'references', {
       title: x.title_en, label: 'Export', banner: x.cover, image: x.cover,
       desc: x.desc_en || `JUNGANG YEONDO export: ${x.title_en}. How the chimney sections were packed for sea transport.`,

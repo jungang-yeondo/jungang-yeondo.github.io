@@ -119,19 +119,56 @@
       "chain": "삼성엔지니어링 → 지엔씨에너지 → (주)중앙이엔지 → (주)중앙연도",
       "dest": "필리핀",
       "period": "2026년 11월",
-      "status": "수출 포장 · 선적",
+      "status": "검수 · 수출 포장 · 선적",
       "cover": "/uploads/export-phl-15.jpg",
       "blog": "",
-      "intro": "삼성엔지니어링 프로젝트로 필리핀에 출하되는 연도입니다.\n긴 해상 운송에 맞춰 수출 전용으로 포장합니다.",
-      "desc": "중앙연도 해외 수출 — 삼성엔지니어링 프로젝트로 필리핀에 수출하는 연도. 팔레트 적재, 랩 포장, 열처리 받침목, 맞춤 목상자까지 수출 포장 과정을 소개합니다.",
+      "intro": "삼성엔지니어링 프로젝트로 필리핀에 출하되는 연도입니다.\n발주처 검수를 마친 뒤, 긴 해상 운송에 맞춰 수출 전용으로 포장합니다.",
+      "desc": "중앙연도 해외 수출 — 삼성엔지니어링 프로젝트로 필리핀에 수출하는 연도. 발주처 검수, 팔레트 적재, 랩 포장, 열처리 받침목, 방습제, 맞춤 목상자까지 수출 포장 과정을 소개합니다.",
       "title_en": "Chimney export to the Philippines",
       "project_en": "Samsung E&A",
       "dest_en": "Philippines",
       "period_en": "November 2026",
-      "status_en": "Export packing · Shipment",
-      "intro_en": "Double-wall chimney sections made for a Samsung E&A project in the Philippines, packed in our yard for long sea transport.",
+      "status_en": "Inspection · Export packing · Shipment",
+      "intro_en": "Double-wall chimney sections made for a Samsung E&A project in the Philippines, inspected by the client and packed in our yard for long sea transport.",
       "desc_en": "JUNGANG YEONDO export to the Philippines for a Samsung E&A project: palletizing, stretch wrapping, heat-treated timber blocking and custom wooden crates for sea transport.",
       "steps": [
+        {
+          "title": "검수",
+          "text": "지엔씨에너지와 삼성엔지니어링 검수 담당자가 공장을 찾아,\n포장 전에 제품을 하나하나 직접 확인합니다.",
+          "title_en": "Inspection",
+          "text_en": "Inspectors from GNC Energy and Samsung E&A visit our plant\nand check every item before packing.",
+          "photos": [
+            {
+              "image": "/uploads/export-phl2-09.jpg"
+            },
+            {
+              "image": "/uploads/export-phl2-10.jpg"
+            }
+          ]
+        },
+        {
+          "title": "팔레트 · 지게차 적재",
+          "text": "포장팀이 짠 합판 팔레트를 옮겨 놓고,\n지게차로 제품을 팔레트 위에 올립니다.",
+          "title_en": "Pallets & forklift loading",
+          "text_en": "Plywood pallets built by the packing team are set out,\nand the stacks are lifted onto them by forklift.",
+          "photos": [
+            {
+              "image": "/uploads/export-phl2-02.jpg"
+            },
+            {
+              "image": "/uploads/export-phl2-03.jpg"
+            },
+            {
+              "image": "/uploads/export-phl2-04.jpg"
+            },
+            {
+              "image": "/uploads/export-phl2-05.jpg"
+            },
+            {
+              "image": "/uploads/export-phl2-06.jpg"
+            }
+          ]
+        },
         {
           "title": "적재 · 랩 포장",
           "text": "제작을 마친 제품을 합판 팔레트 위에 관경별로 쌓고, 제품 사이에 완충재를 넣습니다.\n겉은 랩으로 감아 흔들리지 않게 고정합니다.",
@@ -152,6 +189,12 @@
             },
             {
               "image": "/uploads/export-phl-04.jpg"
+            },
+            {
+              "image": "/uploads/export-phl2-01.jpg"
+            },
+            {
+              "image": "/uploads/export-phl2-07.jpg"
             }
           ]
         },
@@ -169,6 +212,17 @@
             },
             {
               "image": "/uploads/export-phl-09.jpg"
+            }
+          ]
+        },
+        {
+          "title": "방습제",
+          "text": "상자 안에는 벤토나이트 방습제를 몇 개씩 함께 넣어,\n바다를 건너는 동안 생기는 습기를 빨아들이게 합니다.",
+          "title_en": "Desiccant",
+          "text_en": "Bentonite desiccant bags go into every crate\nto absorb moisture during the sea voyage.",
+          "photos": [
+            {
+              "image": "/uploads/export-phl2-08.jpg"
             }
           ]
         },
@@ -201,6 +255,20 @@
             },
             {
               "image": "/uploads/export-phl-18.jpg"
+            }
+          ]
+        },
+        {
+          "title": "덮개 마감",
+          "text": "벽판을 다 세운 뒤 위쪽 덮개까지 덮어\n상자를 완전히 닫습니다.",
+          "title_en": "Closing the lid",
+          "text_en": "Once the walls are up, the top panel is fitted\nand the crate is fully closed.",
+          "photos": [
+            {
+              "image": "/uploads/export-phl2-11.jpg"
+            },
+            {
+              "image": "/uploads/export-phl2-12.jpg"
             }
           ]
         },

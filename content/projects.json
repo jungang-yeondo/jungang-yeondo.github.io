@@ -175,9 +175,9 @@
         },
         {
           "title": "적재 · 랩 포장",
-          "text": "제작을 마친 제품을 합판 팔레트 위에 관경별로 쌓고, 제품 사이에 완충재를 넣습니다.\n겉은 랩으로 감아 흔들리지 않게 고정합니다.",
+          "text": "제작을 마친 제품을 합판 팔레트 위에 관경별로 쌓고, 제품 사이에 완충재를 넣습니다.\n겉은 랩으로 감아 흔들리지 않게 고정합니다.\n대형 곡관(엘보)도 같은 방식으로 팔레트에 올려 포장합니다.",
           "title_en": "Palletizing & stretch wrap",
-          "text_en": "Finished sections are stacked by diameter on plywood pallets, with protective foam between them.\nEach stack is stretch-wrapped so it cannot shift.",
+          "text_en": "Finished sections are stacked by diameter on plywood pallets, with protective foam between them.\nEach stack is stretch-wrapped so it cannot shift.\nLarge elbows are palletized and packed the same way.",
           "photos": [
             {
               "image": "/uploads/export-phl-01.jpg"
@@ -199,6 +199,12 @@
             },
             {
               "image": "/uploads/export-phl2-07.jpg"
+            },
+            {
+              "image": "/uploads/export-phl-16.jpg"
+            },
+            {
+              "image": "/uploads/export-phl-17.jpg"
             }
           ]
         },
@@ -299,20 +305,6 @@
             },
             {
               "image": "/uploads/export-phl3-06.jpg"
-            }
-          ]
-        },
-        {
-          "title": "대형 곡관",
-          "text": "대형 곡관(엘보)도 같은 방식으로 팔레트에 올려 포장합니다.",
-          "title_en": "Large elbows",
-          "text_en": "Large elbows are palletized and packed the same way.",
-          "photos": [
-            {
-              "image": "/uploads/export-phl-16.jpg"
-            },
-            {
-              "image": "/uploads/export-phl-17.jpg"
             }
           ]
         }

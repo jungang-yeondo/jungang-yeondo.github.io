@@ -47,9 +47,9 @@ nav.gnb{margin-left:auto;display:flex}
 .gnb .item>a{display:block;padding:30px 26px;font-weight:500;font-size:16px;letter-spacing:.01em;position:relative}
 .gnb .item>a::after{content:"";position:absolute;left:26px;right:26px;bottom:22px;height:2px;background:var(--red);transform:scaleX(0);transition:transform .25s}
 .gnb .item:hover>a::after,.gnb .item>a[aria-current="true"]::after{transform:scaleX(1)}
-.gnb .sub{position:absolute;left:50%;top:100%;transform:translateX(-50%);min-width:180px;background:var(--bg);color:var(--ink);padding:14px 0;display:none;box-shadow:0 18px 40px -18px rgba(5,12,25,.4)}
+.gnb .sub{position:absolute;left:50%;top:100%;transform:translateX(-50%);min-width:200px;background:var(--bg);color:var(--ink);padding:14px 0;display:none;box-shadow:0 18px 40px -18px rgba(5,12,25,.4)}
 .gnb .item:hover .sub,.gnb .item:focus-within .sub{display:block}
-.gnb .sub a{display:block;padding:8px 24px;font-size:14.5px;color:var(--muted);white-space:nowrap}
+.gnb .sub a{display:block;padding:10px 26px;font-size:16px;font-weight:500;color:color-mix(in srgb,var(--ink) 88%,transparent);white-space:nowrap}
 .gnb .sub a:hover{color:var(--red)}
 .menu-btn{display:none;margin-left:auto;background:none;border:0;color:inherit;cursor:pointer;width:44px;height:44px;padding:10px}
 .menu-btn span{display:block;height:2px;background:currentColor;margin:6px 0}

@@ -124,7 +124,7 @@
       "status": "검수 · 수출 포장 · 선적",
       "cover": "/uploads/export-phl-15.jpg",
       "blog": "",
-      "intro": "삼성엔지니어링 프로젝트로 필리핀에 출하되는 연도입니다.\n발주처 검수를 마친 뒤, 긴 해상 운송에 맞춰 수출 전용으로 포장합니다.",
+      "intro": "삼성엔지니어링 프로젝트로 필리핀에 출하되는 연도입니다.\n발주처 검수를 마친 뒤, 긴 해상 운송에 맞춰 수출 전용으로 포장했습니다.",
       "desc": "중앙연도 해외 수출 — 삼성엔지니어링 프로젝트로 필리핀에 수출하는 연도. 발주처 검수, 팔레트 적재, 랩 포장, 열처리 받침목, 방습제, 맞춤 목상자까지 수출 포장 과정을 소개합니다.",
       "title_en": "Chimney export to the Philippines",
       "project_en": "Samsung E&A",
@@ -273,6 +273,32 @@
             },
             {
               "image": "/uploads/export-phl2-12.jpg"
+            }
+          ]
+        },
+        {
+          "title": "방수포 · 패킹리스트",
+          "text": "상자 윗면을 방수포로 덮고 가장자리를 타카로 고정해 빗물이 스며들지 않게 합니다.\n상자마다 패킹리스트 함과 화물 표시(쉬핑 마크)를 붙여 포장을 마무리합니다.",
+          "title_en": "Waterproof cover & packing list",
+          "text_en": "The top of each crate is covered with a waterproof tarp stapled along the edges.\nA packing-list pocket and shipping mark are fixed to every crate to finish the packing.",
+          "photos": [
+            {
+              "image": "/uploads/export-phl3-03.jpg"
+            },
+            {
+              "image": "/uploads/export-phl3-01.jpg"
+            },
+            {
+              "image": "/uploads/export-phl3-02.jpg"
+            },
+            {
+              "image": "/uploads/export-phl3-04.jpg"
+            },
+            {
+              "image": "/uploads/export-phl3-05.jpg"
+            },
+            {
+              "image": "/uploads/export-phl3-06.jpg"
             }
           ]
         },

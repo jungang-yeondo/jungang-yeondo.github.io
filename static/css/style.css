@@ -744,3 +744,9 @@ a.f-ph:hover{color:var(--red);border-color:var(--red)}
 .faq .ftbl tbody th{text-align:left;font-weight:500}
 .faq .ftbl td{font-family:var(--font-en);font-size:16px}
 @media (max-width:700px){main .faq .ftbl th,main .faq .ftbl td{font-size:13px!important;padding:10px 4px;white-space:normal;word-break:keep-all}.faq .ftbl{min-width:0}.faq .ftbl tbody th{width:30%}}
+/* 견적 문의 칸: STS304 2B 판 + 검정 각인 글씨 */
+.cta{color:#111418;background:#979aa0 url(/uploads/cta-steel.jpg) center/cover;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 -1px 0 rgba(0,0,0,.35)}
+.cta>img{display:none}
+.cta h2,.cta a.tel{color:#111418;text-shadow:0 1px 0 rgba(255,255,255,.35)}
+.cta .label{color:#9c1c23!important}
+.cta p,.cta .mail{color:#1b1f24;opacity:1}
